@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1] - 2026-04-26
+
+### Added
+- Tools tab on the Pixel settings page (LW Plugins → Pixel → Tools), keeping all plugin admin under a single page
+- PixelYourSite (Free + Pro) migrator — preview-diff UI plus one-click import. Reads from both `wp_options` and the legacy `pys_options` table; maps Meta / GA4 / GTM / Pinterest / Bing / Reddit pixel IDs and core toggles to the matching LW Pixel options
+
+### Changed
+- TabEvents extracted EventsAutoSection partial to keep the file under 200 lines
+
 ## [1.0.0] - 2026-04-26
 
 ### Added

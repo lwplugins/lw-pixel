@@ -23,6 +23,7 @@ use LightweightPlugins\Pixel\Frontend\ScriptLoader;
 use LightweightPlugins\Pixel\Pixels\PixelManager;
 use LightweightPlugins\Pixel\Server\OrderEnrich;
 use LightweightPlugins\Pixel\SiteManager\Integration as SiteManagerIntegration;
+use LightweightPlugins\Pixel\Tools\MigrationRunner;
 use LightweightPlugins\Pixel\WooCommerce\Integration as WooCommerceIntegration;
 
 /**
@@ -84,6 +85,7 @@ final class Plugin {
 		OrderEnrich::register();
 		MedicalMode::register();
 		LduMode::register();
+		MigrationRunner::register();
 
 		new Hooks( $this->pixel_manager, $this->consent_manager );
 

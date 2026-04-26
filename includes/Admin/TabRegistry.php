@@ -22,6 +22,7 @@ use LightweightPlugins\Pixel\Admin\Settings\TabPinterest;
 use LightweightPlugins\Pixel\Admin\Settings\TabReddit;
 use LightweightPlugins\Pixel\Admin\Settings\TabSnapchat;
 use LightweightPlugins\Pixel\Admin\Settings\TabTikTok;
+use LightweightPlugins\Pixel\Admin\Settings\TabTools;
 use LightweightPlugins\Pixel\Admin\Settings\TabWooCommerce;
 use LightweightPlugins\Pixel\Admin\Settings\TabX;
 
@@ -50,6 +51,7 @@ final class TabRegistry {
 			new TabWooCommerce(),
 			new TabCompliance(),
 			new TabAdvanced(),
+			new TabTools(),
 			new TabSystemReport(),
 		];
 

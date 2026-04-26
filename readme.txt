@@ -4,7 +4,7 @@ Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,10 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.0.1 =
+* New: Tools tab on the Pixel settings page (LW Plugins → Pixel → Tools)
+* New: PixelYourSite (Free + Pro) migrator — preview diff with one-click import. Reads from both wp_options and the legacy pys_options table. Maps Meta / GA4 / GTM / Pinterest / Bing / Reddit pixel IDs and core toggles to LW Pixel options.
 
 = 1.0.0 =
 * New: Initial release

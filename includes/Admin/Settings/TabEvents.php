@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace LightweightPlugins\Pixel\Admin\Settings;
 
 /**
- * Renders the generic event toggles.
+ * Renders the generic event toggles + auto-tracked events + form integrations.
  */
 final class TabEvents implements TabInterface {
 
@@ -34,171 +34,32 @@ final class TabEvents implements TabInterface {
 		<p><?php esc_html_e( 'Choose which standard events should fire.', 'lw-pixel' ); ?></p>
 
 		<table class="form-table">
-			<tr>
-				<th scope="row"><?php esc_html_e( 'PageView', 'lw-pixel' ); ?></th>
-				<td>
+			<?php
+			$builtins = [
+				'event_pageview'     => [ __( 'PageView', 'lw-pixel' ), __( 'Fire PageView on every page', 'lw-pixel' ) ],
+				'event_view_content' => [ __( 'ViewContent', 'lw-pixel' ), __( 'Fire ViewContent on singular templates (posts, pages, CPTs)', 'lw-pixel' ) ],
+				'event_search'       => [ __( 'Search', 'lw-pixel' ), __( 'Fire Search on the search results page', 'lw-pixel' ) ],
+				'event_lead'         => [ __( 'Lead', 'lw-pixel' ), __( 'Fire Lead on form submissions', 'lw-pixel' ) ],
+			];
+			foreach ( $builtins as $key => [ $title, $label ] ) :
+				?>
+				<tr>
+					<th scope="row"><?php echo esc_html( $title ); ?></th>
+					<td>
 					<?php
 					$this->render_checkbox_field(
 						[
-							'name'  => 'event_pageview',
-							'label' => __( 'Fire PageView on every page', 'lw-pixel' ),
+							'name'  => $key,
+							'label' => $label,
 						]
 					);
 					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'ViewContent', 'lw-pixel' ); ?></th>
-				<td>
-					<?php
-					$this->render_checkbox_field(
-						[
-							'name'  => 'event_view_content',
-							'label' => __( 'Fire ViewContent on singular templates (posts, pages, CPTs)', 'lw-pixel' ),
-						]
-					);
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Search', 'lw-pixel' ); ?></th>
-				<td>
-					<?php
-					$this->render_checkbox_field(
-						[
-							'name'  => 'event_search',
-							'label' => __( 'Fire Search on the search results page', 'lw-pixel' ),
-						]
-					);
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Lead', 'lw-pixel' ); ?></th>
-				<td>
-					<?php
-					$this->render_checkbox_field(
-						[
-							'name'  => 'event_lead',
-							'label' => __( 'Fire Lead on form submissions', 'lw-pixel' ),
-						]
-					);
-					?>
-				</td>
-			</tr>
+						</td>
+				</tr>
+			<?php endforeach; ?>
 		</table>
 
-		<h3><?php esc_html_e( 'Auto-tracked events', 'lw-pixel' ); ?></h3>
-		<table class="form-table">
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Scroll depth', 'lw-pixel' ); ?></th>
-				<td>
-					<?php
-					$this->render_checkbox_field(
-						[
-							'name'  => 'event_scroll',
-							'label' => __( 'Fire Scroll events at percentage thresholds', 'lw-pixel' ),
-						]
-					);
-					?>
-					<br />
-					<?php
-					$this->render_text_field(
-						[
-							'name'        => 'event_scroll_thresholds',
-							'placeholder' => '25,50,75,100',
-							'description' => __( 'Comma-separated percentages.', 'lw-pixel' ),
-						]
-					);
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Time on page', 'lw-pixel' ); ?></th>
-				<td>
-					<?php
-					$this->render_checkbox_field(
-						[
-							'name'  => 'event_time_on_page',
-							'label' => __( 'Fire TimeOnPage events at second thresholds', 'lw-pixel' ),
-						]
-					);
-					?>
-					<br />
-					<?php
-					$this->render_text_field(
-						[
-							'name'        => 'event_time_thresholds',
-							'placeholder' => '10,30,60,180',
-							'description' => __( 'Comma-separated seconds.', 'lw-pixel' ),
-						]
-					);
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Downloads', 'lw-pixel' ); ?></th>
-				<td>
-					<?php
-					$this->render_checkbox_field(
-						[
-							'name'  => 'event_download',
-							'label' => __( 'Fire Download events on file links', 'lw-pixel' ),
-						]
-					);
-					?>
-					<br />
-					<?php
-					$this->render_text_field(
-						[
-							'name'        => 'event_download_extensions',
-							'placeholder' => 'pdf,doc,zip,mp3',
-							'description' => __( 'Comma-separated file extensions to track.', 'lw-pixel' ),
-						]
-					);
-					?>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Login', 'lw-pixel' ); ?></th>
-				<td>
-				<?php
-				$this->render_checkbox_field(
-					[
-						'name'  => 'event_login',
-						'label' => __( 'Fire Login event when a user logs in', 'lw-pixel' ),
-					]
-				);
-				?>
-					</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Signup', 'lw-pixel' ); ?></th>
-				<td>
-				<?php
-				$this->render_checkbox_field(
-					[
-						'name'  => 'event_signup',
-						'label' => __( 'Fire CompleteRegistration event on user signup', 'lw-pixel' ),
-					]
-				);
-				?>
-					</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Comment', 'lw-pixel' ); ?></th>
-				<td>
-				<?php
-				$this->render_checkbox_field(
-					[
-						'name'  => 'event_comment',
-						'label' => __( 'Fire Comment event on new comment submission', 'lw-pixel' ),
-					]
-				);
-				?>
-					</td>
-			</tr>
-		</table>
+		<?php ( new EventsAutoSection() )->render(); ?>
 
 		<h3><?php esc_html_e( 'Form integrations', 'lw-pixel' ); ?></h3>
 		<table class="form-table">
