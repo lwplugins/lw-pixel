@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.2] - 2026-04-26
+
+### Changed
+- Brand color updated to `#2b65f6` and title icon replaced with the circle-small mark, matching the other LW plugins
+- Settings page header now shows the brand icon next to the "Lightweight Pixel" title (LW Cookie / LW ZenAdmin pattern)
+- Active tab left-border uses the new brand color
+
+### Fixed
+- Tab navigation no longer shows the browser focus outline when a tab is clicked
+
+### Docs
+- README updated with PHP / WordPress / License / Packagist badges and a settings screenshot
+
 ## [1.0.1] - 2026-04-26
 
 ### Added

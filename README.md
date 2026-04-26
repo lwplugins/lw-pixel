@@ -2,6 +2,13 @@
 
 Lightweight tracking pixel manager for WordPress.
 
+[![PHP Version](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://php.net)
+[![WordPress Version](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg)](https://wordpress.org)
+[![License](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
+[![Packagist](https://img.shields.io/packagist/v/lwplugins/lw-pixel.svg)](https://packagist.org/packages/lwplugins/lw-pixel)
+
+![LW Pixel Settings](.github/screenshot.png)
+
 ## What it does
 
 Loads tracking pixels from the major ad networks and dispatches the standard ecommerce / conversion events for them. No upsell, no tracking, no bloat.

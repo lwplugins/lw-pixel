@@ -42,7 +42,8 @@ final class SettingsRenderer {
 		?>
 		<div class="wrap">
 			<h1>
-				<?php esc_html_e( 'LW Pixel', 'lw-pixel' ); ?>
+				<img src="<?php echo esc_url( LW_PIXEL_URL . 'assets/img/title-icon.svg' ); ?>" alt="" class="lw-title-icon" />
+				<?php esc_html_e( 'Lightweight Pixel', 'lw-pixel' ); ?>
 				<span style="font-size: 13px; font-weight: 400; color: #888;">(<?php echo esc_html( LW_PIXEL_VERSION ); ?>)</span>
 			</h1>
 

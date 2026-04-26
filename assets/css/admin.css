@@ -2,6 +2,16 @@
  * LW Pixel — admin styles.
  */
 
+/* Title Icon */
+.lw-title-icon {
+	width: 28px;
+	height: 28px;
+	vertical-align: middle;
+	margin-right: 4px;
+	position: relative;
+	top: -2px;
+}
+
 .lw-pixel-settings {
 	background: #fff;
 	border: 1px solid #ccd0d4;
@@ -39,9 +49,16 @@
 	background: #f0f0f1;
 }
 
+.lw-pixel-tabs a:focus,
+.lw-pixel-tabs a:focus-visible,
+.lw-pixel-tabs a:active {
+	outline: none;
+	box-shadow: none;
+}
+
 .lw-pixel-tabs a.active {
 	background: #fff;
-	border-left-color: #2271b1;
+	border-left-color: #2b65f6;
 	font-weight: 600;
 }
 

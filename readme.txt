@@ -4,7 +4,7 @@ Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,13 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.0.2 =
+* Update: Brand color updated to #2b65f6 and title icon replaced with the circle-small mark, matching the other LW plugins
+* Update: Settings page header now shows the brand icon next to the "Lightweight Pixel" title (LW Cookie / LW ZenAdmin pattern)
+* Fix: Tab navigation no longer shows the browser focus outline when a tab is clicked
+* Update: Active tab left-border uses the new brand color
+* Docs: README updated with PHP / WordPress / License / Packagist badges and a settings screenshot
 
 = 1.0.1 =
 * New: Tools tab on the Pixel settings page (LW Plugins → Pixel → Tools)
