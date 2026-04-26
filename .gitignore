@@ -1,0 +1,8 @@
+/vendor/
+/node_modules/
+.DS_Store
+*.log
+.phpcs.cache
+.phpunit.cache/
+.phpunit.result.cache
+composer.phar

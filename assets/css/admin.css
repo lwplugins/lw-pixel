@@ -1,0 +1,74 @@
+/**
+ * LW Pixel — admin styles.
+ */
+
+.lw-pixel-settings {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	margin-top: 20px;
+	overflow: hidden;
+	display: flex;
+	min-height: 500px;
+}
+
+.lw-pixel-tabs {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 220px;
+	background: #f6f7f7;
+	border-right: 1px solid #ccd0d4;
+}
+
+.lw-pixel-tabs li {
+	margin: 0;
+}
+
+.lw-pixel-tabs a {
+	display: flex;
+	align-items: center;
+	padding: 12px 16px;
+	text-decoration: none;
+	color: #2c3338;
+	border-left: 3px solid transparent;
+	transition: background 0.15s ease;
+}
+
+.lw-pixel-tabs a:hover {
+	background: #f0f0f1;
+}
+
+.lw-pixel-tabs a.active {
+	background: #fff;
+	border-left-color: #2271b1;
+	font-weight: 600;
+}
+
+.lw-pixel-tabs .dashicons {
+	margin-right: 8px;
+	color: #50575e;
+}
+
+.lw-pixel-tab-content {
+	flex: 1;
+	padding: 24px;
+}
+
+.lw-pixel-tab-panel {
+	display: none;
+}
+
+.lw-pixel-tab-panel.active {
+	display: block;
+}
+
+.lw-pixel-tab-panel h2 {
+	margin-top: 0;
+}
+
+.lw-pixel-tab-panel h3 {
+	margin-top: 32px;
+	border-top: 1px solid #ccd0d4;
+	padding-top: 24px;
+}
