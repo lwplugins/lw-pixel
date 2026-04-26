@@ -71,7 +71,7 @@ final class ParentPage {
 				'name'          => 'LW Pixel',
 				'description'   => 'Lightweight tracking pixel manager — Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing.',
 				'icon'          => 'dashicons-marker',
-				'icon_color'    => '#1d4ed8',
+				'icon_color'    => '#2b65f6',
 				'constant'      => 'LW_PIXEL_VERSION',
 				'settings_page' => 'lw-pixel',
 				'github'        => 'https://github.com/lwplugins/lw-pixel',
