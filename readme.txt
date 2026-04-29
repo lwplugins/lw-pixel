@@ -4,7 +4,7 @@ Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,13 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.0.3 =
+* New: WP-CLI support — full CLI surface for headless / scripted setups, sharing the same Options + SettingsSanitizer layer as the admin UI
+* New: `wp lw-pixel status` — version, configured-pixel count, consent mode, compliance flags, Meta CAPI / GA4 MP state
+* New: `wp lw-pixel list [--configured] [--format=…]` — every registered pixel with enabled/configured flags
+* New: `wp lw-pixel config list|get|set|reset` — booleans accept true/false/1/0/yes/no/on/off, array options accept comma-separated values
+* New: `wp lw-pixel migrate list|preview|run` — runs the PixelYourSite (Free + Pro) importer (and any future migrators) from the CLI
 
 = 1.0.2 =
 * Update: Brand color updated to #2b65f6 and title icon replaced with the circle-small mark, matching the other LW plugins

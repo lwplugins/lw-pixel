@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.3] - 2026-04-29
+
+### Added
+- WP-CLI support — full CLI surface for headless / scripted deployments, sharing the same `Options` + `SettingsSanitizer` layer as the admin UI so writes from CLI go through the exact same validation and head/body/footer protections
+- `wp lw-pixel status` — version, configured-pixel count, consent mode, Medical / LDU compliance state, Meta CAPI and GA4 Measurement Protocol toggles
+- `wp lw-pixel list [--configured] [--format=table|json|csv|yaml]` — every registered pixel with `enabled` and `configured` flags
+- `wp lw-pixel config list [--changed] [--format=…]` / `get <key>` / `set <key> <value>` / `reset [--yes]` — booleans accept `true/false/1/0/yes/no/on/off`, array options accept comma-separated values
+- `wp lw-pixel migrate list` / `preview <id> [--format=…]` / `run <id> [--yes]` — drives the existing `MigratorRegistry`, so the PixelYourSite (Free + Pro) importer is now available without opening the Tools tab
+
 ## [1.0.2] - 2026-04-26
 
 ### Changed
