@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5] - 2026-04-29
+
+### Added
+- PixelYourSite migrator now imports the cross-cutting auto-event toggles stored in `pys_facebook`: `general_event_enabled` → `event_pageview`, `automatic_event_search_enabled` → `event_search`, `automatic_event_form_enabled` → `event_lead`, plus login / signup / comment / download / scroll / time-on-page
+- Migrator imports the WooCommerce event toggles: `woo_view_content_enabled` → `woo_view_product`, `woo_view_category_enabled`, `woo_add_to_cart_enabled`, `woo_initiate_checkout_enabled`, `woo_purchase_enabled`, plus `woo_content_id_prefix`
+- Migrator picks up Meta's QA `test_api_event_code` (PYS stores it as a single-element array — handled by the same array-unwrap as `pixel_id`)
+
 ## [1.0.4] - 2026-04-29
 
 ### Fixed

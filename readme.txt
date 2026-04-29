@@ -4,7 +4,7 @@ Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.1
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,10 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.0.5 =
+* New: PixelYourSite migrator now also imports auto-event toggles (PageView, Search, Lead/form, Login, Signup, Comment, Download, Scroll, Time on Page) and WooCommerce event toggles (ViewProduct, ViewCategory, AddToCart, InitiateCheckout, Purchase, content_id_prefix), so a full PYS → LW Pixel switch keeps your existing tracking surface
+* New: Migrator picks up the Meta `test_api_event_code` so QA event codes don't get lost in the migration
 
 = 1.0.4 =
 * Fix: PixelYourSite migrator now imports the actual Pixel ID, GA4 Measurement ID and Bing/Pinterest/Reddit IDs — PYS stores those as single-element arrays (`["123…"]`) and the migrator was discarding non-scalar values. The fix unwraps any array, taking the first non-empty entry
