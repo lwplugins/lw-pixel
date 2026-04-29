@@ -110,6 +110,16 @@ final class PysMigrator implements MigratorInterface {
 			return is_array( $value ) ? array_map( 'strval', $value ) : (array) $default;
 		}
 
+		if ( is_array( $value ) ) {
+			foreach ( $value as $entry ) {
+				if ( is_scalar( $entry ) && '' !== trim( (string) $entry ) ) {
+					return trim( (string) $entry );
+				}
+			}
+
+			return (string) $default;
+		}
+
 		return is_scalar( $value ) ? trim( (string) $value ) : (string) $default;
 	}
 

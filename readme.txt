@@ -4,7 +4,7 @@ Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.1
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,10 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.0.4 =
+* Fix: PixelYourSite migrator now imports the actual Pixel ID, GA4 Measurement ID and Bing/Pinterest/Reddit IDs — PYS stores those as single-element arrays (`["123…"]`) and the migrator was discarding non-scalar values. The fix unwraps any array, taking the first non-empty entry
+* New: Migrator also imports the Meta Conversion API toggle (`use_server_api` → `fb_capi_enabled`) and access token (`server_access_api_token` → `fb_capi_token`)
 
 = 1.0.3 =
 * New: WP-CLI support — full CLI surface for headless / scripted setups, sharing the same Options + SettingsSanitizer layer as the admin UI

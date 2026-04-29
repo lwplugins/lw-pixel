@@ -46,6 +46,8 @@ final class PysMapping {
 			'pixel_id'                  => 'fb_pixel_id',
 			'advanced_matching_enabled' => 'fb_advanced_matching',
 			'send_external_id'          => 'fb_send_external_id',
+			'use_server_api'            => 'fb_capi_enabled',
+			'server_access_api_token'   => 'fb_capi_token',
 		];
 	}
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.4] - 2026-04-29
+
+### Fixed
+- PixelYourSite migrator was importing only the boolean toggles, leaving Pixel IDs and Measurement IDs blank. PYS stores `pixel_id`, `tracking_id`, `tag_id`, `server_access_api_token` etc. as single-element arrays (`["123…"]`) for multi-pixel support, and `PysMigrator::cast()` fell through to `(string) $default` for any non-scalar input. Cast now unwraps arrays and takes the first non-empty scalar entry
+
+### Added
+- PixelYourSite migrator now also maps `pys_facebook.use_server_api` → `fb_capi_enabled` and `pys_facebook.server_access_api_token` → `fb_capi_token`, so the Conversion API setup transfers in the same import
+
 ## [1.0.3] - 2026-04-29
 
 ### Added
