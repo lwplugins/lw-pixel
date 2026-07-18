@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -27,8 +27,28 @@ jobs:
       - name: Run PHPCS
         run: composer phpcs -- -q --report=checkstyle | cs2pr
 
-  smoke:
-    name: Smoke test (PHP ${{ matrix.php }})
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Run PHPStan
+        run: composer analyse
+
+  test:
+    name: Tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
 
     strategy:
@@ -37,7 +57,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -50,3 +70,6 @@ jobs:
 
       - name: Run smoke test
         run: composer smoke
+
+      - name: Run unit tests
+        run: composer test

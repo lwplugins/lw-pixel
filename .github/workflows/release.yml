@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -59,6 +59,8 @@ jobs:
             --exclude='builds' --exclude='composer.json' --exclude='composer.lock' \
             --exclude='phpcs.xml.dist' --exclude='node_modules' --exclude='.gitignore' \
             --exclude='bin' --exclude='tests' --exclude='docs' \
+            --exclude='phpstan.neon.dist' --exclude='phpstan-baseline.neon' \
+            --exclude='phpstan-bootstrap.php' --exclude='phpunit.xml.dist' --exclude='.claude' \
             --exclude='*.log' . dist/lw-pixel/
           cd dist && zip -r "lw-pixel-${VERSION}.zip" lw-pixel/
 
