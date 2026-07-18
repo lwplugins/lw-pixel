@@ -51,7 +51,7 @@ trait FieldRendererTrait {
 	/**
 	 * Render a checkbox.
 	 *
-	 * @param array{name: string, label: string, description?: string} $args Field arguments.
+	 * @param array{name: string, label?: string, description?: string} $args Field arguments.
 	 */
 	protected function render_checkbox_field( array $args ): void {
 		printf(

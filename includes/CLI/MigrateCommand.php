@@ -145,8 +145,8 @@ final class MigrateCommand {
 		WP_CLI::confirm( "Run the '{$id}' migrator? Existing LW Pixel options will be overwritten where mappings apply.", $assoc_args );
 
 		$result  = $migrator->run();
-		$updated = (array) ( $result['updated'] ?? [] );
-		$skipped = (array) ( $result['skipped'] ?? [] );
+		$updated = $result['updated'];
+		$skipped = $result['skipped'];
 
 		WP_CLI::success(
 			sprintf(

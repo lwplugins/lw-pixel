@@ -84,6 +84,10 @@ final class ProductData {
 		$contents = [];
 
 		foreach ( $order->get_items() as $item ) {
+			if ( ! $item instanceof \WC_Order_Item_Product ) {
+				continue;
+			}
+
 			$product = $item->get_product();
 
 			if ( ! $product instanceof WC_Product ) {

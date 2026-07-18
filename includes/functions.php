@@ -24,9 +24,9 @@ if ( ! function_exists( __NAMESPACE__ . '\\get_pixel_manager' ) ) {
 	/**
 	 * Get the pixel manager from the main plugin instance.
 	 *
-	 * @return Pixels\PixelManager|null
+	 * @return Pixels\PixelManager
 	 */
-	function get_pixel_manager(): ?Pixels\PixelManager {
+	function get_pixel_manager(): Pixels\PixelManager {
 		$plugin = lw_pixel();
 		return $plugin->get_pixel_manager();
 	}

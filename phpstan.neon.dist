@@ -1,0 +1,39 @@
+includes:
+	- phpstan-baseline.neon
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	level: 5
+
+	paths:
+		- lw-pixel.php
+		- includes/
+
+	excludePaths:
+		- tests/
+		- bin/
+		- vendor/
+
+	# Declare the plugin's runtime-defined constants for static analysis.
+	bootstrapFiles:
+		- phpstan-bootstrap.php
+
+	# Third-party APIs the plugin integrates with. WordPress core stubs come
+	# from the szepeviktor/phpstan-wordpress extension above.
+	scanFiles:
+		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+		- vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
+
+	# The WooCommerce/WordPress stub symbol tables are large; a single worker
+	# keeps peak memory deterministic under the `analyse` script's limit.
+	parallel:
+		maximumNumberOfProcesses: 1
+
+	ignoreErrors:
+		# ProductData::for_cart() guards on function_exists('WC') so it degrades
+		# gracefully when WooCommerce is inactive at runtime. woocommerce-stubs
+		# make PHPStan treat WC() as always-defined, folding the guard to
+		# always-false — but the runtime guard is real.
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			path: includes/WooCommerce/ProductData.php

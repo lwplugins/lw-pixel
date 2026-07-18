@@ -37,7 +37,7 @@ final class GoogleTagManager extends AbstractPixel {
 		];
 	}
 
-	public function map_event( string $event_name, array $params ): ?array {
+	public function map_event( string $event_name, array $params ): array {
 		// GTM consumes events through the dataLayer; the provider name is enough.
 		return [
 			'event'  => $event_name,

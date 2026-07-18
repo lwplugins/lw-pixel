@@ -57,7 +57,7 @@ final class FacebookPixel extends AbstractPixel {
 		];
 	}
 
-	public function map_event( string $event_name, array $params ): ?array {
+	public function map_event( string $event_name, array $params ): array {
 		$mapped = self::EVENT_MAP[ $event_name ] ?? null;
 
 		if ( null === $mapped ) {

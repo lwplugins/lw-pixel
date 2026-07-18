@@ -56,7 +56,7 @@ final class GoogleAnalytics4 extends AbstractPixel {
 		];
 	}
 
-	public function map_event( string $event_name, array $params ): ?array {
+	public function map_event( string $event_name, array $params ): array {
 		$mapped = self::EVENT_MAP[ $event_name ] ?? $this->snake_case( $event_name );
 
 		return [

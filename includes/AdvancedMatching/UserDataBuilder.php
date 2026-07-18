@@ -84,7 +84,7 @@ final class UserDataBuilder {
 	private static function collect_from_user(): array {
 		$user = wp_get_current_user();
 
-		if ( ! $user || ! $user->exists() ) {
+		if ( ! $user->exists() ) {
 			return [];
 		}
 

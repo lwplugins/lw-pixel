@@ -62,6 +62,11 @@ function lw_pixel(): Plugin {
 	return $instance;
 }
 
-add_action( 'plugins_loaded', __NAMESPACE__ . '\\lw_pixel' );
+add_action(
+	'plugins_loaded',
+	static function (): void {
+		lw_pixel();
+	}
+);
 
 CLI\Loader::register();

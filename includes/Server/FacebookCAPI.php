@@ -88,7 +88,7 @@ final class FacebookCAPI {
 
 		return [
 			'ok'   => 200 === $code,
-			'body' => is_string( $response_body ) ? $response_body : '',
+			'body' => $response_body,
 		];
 	}
 
