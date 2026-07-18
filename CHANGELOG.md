@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.6] - 2026-05-14
+
+### Changed
+- Save Changes button now renders inside every settings tab panel that has editable fields, so it sits with the form fields on the active tab instead of hanging off the bottom of the whole form. Tools (migrator launchers) and System Report (read-only diagnostics) skip the button — they have nothing to save.
+
 ## [1.0.5] - 2026-04-29
 
 ### Added

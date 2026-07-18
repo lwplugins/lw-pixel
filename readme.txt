@@ -4,7 +4,7 @@ Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.1
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,9 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.0.6 =
+* Change: Save Changes button now renders inside every settings tab that has editable fields, not just below the entire form. Tools (migrator launchers) and System Report (read-only diagnostics) still skip it.
 
 = 1.0.5 =
 * New: PixelYourSite migrator now also imports auto-event toggles (PageView, Search, Lead/form, Login, Signup, Comment, Download, Scroll, Time on Page) and WooCommerce event toggles (ViewProduct, ViewCategory, AddToCart, InitiateCheckout, Purchase, content_id_prefix), so a full PYS → LW Pixel switch keeps your existing tracking surface

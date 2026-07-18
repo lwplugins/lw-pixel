@@ -55,7 +55,6 @@ final class SettingsRenderer {
 
 					<div class="lw-pixel-tab-content">
 						<?php $this->render_panels(); ?>
-						<?php submit_button(); ?>
 					</div>
 				</div>
 			</form>
@@ -97,7 +96,23 @@ final class SettingsRenderer {
 				esc_attr( $active_class )
 			);
 			$tab->render();
+			if ( $this->should_show_save_button( $tab ) ) {
+				submit_button();
+			}
 			echo '</div>';
 		}
+	}
+
+	/**
+	 * Whether a tab should render the WordPress save button.
+	 *
+	 * Tools (migrator launchers) and System Report (read-only diagnostics)
+	 * have no editable fields, so a save button would be misleading there.
+	 *
+	 * @param TabInterface $tab Tab being rendered.
+	 * @return bool
+	 */
+	private function should_show_save_button( TabInterface $tab ): bool {
+		return ! in_array( $tab->get_slug(), [ 'tools', 'system-report' ], true );
 	}
 }
