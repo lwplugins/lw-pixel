@@ -62,6 +62,23 @@ final class Manager {
 	}
 
 	/**
+	 * Whether consent can be evaluated CLIENT-SIDE (cache-safe).
+	 *
+	 * LW Cookie publishes the visitor's consent in a JS-readable cookie
+	 * (`lw_cookie_consent`) and fires a `lwCookieConsent` event, so runtime.js
+	 * can decide per-visitor which pixels fire — without the server baking a
+	 * cache-filler's consent into the HTML. We detect it via lw-cookie's PHP
+	 * hook. When true, PayloadBuilder emits every configured pixel plus a
+	 * pixel→category map and lets the browser gate; when false it keeps the
+	 * server-side filter (no client-readable consent source to defer to).
+	 *
+	 * @return bool
+	 */
+	public function has_client_gating(): bool {
+		return false !== has_filter( 'lw_cookie_is_category_allowed' );
+	}
+
+	/**
 	 * Current consent state per category.
 	 *
 	 * @return array<string, bool>

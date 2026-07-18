@@ -51,28 +51,40 @@ final class PayloadBuilder {
 	 * @return array<string, mixed>
 	 */
 	public function build( array $queue ): array {
-		$pixels     = $this->pixels();
+		// When consent can be evaluated client-side, emit EVERY configured pixel
+		// (plus a pixel→category map) so the HTML is identical for every visitor
+		// and safe to full-page cache — runtime.js then gates per-visitor. This
+		// is the whole point of the cache-safe consent architecture (issue #3).
+		$client_gating = $this->consent_manager->has_client_gating();
+
+		$pixels     = $this->pixels( $client_gating );
 		$active_ids = array_keys( $pixels );
 
 		return [
 			'pixels'        => $pixels,
 			'events'        => $this->resolve_events( $queue, $active_ids ),
 			'consent'       => $this->consent_manager->get_state(),
+			'consentClient' => $client_gating,
+			'categories'    => $client_gating ? $this->consent_manager->get_pixel_categories() : [],
 			'custom_events' => $this->resolve_custom_events( $active_ids ),
 			'auto_events'   => $this->resolve_auto_events( $active_ids ),
 		];
 	}
 
 	/**
-	 * Configured pixels with consent applied.
+	 * Configured pixels for the payload.
 	 *
+	 * @param bool $client_gating When true, consent is applied client-side, so
+	 *                            every configured pixel is emitted (cache-safe).
+	 *                            When false, the server-side consent filter is
+	 *                            kept (no client-readable consent source).
 	 * @return array<string, array<string, mixed>>
 	 */
-	private function pixels(): array {
+	private function pixels( bool $client_gating ): array {
 		$pixels = [];
 
 		foreach ( $this->pixel_manager->get_configured() as $pixel ) {
-			if ( ! $this->consent_manager->is_pixel_allowed( $pixel->get_id() ) ) {
+			if ( ! $client_gating && ! $this->consent_manager->is_pixel_allowed( $pixel->get_id() ) ) {
 				continue;
 			}
 

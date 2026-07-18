@@ -8,6 +8,43 @@
 	'use strict';
 
 	var DATA_NODE_ID = 'lw-pixel-data';
+	var payload      = null;
+	var initialized  = {};
+
+	/**
+	 * Read the visitor's consent categories from the lw-cookie cookie.
+	 * Cache-safe: this runs per-visitor in the browser, so full-page caching
+	 * cannot bake one visitor's consent into the HTML served to another.
+	 */
+	function getConsentCategories() {
+		try {
+			var match = document.cookie.match( /(?:^|;\s*)lw_cookie_consent=([^;]+)/ );
+			if ( ! match) {
+				return { necessary: true };
+			}
+			var data = JSON.parse( decodeURIComponent( match[1] ) );
+			return (data && data.categories) ? data.categories : { necessary: true };
+		} catch (e) {
+			return { necessary: true };
+		}
+	}
+
+	/**
+	 * Whether a pixel may fire for the current visitor.
+	 * When the payload was built without client-side gating, the server already
+	 * filtered — allow everything present. Otherwise gate by the pixel's
+	 * consent category (uncategorized pixels are always allowed).
+	 */
+	function pixelAllowed(id) {
+		if ( ! payload || ! payload.consentClient) {
+			return true;
+		}
+		var category = (payload.categories || {})[id];
+		if ( ! category) {
+			return true;
+		}
+		return getConsentCategories()[category] === true;
+	}
 
 	function readPayload() {
 		var node = document.getElementById( DATA_NODE_ID );
@@ -261,39 +298,72 @@
 		}
 	};
 
-	function init() {
-		var payload = readPayload();
-		if ( ! payload || ! payload.pixels) {
-			return;
-		}
+	/**
+	 * Initialise every configured pixel the visitor currently allows and has
+	 * not been initialised yet. Returns the ids initialised on this pass so the
+	 * caller can fire their base/pending events.
+	 */
+	function initAllowedPixels() {
+		var newly = [];
 
 		Object.keys( payload.pixels ).forEach(
 			function (id) {
+				if (initialized[id] || ! pixelAllowed( id )) {
+					return;
+				}
 				var provider = providers[id];
 				if ( ! provider) {
 					return;
 				}
 				try {
-					provider.init( payload.pixels[id] ); } catch (e) {
-								/* noop */ }
+					provider.init( payload.pixels[id] );
+					initialized[id] = true;
+					newly.push( id );
+				} catch (e) { /* noop */ }
 			}
 		);
 
-		(payload.events || []).forEach(
-			function (event) {
-				Object.keys( event.mapped || {} ).forEach(
-					function (pixelId) {
-						var provider = providers[pixelId];
-						if ( ! provider || typeof provider.fire !== 'function') {
-							return;
-						}
-						try {
-							provider.fire( event.mapped[pixelId], event.params || {} ); } catch (e) {
-											/* noop */ }
+		return newly;
+	}
+
+	/**
+	 * Fire the queued page-load and pending events, but only for the given
+	 * (just-initialised) pixels — so a pixel that gains consent later still
+	 * receives its PageView.
+	 */
+	function fireQueuedEventsFor(ids) {
+		var allow = {};
+		ids.forEach( function (id) { allow[id] = true; } );
+
+		var lists = [ payload.events || [] ];
+		var auto  = payload.auto_events || {};
+		lists.push( auto.pending || [] );
+
+		lists.forEach(
+			function (list) {
+				list.forEach(
+					function (entry) {
+						Object.keys( entry.mapped || {} ).forEach(
+							function (pixelId) {
+								if ( ! allow[pixelId]) { return; }
+								var provider = providers[pixelId];
+								if ( ! provider || typeof provider.fire !== 'function') { return; }
+								try { provider.fire( entry.mapped[pixelId], entry.params || {} ); } catch (e) { /* noop */ }
+							}
+						);
 					}
 				);
 			}
 		);
+	}
+
+	function init() {
+		payload = readPayload();
+		if ( ! payload || ! payload.pixels) {
+			return;
+		}
+
+		fireQueuedEventsFor( initAllowedPixels() );
 
 		(payload.custom_events || []).forEach(
 			function (cev) {
@@ -302,16 +372,21 @@
 		);
 
 		var auto = payload.auto_events || {};
-		fireMappedList( auto.pending );
 		setupAutoScroll( auto.scroll );
 		setupAutoTime( auto.time );
 		setupAutoDownload( auto.download );
-	}
 
-	function fireMappedList(list) {
-		(list || []).forEach(
-			function (entry) {
-				fireMapped( entry.mapped, entry.params );
+		// Re-evaluate on a consent change (lw-cookie fires this): initialise any
+		// newly-allowed pixel and fire its base/pending events. Auto-event
+		// listeners below gate on `initialized` at fire time, so they start
+		// working for the pixel automatically.
+		window.addEventListener(
+			'lwCookieConsent',
+			function () {
+				var newly = initAllowedPixels();
+				if (newly.length) {
+					fireQueuedEventsFor( newly );
+				}
 			}
 		);
 	}
@@ -319,6 +394,7 @@
 	function fireMapped(mapped, params) {
 		Object.keys( mapped || {} ).forEach(
 			function (pixelId) {
+				if ( ! initialized[pixelId]) { return; }
 				var provider = providers[pixelId];
 				if ( ! provider || typeof provider.fire !== 'function') { return; }
 				try { provider.fire( mapped[pixelId], params || {} ); } catch (e) { /* noop */ }
@@ -377,6 +453,7 @@
 	function fireCustomEvent(cev) {
 		Object.keys( cev.mapped || {} ).forEach(
 			function (pixelId) {
+				if ( ! initialized[pixelId]) { return; }
 				var provider = providers[pixelId];
 				if ( ! provider || typeof provider.fire !== 'function') {
 					return;

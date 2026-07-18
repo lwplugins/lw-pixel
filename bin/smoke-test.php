@@ -111,6 +111,9 @@ lw_assert( isset( $payload['auto_events'] ), 'payload has auto_events' );
 lw_assert( isset( $payload['auto_events']['scroll'] ), 'auto_events has scroll' );
 lw_assert( isset( $payload['auto_events']['time'] ), 'auto_events has time' );
 lw_assert( isset( $payload['auto_events']['download'] ), 'auto_events has download' );
+lw_assert( isset( $payload['consentClient'] ), 'payload has consentClient flag' );
+lw_assert( isset( $payload['categories'] ), 'payload has categories map' );
+lw_assert( false === $payload['consentClient'], 'consentClient is false with no consent plugin' );
 
 $json = json_encode( $payload, JSON_HEX_TAG | JSON_HEX_AMP );
 lw_assert( false === strpos( (string) $json, '</script>' ), 'JSON output cannot contain </script>' );
@@ -127,6 +130,25 @@ foreach ( $_GLOBALS_OPTIONS as $k => $v ) {
 $manager2 = new PixelManager();
 lw_assert( count( $manager2->get_configured() ) === 1, 'fb is now configured' );
 lw_assert( $manager2->get( 'fb' )->is_configured(), 'fb is_configured() returns true' );
+
+echo "\n== Cache-safe consent gating (issue #3) ==\n";
+Options::set( 'consent_marketing_pixels', [ 'fb' ] );
+add_filter(
+	'lw_cookie_is_category_allowed',
+	static function ( $allowed, $category ) {
+		// Simulate lw-cookie denying the marketing category server-side.
+		return 'marketing' === $category ? false : true;
+	},
+	10,
+	2
+);
+$consent3 = new ConsentManager();
+lw_assert( $consent3->has_client_gating(), 'client gating detected when the lw-cookie hook is present' );
+lw_assert( ! $consent3->is_pixel_allowed( 'fb' ), 'server-side consent would deny fb (marketing)' );
+$payload3 = ( new PayloadBuilder( $manager2, $consent3 ) )->build( [] );
+lw_assert( true === $payload3['consentClient'], 'payload advertises client-side gating' );
+lw_assert( isset( $payload3['pixels']['fb'] ), 'fb is STILL emitted (cache-safe) despite denied marketing consent' );
+lw_assert( 'marketing' === ( $payload3['categories']['fb'] ?? '' ), 'fb category is exposed for client-side gating' );
 
 echo "\n========================================\n";
 echo "Total: {$assertions} assertions";
