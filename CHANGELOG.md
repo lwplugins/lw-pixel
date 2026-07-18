@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.0] - 2026-07-18
+
+### Fixed
+- Consent is now evaluated in the browser instead of at render time, so the frontend payload is identical for every visitor and safe to full-page cache. Previously, under nginx/Varnish/CDN HTML caching, the consent state of whoever filled the cache was served to everyone — either dropping tracking for consented visitors or firing pixels for non-consented ones (a GDPR risk). When LW Cookie is active, every configured pixel is emitted with its consent category and `runtime.js` gates per-visitor, re-initialising pixels when consent changes. (#3)
+
+### Changed
+- Minimum PHP is now 8.2.
+
+### Added
+- PHPStan level 5 static analysis and a PHPUnit test suite in CI.
+
 ## [1.0.6] - 2026-05-14
 
 ### Changed

@@ -3,8 +3,8 @@ Contributors: lwplugins
 Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
 Tested up to: 6.7
-Requires PHP: 8.1
-Stable tag: 1.0.6
+Requires PHP: 8.2
+Stable tag: 1.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,10 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.1.0 =
+* Fix: Consent is now evaluated in the browser, so consent-filtered pixels are no longer baked into full-page-cached HTML. Under page caching this previously dropped tracking for consented visitors or fired pixels for non-consented ones. With LW Cookie active, all configured pixels are output and runtime.js gates each one per visitor (#3)
+* Update: Minimum PHP is now 8.2; added PHPStan level 5 and a PHPUnit test suite to CI
 
 = 1.0.6 =
 * Change: Save Changes button now renders inside every settings tab that has editable fields, not just below the entire form. Tools (migrator launchers) and System Report (read-only diagnostics) still skip it.
