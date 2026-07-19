@@ -31,6 +31,9 @@ final class EventsAutoSection {
 			<?php $this->simple_row( 'event_login', __( 'Login', 'lw-pixel' ), __( 'Fire Login event when a user logs in', 'lw-pixel' ) ); ?>
 			<?php $this->simple_row( 'event_signup', __( 'Signup', 'lw-pixel' ), __( 'Fire CompleteRegistration event on user signup', 'lw-pixel' ) ); ?>
 			<?php $this->simple_row( 'event_comment', __( 'Comment', 'lw-pixel' ), __( 'Fire Comment event on new comment submission', 'lw-pixel' ) ); ?>
+			<?php $this->simple_row( 'event_click_phone', __( 'Phone clicks', 'lw-pixel' ), __( 'Fire a Contact event when a visitor clicks a tel: link', 'lw-pixel' ) ); ?>
+			<?php $this->simple_row( 'event_click_email', __( 'Email clicks', 'lw-pixel' ), __( 'Fire a Contact event when a visitor clicks a mailto: link', 'lw-pixel' ) ); ?>
+			<?php $this->thankyou_row(); ?>
 		</table>
 		<?php
 	}
@@ -57,6 +60,36 @@ final class EventsAutoSection {
 			);
 			?>
 				</td>
+		</tr>
+		<?php
+	}
+
+	/**
+	 * Render the thank-you page toggle plus its URL fragment list.
+	 *
+	 * @return void
+	 */
+	private function thankyou_row(): void {
+		?>
+		<tr>
+			<th scope="row"><?php esc_html_e( 'Thank-you pages', 'lw-pixel' ); ?></th>
+			<td>
+			<?php
+			$this->render_checkbox_field(
+				[
+					'name'  => 'event_thankyou',
+					'label' => __( 'Fire a Lead event when the URL matches one of the fragments below', 'lw-pixel' ),
+				]
+			);
+			$this->render_textarea_field(
+				[
+					'name'        => 'event_thankyou_urls',
+					'rows'        => 4,
+					'description' => __( 'One URL fragment per line, e.g. koszonjuk. Matched case-insensitively against the page path.', 'lw-pixel' ),
+				]
+			);
+			?>
+			</td>
 		</tr>
 		<?php
 	}

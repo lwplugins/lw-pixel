@@ -22,6 +22,11 @@ final class SettingsSanitizer {
 	private const RAW_KEYS = [ 'head_code', 'footer_code', 'body_open_code' ];
 
 	/**
+	 * Keys that should be sanitized as textarea (preserve line breaks).
+	 */
+	private const TEXTAREA_KEYS = [ 'event_thankyou_urls' ];
+
+	/**
 	 * Sanitise the submitted values.
 	 *
 	 * @param array<string, mixed> $input Submitted input.
@@ -64,6 +69,10 @@ final class SettingsSanitizer {
 
 		if ( in_array( $key, self::RAW_KEYS, true ) ) {
 			return self::sanitize_raw_code( $value, (string) $fallback );
+		}
+
+		if ( in_array( $key, self::TEXTAREA_KEYS, true ) ) {
+			return null === $value ? $fallback : sanitize_textarea_field( $value );
 		}
 
 		return null === $value ? $fallback : sanitize_text_field( $value );
