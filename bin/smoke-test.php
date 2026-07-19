@@ -111,6 +111,9 @@ lw_assert( isset( $payload['auto_events'] ), 'payload has auto_events' );
 lw_assert( isset( $payload['auto_events']['scroll'] ), 'auto_events has scroll' );
 lw_assert( isset( $payload['auto_events']['time'] ), 'auto_events has time' );
 lw_assert( isset( $payload['auto_events']['download'] ), 'auto_events has download' );
+lw_assert( isset( $payload['auto_events']['phone'] ), 'auto_events has phone' );
+lw_assert( isset( $payload['auto_events']['email'] ), 'auto_events has email' );
+lw_assert( false === $payload['auto_events']['phone']['enabled'], 'phone click tracking is off by default' );
 lw_assert( isset( $payload['consentClient'] ), 'payload has consentClient flag' );
 lw_assert( isset( $payload['categories'] ), 'payload has categories map' );
 lw_assert( false === $payload['consentClient'], 'consentClient is false with no consent plugin' );
@@ -130,6 +133,19 @@ foreach ( $_GLOBALS_OPTIONS as $k => $v ) {
 $manager2 = new PixelManager();
 lw_assert( count( $manager2->get_configured() ) === 1, 'fb is now configured' );
 lw_assert( $manager2->get( 'fb' )->is_configured(), 'fb is_configured() returns true' );
+
+Options::set( 'event_click_phone', true );
+$payload_phone = ( new PayloadBuilder( $manager2, $consent ) )->build( [] );
+lw_assert( true === $payload_phone['auto_events']['phone']['enabled'], 'phone click tracking can be enabled' );
+lw_assert(
+	'Contact' === ( $payload_phone['auto_events']['phone']['mapped']['fb']['name'] ?? '' ),
+	'phone click maps to the standard Contact event for Meta'
+);
+lw_assert(
+	'phone' === ( $payload_phone['auto_events']['phone']['mapped']['fb']['params']['contact_method'] ?? '' ),
+	'phone click carries contact_method=phone'
+);
+Options::set( 'event_click_phone', false );
 
 echo "\n== Cache-safe consent gating (issue #3) ==\n";
 Options::set( 'consent_marketing_pixels', [ 'fb' ] );

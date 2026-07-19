@@ -45,6 +45,8 @@ final class AutoEvents {
 			'scroll'   => self::scroll_config(),
 			'time'     => self::time_config(),
 			'download' => self::download_config(),
+			'phone'    => self::contact_config( 'event_click_phone' ),
+			'email'    => self::contact_config( 'event_click_email' ),
 			'pending'  => PendingEventStore::pop( PendingEventStore::current_owner() ),
 		];
 	}
@@ -88,6 +90,16 @@ final class AutoEvents {
 			'enabled'    => (bool) Options::get( 'event_download' ),
 			'extensions' => array_values( array_filter( $exts ) ),
 		];
+	}
+
+	/**
+	 * Contact-link click config (phone / email).
+	 *
+	 * @param string $option_key Toggle option key.
+	 * @return array<string, mixed>
+	 */
+	private static function contact_config( string $option_key ): array {
+		return [ 'enabled' => (bool) Options::get( $option_key ) ];
 	}
 
 	/**

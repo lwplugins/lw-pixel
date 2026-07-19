@@ -156,6 +156,14 @@ final class PayloadBuilder {
 			'scroll'   => array_merge( $config['scroll'], [ 'mapped' => $this->map_for_all( 'Scroll', [], $active_ids ) ] ),
 			'time'     => array_merge( $config['time'], [ 'mapped' => $this->map_for_all( 'TimeOnPage', [], $active_ids ) ] ),
 			'download' => array_merge( $config['download'], [ 'mapped' => $this->map_for_all( 'Download', [], $active_ids ) ] ),
+			'phone'    => array_merge(
+				$config['phone'],
+				[ 'mapped' => $this->map_for_all( 'Contact', [ 'contact_method' => 'phone' ], $active_ids ) ]
+			),
+			'email'    => array_merge(
+				$config['email'],
+				[ 'mapped' => $this->map_for_all( 'Contact', [ 'contact_method' => 'email' ], $active_ids ) ]
+			),
 			'pending'  => $this->resolve_pending( $config['pending'], $active_ids ),
 		];
 	}
