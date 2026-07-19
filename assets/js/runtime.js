@@ -81,6 +81,17 @@
 		}
 	}
 
+	/**
+	 * Merge server-mapped params with the runtime params captured at fire time.
+	 */
+	function mergeParams(mapped, params) {
+		var base = (mapped && mapped.params) || {};
+		var out  = {};
+		Object.keys( base ).forEach( function (k) { out[k] = base[k]; } );
+		Object.keys( params || {} ).forEach( function (k) { out[k] = params[k]; } );
+		return out;
+	}
+
 	var providers = {
 
 		fb: {
@@ -101,11 +112,11 @@
 				window.fbq( 'init', config.pixelId );
 				this.loaded = true;
 			},
-			fire: function (mapped) {
+			fire: function (mapped, params) {
 				if ( ! window.fbq || ! mapped) {
 					return;
 				}
-				window.fbq( mapped.type || 'track', mapped.name, mapped.params || {} );
+				window.fbq( mapped.type || 'track', mapped.name, mergeParams( mapped, params ) );
 			}
 		},
 
@@ -125,11 +136,11 @@
 					}
 				);
 			},
-			fire: function (mapped) {
+			fire: function (mapped, params) {
 				if ( ! window.gtag || ! mapped) {
 					return;
 				}
-				window.gtag( 'event', mapped.name, mapped.params || {} );
+				window.gtag( 'event', mapped.name, mergeParams( mapped, params ) );
 			}
 		},
 
@@ -142,11 +153,11 @@
 				loadScript( 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent( config.conversionId ) );
 				window.gtag( 'config', config.conversionId );
 			},
-			fire: function (mapped) {
+			fire: function (mapped, params) {
 				if ( ! window.gtag || ! mapped) {
 					return;
 				}
-				window.gtag( 'event', 'conversion', mapped );
+				window.gtag( 'event', 'conversion', mergeParams( mapped, params ) );
 			}
 		},
 
@@ -191,11 +202,11 @@
 				window.ttq.load( config.pixelId );
 				window.ttq.page();
 			},
-			fire: function (mapped) {
+			fire: function (mapped, params) {
 				if ( ! window.ttq || ! mapped) {
 					return;
 				}
-				window.ttq.track( mapped.name, mapped.params || {} );
+				window.ttq.track( mapped.name, mergeParams( mapped, params ) );
 			}
 		},
 
@@ -213,11 +224,11 @@
 				window.pintrk( 'load', config.tagId );
 				window.pintrk( 'page' );
 			},
-			fire: function (mapped) {
+			fire: function (mapped, params) {
 				if ( ! window.pintrk || ! mapped) {
 					return;
 				}
-				window.pintrk( 'track', mapped.name, mapped.params || {} );
+				window.pintrk( 'track', mapped.name, mergeParams( mapped, params ) );
 			}
 		},
 
@@ -233,11 +244,11 @@
 							var s = this.readyState;s && s !== "loaded" && s !== "complete" || (f(),n.onload = n.onreadystatechange = null)},i = d.getElementsByTagName( t )[0],i.parentNode.insertBefore( n,i )})( window,document,"script","//bat.bing.com/bat.js","uetq" );
 				/* eslint-enable */
 			},
-			fire: function (mapped) {
+			fire: function (mapped, params) {
 				if ( ! window.uetq || ! mapped) {
 					return;
 				}
-				window.uetq.push( 'event', mapped.name, mapped.params || {} );
+				window.uetq.push( 'event', mapped.name, mergeParams( mapped, params ) );
 			}
 		},
 
@@ -252,11 +263,11 @@
 				window.rdt( 'init', config.pixelId );
 				window.rdt( 'track', 'PageVisit' );
 			},
-			fire: function (mapped) {
+			fire: function (mapped, params) {
 				if ( ! window.rdt || ! mapped) {
 					return;
 				}
-				window.rdt( 'track', mapped.name, mapped.params || {} );
+				window.rdt( 'track', mapped.name, mergeParams( mapped, params ) );
 			}
 		},
 
@@ -271,11 +282,11 @@
 				window.snaptr( 'init', config.pixelId, { user_email: config.email || '' } );
 				window.snaptr( 'track', 'PAGE_VIEW' );
 			},
-			fire: function (mapped) {
+			fire: function (mapped, params) {
 				if ( ! window.snaptr || ! mapped) {
 					return;
 				}
-				window.snaptr( 'track', mapped.name, mapped.params || {} );
+				window.snaptr( 'track', mapped.name, mergeParams( mapped, params ) );
 			}
 		},
 
@@ -289,11 +300,11 @@
 				/* eslint-enable */
 				window.twq( 'config', config.pixelId );
 			},
-			fire: function (mapped) {
+			fire: function (mapped, params) {
 				if ( ! window.twq || ! mapped) {
 					return;
 				}
-				window.twq( 'event', mapped.name, mapped.params || {} );
+				window.twq( 'event', mapped.name, mergeParams( mapped, params ) );
 			}
 		}
 	};
@@ -375,6 +386,8 @@
 		setupAutoScroll( auto.scroll );
 		setupAutoTime( auto.time );
 		setupAutoDownload( auto.download );
+		setupAutoContactClick( auto.phone, 'tel:', 'phone' );
+		setupAutoContactClick( auto.email, 'mailto:', 'email' );
 
 		// Re-evaluate on a consent change (lw-cookie fires this): initialise any
 		// newly-allowed pixel and fire its base/pending events. Auto-event
@@ -446,6 +459,29 @@
 				var ext  = (href.split( '?' )[0].split( '#' )[0].split( '.' ).pop() || '').toLowerCase();
 				if (cfg.extensions.indexOf( ext ) === -1) { return; }
 				fireMapped( cfg.mapped, { file_url: href, file_extension: ext } );
+			}
+		);
+	}
+
+	/**
+	 * Fire a Contact event when a visitor clicks a tel:/mailto: link.
+	 *
+	 * @param {Object} cfg    Auto-event config block ({enabled, mapped}).
+	 * @param {string} scheme Link scheme to match, e.g. 'tel:'.
+	 * @param {string} method Value reported as contact_method.
+	 */
+	function setupAutoContactClick(cfg, scheme, method) {
+		if ( ! cfg || ! cfg.enabled) { return; }
+		document.addEventListener(
+			'click',
+			function (e) {
+				var link = e.target.closest && e.target.closest( 'a[href^="' + scheme + '"]' );
+				if ( ! link) { return; }
+				var href = link.getAttribute( 'href' ) || '';
+				fireMapped(
+					cfg.mapped,
+					{ contact_method: method, contact_target: href.slice( scheme.length ) }
+				);
 			}
 		);
 	}
