@@ -20,7 +20,7 @@ LW Pixel is a lightweight, no-bloat alternative to PixelYourSite. Manage all you
 * WooCommerce integration — ViewProduct, ViewCategory, ViewCart, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase (idempotent)
 * 9 form integrations — Contact Form 7, WPForms, Elementor Pro, Forminator, Formidable, Ninja Forms, Fluent Forms, WS Form, Gravity Forms
 * Custom Event editor — page_load / click / scroll / time triggers, URL patterns, fire-once-per-session
-* Auto-tracked events — scroll depth, time on page, file download, login, signup, comment
+* Auto-tracked events — scroll depth, time on page, file download, login, signup, comment, phone clicks, email clicks, thank-you pages
 * Meta Conversion API with Advanced Matching (SHA-256), External ID, Order Enrich
 * GA4 Measurement Protocol for server-side dispatch
 * Compliance — Medical traffic + LDU (California / CCPA)

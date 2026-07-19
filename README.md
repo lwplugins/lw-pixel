@@ -35,6 +35,7 @@ Loads tracking pixels from the major ad networks and dispatches the standard eco
 - `AddToCart`, `InitiateCheckout`, `AddPaymentInfo`, `Purchase`, `ViewCart`, `ViewCategory` — WooCommerce
 - `Login`, `Signup` (CompleteRegistration), `Comment` — server-side, replayed on the next page load
 - `Scroll`, `TimeOnPage`, `Download` — auto-tracked frontend events with configurable thresholds
+- `Contact` (tel:/mailto: link clicks), `Lead` (thank-you page match) — auto-tracked, off by default
 - Custom events — define your own with the editor (page_load / click / scroll / time triggers, URL patterns)
 
 ## Integrations

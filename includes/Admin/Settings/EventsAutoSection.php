@@ -85,7 +85,7 @@ final class EventsAutoSection {
 				[
 					'name'        => 'event_thankyou_urls',
 					'rows'        => 4,
-					'description' => __( 'One URL fragment per line, e.g. koszonjuk. Matched case-insensitively against the page path.', 'lw-pixel' ),
+					'description' => __( 'One URL fragment per line, e.g. koszonjuk. Matched case-insensitively against the page address, including any query string.', 'lw-pixel' ),
 				]
 			);
 			?>

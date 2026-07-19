@@ -153,11 +153,20 @@
 				loadScript( 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent( config.conversionId ) );
 				window.gtag( 'config', config.conversionId );
 			},
-			fire: function (mapped, params) {
+			/**
+			 * Unlike every other provider, `mapped` here IS the flat gtag conversion
+			 * payload (send_to, value, currency, transaction_id) — not a
+			 * {name, params} pair. mergeParams() reads mapped.params, which does not
+			 * exist for this provider, so merging would silently drop send_to and
+			 * transaction_id. There are also no runtime-captured params to merge for
+			 * this provider: map_event() only returns non-null for Purchase, and its
+			 * params are already baked in server-side. Pass mapped straight through.
+			 */
+			fire: function (mapped) {
 				if ( ! window.gtag || ! mapped) {
 					return;
 				}
-				window.gtag( 'event', 'conversion', mergeParams( mapped, params ) );
+				window.gtag( 'event', 'conversion', mapped );
 			}
 		},
 

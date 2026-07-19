@@ -83,6 +83,28 @@ lw_assert( $fb->map_event( 'CustomFoo', [] )['type'] === 'trackCustom', 'fb fall
 lw_assert( $ga->map_event( 'Purchase', [] )['name'] === 'purchase', 'ga4 maps Purchase to lowercase purchase' );
 lw_assert( $ga->map_event( 'AddToCart', [] )['name'] === 'add_to_cart', 'ga4 maps AddToCart to add_to_cart' );
 
+echo "\n== GoogleAds map_event contract (issue #1 regression guard) ==\n";
+// Pin the shape runtime.js's gads.fire() depends on: map_event() returns the
+// flat gtag conversion payload directly, not a {name, params} pair. If this
+// ever changes, mergeParams() in assets/js/runtime.js would silently start
+// discarding send_to/transaction_id again (see the 1.2.0 gads regression).
+Options::set( 'gads_enabled', true );
+Options::set( 'gads_conversion_id', 'AW-123456789' );
+Options::set( 'gads_conversion_label', 'AbCdeFgH' );
+
+$gads          = $manager->get( 'gads' );
+$gads_purchase = null !== $gads ? $gads->map_event( 'Purchase', [ 'value' => 49.99, 'currency' => 'EUR', 'order_id' => '1042' ] ) : null;
+
+lw_assert( null !== $gads, 'Google Ads pixel is registered' );
+lw_assert( is_array( $gads_purchase ), 'gads maps Purchase to an array (the flat gtag conversion payload)' );
+lw_assert( '' !== (string) ( $gads_purchase['send_to'] ?? '' ), 'gads Purchase payload has a non-empty send_to' );
+lw_assert( '1042' === ( $gads_purchase['transaction_id'] ?? '' ), 'gads Purchase payload carries transaction_id from the event order_id' );
+lw_assert( null === $gads->map_event( 'Contact', [] ), 'gads map_event() returns null for a non-Purchase event' );
+
+Options::set( 'gads_enabled', false );
+Options::set( 'gads_conversion_id', '' );
+Options::set( 'gads_conversion_label', '' );
+
 echo "\n== Advanced Matching hasher ==\n";
 lw_assert( strlen( (string) Hasher::hash( 'em', 'Foo@Example.com' ) ) === 64, 'email hash is 64 chars' );
 lw_assert( null === Hasher::hash( 'em', 'not-an-email' ), 'invalid email is dropped' );
