@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.0] - 2026-07-19
+
+### Added
+- Phone click tracking: clicking a `tel:` link fires the standard `Contact` event with `contact_method: phone` and the dialled number as `contact_target`. Off by default. (#1)
+- Email click tracking: clicking a `mailto:` link fires `Contact` with `contact_method: email`. Off by default. (#1)
+- Thank-you page tracking: configure URL fragments (one per line, e.g. `koszonjuk`) and a matching page fires the standard `Lead` event with the page URL. Off by default. (#1)
+
+### Fixed
+- Runtime event parameters (the clicked link, scroll depth, downloaded file) now reach every pixel, not just Google Tag Manager — each provider merges them over the server-mapped parameters.
+
 ## [1.1.0] - 2026-07-18
 
 ### Fixed

@@ -4,7 +4,7 @@ Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.2
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,12 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.2.0 =
+* New: Phone click tracking — a click on a tel: link fires the standard Contact event (off by default) (#1)
+* New: Email click tracking — a click on a mailto: link fires the standard Contact event (off by default) (#1)
+* New: Thank-you page tracking — list URL fragments (e.g. koszonjuk) and a matching page fires the standard Lead event (off by default) (#1)
+* Fix: Runtime event parameters (clicked link, scroll depth, downloaded file) now reach every pixel, not just Google Tag Manager
 
 = 1.1.0 =
 * Fix: Consent is now evaluated in the browser, so consent-filtered pixels are no longer baked into full-page-cached HTML. Under page caching this previously dropped tracking for consented visitors or fired pixels for non-consented ones. With LW Cookie active, all configured pixels are output and runtime.js gates each one per visitor (#3)
