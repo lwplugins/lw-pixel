@@ -95,6 +95,10 @@ final class DefaultOptions {
 			'event_login'               => false,
 			'event_signup'              => false,
 			'event_comment'             => false,
+			'event_click_phone'         => false,
+			'event_click_email'         => false,
+			'event_thankyou'            => false,
+			'event_thankyou_urls'       => '',
 		];
 	}
 

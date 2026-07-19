@@ -23,6 +23,7 @@ final class EventRegistry {
 		PageView::class,
 		Search::class,
 		ViewContent::class,
+		ThankYou::class,
 	];
 
 	/**
