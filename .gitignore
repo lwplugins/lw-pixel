@@ -6,3 +6,6 @@
 .phpunit.cache/
 .phpunit.result.cache
 composer.phar
+
+# Internal planning docs (brainstorm specs / implementation plans)
+/docs/superpowers/
