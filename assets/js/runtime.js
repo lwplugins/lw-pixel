@@ -475,7 +475,8 @@
 		document.addEventListener(
 			'click',
 			function (e) {
-				var link = e.target.closest && e.target.closest( 'a[href^="' + scheme + '"]' );
+				// The " i" flag matters: TEL:/Mailto: are valid, and would not match otherwise.
+				var link = e.target.closest && e.target.closest( 'a[href^="' + scheme + '" i]' );
 				if ( ! link) { return; }
 				var href = link.getAttribute( 'href' ) || '';
 				fireMapped(
