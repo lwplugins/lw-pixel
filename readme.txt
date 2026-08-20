@@ -2,9 +2,9 @@
 Contributors: lwplugins
 Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,9 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.2.1 =
+* Update: Tested up to WordPress 7.1.
 
 = 1.2.0 =
 * New: Phone click tracking — a click on a tel: link fires the standard Contact event (off by default) (#1)
