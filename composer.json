@@ -19,7 +19,7 @@
         "wp-coding-standards/wpcs": "^3.0",
         "phpcompatibility/phpcompatibility-wp": "^2.1",
         "szepeviktor/phpstan-wordpress": "^2.0",
-        "php-stubs/woocommerce-stubs": "^10.9",
+        "php-stubs/woocommerce-stubs": "^11.0",
         "php-stubs/wp-cli-stubs": "^2.12",
         "brain/monkey": "^2.6"
     },
