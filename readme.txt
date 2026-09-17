@@ -4,7 +4,7 @@ Tags: pixel, analytics, facebook, google analytics, conversion tracking
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,9 @@ Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the b
 3. Event configuration
 
 == Changelog ==
+
+= 1.2.3 =
+* Fix: pixels never fired with LW Cookie consent — the runtime read the base64-encoded consent cookie as plain JSON, so every analytics/marketing pixel stayed blocked even after the visitor accepted all cookies
 
 = 1.2.2 =
 * Fix: the release package and Composer dist no longer ship tests, docs or development configuration

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.3] - 2026-09-17
+
+### Fixed
+- Client-side consent gating never recognised consent from LW Cookie: `runtime.js` parsed the `lw_cookie_consent` cookie as plain JSON, but LW Cookie stores it as base64-encoded JSON. Every analytics/marketing pixel stayed blocked even after the visitor accepted all cookies. Affected 1.1.0–1.2.2.
+
 ## [1.2.2] - 2026-09-06
 
 ### Fixed

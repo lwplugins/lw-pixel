@@ -22,7 +22,8 @@
 			if ( ! match) {
 				return { necessary: true };
 			}
-			var data = JSON.parse( decodeURIComponent( match[1] ) );
+			// lw-cookie stores base64( JSON ) — consent.js btoa(), Consent\Storage base64_encode().
+			var data = JSON.parse( window.atob( decodeURIComponent( match[1] ) ) );
 			return (data && data.categories) ? data.categories : { necessary: true };
 		} catch (e) {
 			return { necessary: true };
