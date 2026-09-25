@@ -142,8 +142,7 @@ final class AutoEvents {
 	 */
 	public static function flag_comment( int $comment_id, int|string $approved, array $data ): void {
 		unset( $approved, $data );
-		PendingEventStore::push(
-			PendingEventStore::current_owner(),
+		PendingEventStore::push_for_current_visitor(
 			'Comment',
 			[ 'comment_id' => (string) $comment_id ]
 		);
