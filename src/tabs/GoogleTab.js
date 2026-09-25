@@ -68,7 +68,7 @@ export default function GoogleTab( { store } ) {
 						name="ga4_mp_enabled"
 						title={ __( 'Measurement Protocol', 'lw-pixel' ) }
 						help={ __(
-							'Send server-side events via the GA4 Measurement Protocol',
+							'Send server-side events via the GA4 Measurement Protocol. Only used when GA4 is loaded outside LW Pixel (e.g. through Tag Manager): with the GA4 tag above on, the browser sends every event, the purchase included, and nothing is doubled.',
 							'lw-pixel'
 						) }
 					/>

@@ -170,7 +170,9 @@
 				if ( ! window.gtag || ! mapped) {
 					return;
 				}
-				var gaParams = mergeParams( mapped, params );
+				// `exact`: the server built the full GA4 shape (the purchase);
+				// the generic params must not overwrite its value or items.
+				var gaParams = mapped.exact ? mergeParams( mapped, {} ) : mergeParams( mapped, params );
 				if (eventId) {
 					gaParams.event_id = eventId;
 				}

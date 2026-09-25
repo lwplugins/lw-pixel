@@ -116,7 +116,7 @@ final class ProductData {
 	 * @param WC_Product $product Product.
 	 * @return string
 	 */
-	private static function content_id( WC_Product $product ): string {
+	public static function content_id( WC_Product $product ): string {
 		$prefix  = (string) Options::get( 'woo_content_id_prefix', '' );
 		$use_sku = (bool) Options::get( 'woo_use_sku', false );
 		$id      = $use_sku && $product->get_sku() ? $product->get_sku() : (string) $product->get_id();

@@ -11,14 +11,16 @@ namespace LightweightPlugins\Pixel\Server\Providers;
 
 use LightweightPlugins\Pixel\Options;
 use LightweightPlugins\Pixel\Server\GoogleAnalyticsMP;
+use LightweightPlugins\Pixel\WooCommerce\Ga4Purchase;
 
 /**
  * GA4 does not deduplicate Measurement Protocol hits against gtag.js hits
- * (only purchases, by transaction_id). So when LW Pixel's own GA4 tag runs
- * in the browser, only the purchase is also sent from the server; every
- * other event is sent from the server only when GA4 is loaded some other
- * way (e.g. through Tag Manager). Always needs the visitor's `_ga` client
- * id — without it (no GA4 tag, no analytics consent) nothing is sent.
+ * (its transaction_id dedup is documented for web streams only, not for MP).
+ * So when LW Pixel's own GA4 tag runs in the browser, nothing — not even the
+ * purchase — is also sent from the server; events are sent from the server
+ * only when GA4 is loaded some other way (e.g. through Tag Manager). Always
+ * needs the visitor's `_ga` client id — without it (no GA4 tag, no analytics
+ * consent) nothing is sent.
  */
 final class Ga4Provider implements ServerProviderInterface {
 
@@ -60,7 +62,7 @@ final class Ga4Provider implements ServerProviderInterface {
 			return null;
 		}
 
-		if ( 'Purchase' !== $name && self::browser_tag_active() ) {
+		if ( self::browser_tag_active() ) {
 			return null;
 		}
 
@@ -130,6 +132,10 @@ final class Ga4Provider implements ServerProviderInterface {
 			'page_location'        => (string) ( $context['url'] ?? '' ),
 		];
 
+		if ( 'Purchase' === $name && isset( $params['order_id'] ) ) {
+			return array_filter( array_merge( $out, Ga4Purchase::params( $params ) ), static fn ( $value ): bool => '' !== $value );
+		}
+
 		$items = isset( $params['contents'] ) && is_array( $params['contents'] )
 			? $params['contents']
 			: ( isset( $params['content_id'] ) ? [ $params ] : [] );
@@ -153,10 +159,6 @@ final class Ga4Provider implements ServerProviderInterface {
 
 		if ( isset( $out['value'] ) && '' !== (string) ( $params['currency'] ?? '' ) ) {
 			$out['currency'] = (string) $params['currency'];
-		}
-
-		if ( 'Purchase' === $name ) {
-			$out['transaction_id'] = (string) ( $params['order_id'] ?? '' );
 		}
 
 		if ( 'Search' === $name ) {

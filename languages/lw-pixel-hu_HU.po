@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LW Pixel\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
-"POT-Creation-Date: 2026-09-25T23:04:55+00:00\n"
+"POT-Creation-Date: 2026-09-25T23:27:04+00:00\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -215,7 +215,7 @@ msgstr "Meta (Facebook) Pixel"
 msgid "Google Ads"
 msgstr "Google Ads"
 
-#: includes/Pixels/GoogleAnalytics4.php:40 build/index.js:14
+#: includes/Pixels/GoogleAnalytics4.php:42 build/index.js:14
 msgid "Google Analytics 4"
 msgstr "Google Analytics 4"
 
@@ -1211,8 +1211,16 @@ msgid "Measurement Protocol"
 msgstr "Measurement Protocol"
 
 #: build/index.js:14
-msgid "Send server-side events via the GA4 Measurement Protocol"
-msgstr "Szerveroldali események küldése a GA4 Measurement Protocolon keresztül"
+msgid ""
+"Send server-side events via the GA4 Measurement Protocol. Only used when GA4 "
+"is loaded outside LW Pixel (e.g. through Tag Manager): with the GA4 tag "
+"above on, the browser sends every event, the purchase included, and nothing "
+"is doubled."
+msgstr ""
+"Szerveroldali események küldése a GA4 Measurement Protocolon keresztül. Csak "
+"akkor működik, ha a GA4-et nem az LW Pixel tölti be (pl. Tag Manageren "
+"keresztül): ha a fenti GA4 tag be van kapcsolva, minden eseményt – a "
+"vásárlást is – a böngésző küld, így semmi sem duplázódik."
 
 #: build/index.js:14
 msgid "MP API Secret"

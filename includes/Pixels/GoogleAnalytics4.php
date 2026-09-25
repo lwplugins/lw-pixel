@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Pixels;
 
+use LightweightPlugins\Pixel\WooCommerce\Ga4Purchase;
+
 /**
  * Maps generic events to GA4 standard events.
  */
@@ -58,6 +60,17 @@ final class GoogleAnalytics4 extends AbstractPixel {
 
 	public function map_event( string $event_name, array $params ): array {
 		$mapped = self::EVENT_MAP[ $event_name ] ?? $this->snake_case( $event_name );
+
+		// An order's purchase carries the GA4 ecommerce shape (transaction_id,
+		// net value, items), the same as the Measurement Protocol copy. `exact`
+		// tells runtime.js not to merge the generic params back over it.
+		if ( 'Purchase' === $event_name && isset( $params['order_id'] ) ) {
+			return [
+				'name'   => $mapped,
+				'params' => Ga4Purchase::params( $params ),
+				'exact'  => true,
+			];
+		}
 
 		return [
 			'name'   => $mapped,
