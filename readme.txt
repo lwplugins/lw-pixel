@@ -1,30 +1,41 @@
 === LW Pixel ===
 Contributors: lwplugins
-Tags: pixel, analytics, facebook, google analytics, conversion tracking
-Requires at least: 6.0
+Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
+Requires at least: 6.6
 Tested up to: 7.1
-Requires PHP: 8.2
+Requires PHP: 8.0
 Stable tag: 1.2.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Lightweight tracking pixel manager for WordPress — Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X in one minimal plugin.
+ChatGPT Ads conversion tracking (browser + server), Meta, GA4, TikTok and 7 more ad networks in one lightweight pixel manager.
 
 == Description ==
 
-LW Pixel is a lightweight, no-bloat alternative to PixelYourSite. Manage all your tracking pixels from a single, clean settings page.
+LW Pixel manages all your tracking pixels from a single, clean settings page, and sends conversions from the browser and from your server.
+
+**ChatGPT Ads conversion tracking**
+
+Measure the results of your ChatGPT Ads campaigns with the official measurement pixel and the Conversions API:
+
+* Browser pixel and server-side Conversions API, deduplicated with a shared event ID
+* WooCommerce: product views, add to cart, checkout started and orders (sent once per order, amounts in the currency's minor units)
+* Form submissions as leads, signups as registrations, page views, and your own custom events
+* Consent-aware: fires only after the visitor accepts marketing cookies (LW Cookie)
+* Optional hashed advanced matching, debug mode and a one-click connection test
 
 **Features:**
 
-* 10 pixel providers — Meta (Facebook), Google Analytics 4, Google Ads, Google Tag Manager, TikTok, Pinterest, Microsoft Bing UET, Reddit, Snapchat, X (Twitter)
-* WooCommerce integration — ViewProduct, ViewCategory, ViewCart, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase (idempotent)
+* 11 pixel providers — ChatGPT Ads, Meta (Facebook), Google Analytics 4, Google Ads, Google Tag Manager, TikTok, Pinterest, Microsoft Bing UET, Reddit, Snapchat, X (Twitter)
+* Server-side events — ChatGPT Ads Conversions API, Meta Conversion API for every standard event, GA4 Measurement Protocol; browser and server copies share one event ID so they are counted once
+* WooCommerce integration — ViewProduct, ViewCategory, ViewCart, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase (sent once per order, from the browser and the server)
 * 9 form integrations — Contact Form 7, WPForms, Elementor Pro, Forminator, Formidable, Ninja Forms, Fluent Forms, WS Form, Gravity Forms
 * Custom Event editor — page_load / click / scroll / time triggers, URL patterns, fire-once-per-session
 * Auto-tracked events — scroll depth, time on page, file download, login, signup, comment, phone clicks, email clicks, thank-you pages
-* Meta Conversion API with Advanced Matching (SHA-256), External ID, Order Enrich
-* GA4 Measurement Protocol for server-side dispatch
+* Advanced Matching (SHA-256 hashed) for Meta and ChatGPT Ads, External ID, Order Enrich
 * Compliance — Medical traffic + LDU (California / CCPA)
-* GDPR-compliant — works with LW Cookie out of the box
+* GDPR-compliant — works with LW Cookie out of the box, for browser and server-side events
+* Settings importer from a previous pixel plugin, with a preview before anything changes
 * No bloat, no upsell, no tracking of your data
 
 **Why LW Pixel?**
@@ -39,17 +50,32 @@ Most pixel plugins are bloated with upsells, premium features, and tracking. LW 
 
 == Frequently Asked Questions ==
 
+= How do I set up ChatGPT Ads? =
+
+1. Copy your pixel ID from the ChatGPT Ads Manager.
+2. In LW Plugins → Pixel, open the ChatGPT Ads settings, enable the pixel, paste the pixel ID and save.
+3. For server-side tracking, create a Conversions API key in the Ads Manager, paste it (or define `LW_PIXEL_CHATGPT_API_KEY` in `wp-config.php`), turn on "Send events server-side" and use the connection test.
+4. While testing, turn on debug mode to see every pixel call in the browser console. Turn it off on a live site.
+
+The pixel is in the marketing consent category: with LW Cookie it loads only after the visitor accepts marketing cookies. If your site sends a Content Security Policy, allow `https://bzrcdn.openai.com` (script-src, connect-src) and `https://bzr.openai.com` (connect-src, img-src).
+
 = Does this work with WooCommerce? =
 
 Yes. LW Pixel auto-detects WooCommerce and fires ecommerce events.
 
 = Is it GDPR-compliant? =
 
-Yes. It integrates with LW Cookie and any plugin that exposes the `lw_cookie_is_category_allowed` filter.
+Yes. It integrates with LW Cookie and any plugin that exposes the `lw_cookie_is_category_allowed` filter. Server-side events respect the same consent: nothing is sent for a provider the visitor did not allow.
 
 = Can I use server-side events? =
 
-Yes. Meta Conversion API and GA4 Measurement Protocol are supported out of the box.
+Yes. Turn on the server-side option of a provider:
+
+* Meta Conversion API — every standard event (PageView, ViewContent, Search, Lead, Contact, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase, CompleteRegistration).
+* ChatGPT Ads Conversions API — the same events as the ChatGPT Ads pixel.
+* GA4 Measurement Protocol — the purchase; other events too when GA4 is loaded by something else (for example Tag Manager), because GA4 would otherwise count them twice.
+
+The browser and the server copy of an event share one event ID, so each platform counts it once. Requests are sent after the page was delivered (or in the background through Action Scheduler) and never slow down the visitor. Page views are sent server-side only on pages that a page cache cannot serve to other visitors (for example for logged-in users); cart, checkout, form, signup and purchase events are always sent.
 
 == Screenshots ==
 
