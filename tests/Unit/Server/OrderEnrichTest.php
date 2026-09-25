@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Tests\Unit\Server;
 
+use Brain\Monkey\Actions;
 use Brain\Monkey\Functions;
 use LightweightPlugins\Pixel\Server\CheckoutContext;
 use LightweightPlugins\Pixel\Server\OrderEnrich;
@@ -83,12 +84,31 @@ final class OrderEnrichTest extends CapiTestCase {
 	public function test_enrich_queues_the_send_instead_of_blocking_checkout(): void {
 		Functions\expect( 'as_enqueue_async_action' )
 			->once()
-			->with( OrderEnrich::ASYNC_HOOK, [ 42 ], 'lw-pixel', true )
+			->with( OrderEnrich::ASYNC_HOOK, [ 42 ], 'lw-pixel', false )
 			->andReturn( 7 );
 
 		OrderEnrich::enrich( 42 );
 
 		$this->assertSame( [], $this->sent );
+	}
+
+	/**
+	 * Action Scheduler refused the action (e.g. processing, then completed in
+	 * the same request): nothing runs inside the hook, and the shutdown sends
+	 * the order once, not once per trigger.
+	 */
+	public function test_a_refused_enqueue_sends_once_at_shutdown(): void {
+		Functions\when( 'as_enqueue_async_action' )->justReturn( 0 );
+		Functions\when( 'wc_get_order' )->justReturn( $this->order( [ CheckoutContext::META_KEY => self::CUSTOMER_CONTEXT ] ) );
+		Actions\expectAdded( 'shutdown' )->once();
+
+		OrderEnrich::enrich( 42 );
+		OrderEnrich::enrich( 42 );
+		$this->assertSame( [], $this->sent, 'Nothing is sent inside the status hook.' );
+
+		OrderEnrich::flush_deferred();
+		OrderEnrich::flush_deferred();
+		$this->assertCount( 1, $this->sent );
 	}
 
 	public function test_marks_the_order_tracked_when_meta_accepts_the_event(): void {

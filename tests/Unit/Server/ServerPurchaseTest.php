@@ -141,7 +141,7 @@ final class ServerPurchaseTest extends CapiTestCase {
 		$this->use_options( [ 'fb_order_enrich' => false ] );
 		Functions\expect( 'as_enqueue_async_action' )
 			->once()
-			->with( OrderEnrich::ASYNC_HOOK, [ 42, OrderEnrich::TRIGGER_THANKYOU ], 'lw-pixel', true )
+			->with( OrderEnrich::ASYNC_HOOK, [ 42, OrderEnrich::TRIGGER_THANKYOU ], 'lw-pixel', false )
 			->andReturn( 3 );
 
 		OrderEnrich::thankyou( 42 );

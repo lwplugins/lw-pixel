@@ -20,7 +20,9 @@ use LightweightPlugins\Pixel\Options;
  *   page, together with the browser Purchase.
  *
  * The HTTP calls are handed to Action Scheduler (bundled with WooCommerce)
- * so checkout is never slowed down; inline only when it is unavailable.
+ * so checkout is never slowed down. Only when it is unavailable (or refuses
+ * the action) is the send run in this request: once per order, at shutdown,
+ * after the response was flushed to the visitor where the server allows it.
  */
 final class OrderEnrich {
 
@@ -28,6 +30,13 @@ final class OrderEnrich {
 
 	public const TRIGGER_STATUS   = 'status';
 	public const TRIGGER_THANKYOU = 'thankyou';
+
+	/**
+	 * Sends left for this request's shutdown: order id → triggers.
+	 *
+	 * @var array<int, array<string, true>>
+	 */
+	private static array $deferred = [];
 
 	/**
 	 * Register hooks when any server-side provider is active.
@@ -81,16 +90,62 @@ final class OrderEnrich {
 			return;
 		}
 
-		// The status trigger keeps the pre-1.3.0 arguments, so the
-		// processing → completed pair still queues a single (unique) action.
+		// The status trigger keeps the pre-1.3.0 arguments. Not `unique`:
+		// Action Scheduler's uniqueness compares only hook + group, so one
+		// pending order would block every other order's action. The order
+		// lock and the per-provider sent flags make repeated runs harmless.
 		$args = self::TRIGGER_STATUS === $trigger ? [ $order_id ] : [ $order_id, $trigger ];
 
 		if ( function_exists( 'as_enqueue_async_action' )
-			&& as_enqueue_async_action( self::ASYNC_HOOK, $args, 'lw-pixel', true ) > 0 ) {
+			&& as_enqueue_async_action( self::ASYNC_HOOK, $args, 'lw-pixel', false ) > 0 ) {
 			return;
 		}
 
-		self::send( $order_id, $trigger );
+		self::defer( $order_id, $trigger );
+	}
+
+	/**
+	 * Leave a send for this request's shutdown (one per order).
+	 *
+	 * @param int    $order_id Order id.
+	 * @param string $trigger  TRIGGER_* constant.
+	 * @return void
+	 */
+	private static function defer( int $order_id, string $trigger ): void {
+		if ( [] === self::$deferred ) {
+			add_action( 'shutdown', [ self::class, 'flush_deferred' ], PHP_INT_MAX );
+		}
+
+		self::$deferred[ $order_id ][ $trigger ] = true;
+	}
+
+	/**
+	 * Shutdown: release the visitor, then send each deferred order once,
+	 * to the providers of all its triggers together.
+	 *
+	 * @return void
+	 */
+	public static function flush_deferred(): void {
+		$deferred       = self::$deferred;
+		self::$deferred = [];
+
+		if ( [] === $deferred ) {
+			return;
+		}
+
+		DispatchQueue::finish_response();
+
+		foreach ( $deferred as $order_id => $triggers ) {
+			$providers = [];
+
+			foreach ( array_keys( $triggers ) as $trigger ) {
+				$providers = array_merge( $providers, self::providers_for( $trigger ) );
+			}
+
+			if ( [] !== $providers ) {
+				ServerPurchase::send( $order_id, array_values( array_unique( $providers ) ) );
+			}
+		}
 	}
 
 	/**

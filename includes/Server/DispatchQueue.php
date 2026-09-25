@@ -162,7 +162,7 @@ final class DispatchQueue {
 	 *
 	 * @return bool True when the visitor is no longer waiting.
 	 */
-	private static function finish_response(): bool {
+	public static function finish_response(): bool {
 		if ( function_exists( 'fastcgi_finish_request' ) ) {
 			return fastcgi_finish_request();
 		}
