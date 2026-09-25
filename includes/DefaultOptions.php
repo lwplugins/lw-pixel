@@ -56,7 +56,6 @@ final class DefaultOptions {
 			'gads_enabled'          => false,
 			'gads_conversion_id'    => '',
 			'gads_conversion_label' => '',
-			'gads_remarketing'      => false,
 			'gtm_enabled'           => false,
 			'gtm_container_id'      => '',
 			'gtm_data_layer_only'   => false,
@@ -64,7 +63,6 @@ final class DefaultOptions {
 			'tiktok_pixel_id'       => '',
 			'pinterest_enabled'     => false,
 			'pinterest_tag_id'      => '',
-			'pinterest_em_enabled'  => false,
 			'bing_enabled'          => false,
 			'bing_tag_id'           => '',
 			'reddit_enabled'        => false,
@@ -165,7 +163,6 @@ final class DefaultOptions {
 	 */
 	private static function consent(): array {
 		return [
-			'consent_mode'                => 'lw_cookie',
 			'consent_marketing_pixels'    => [ 'fb', 'tiktok', 'pinterest', 'gads', 'reddit', 'snapchat', 'x', 'chatgpt' ],
 			'consent_analytics_pixels'    => [ 'ga4', 'bing' ],
 			'consent_unclassified_pixels' => [ 'gtm' ],
@@ -196,7 +193,6 @@ final class DefaultOptions {
 			'footer_code'        => '',
 			'body_open_code'     => '',
 			'disable_for_admins' => true,
-			'debug_mode'         => false,
 		];
 	}
 }

@@ -31,7 +31,6 @@ final class PysMapping {
 			'pys_pinterest' => self::pinterest(),
 			'pys_bing'      => self::bing(),
 			'pys_reddit'    => self::reddit(),
-			'pys'           => self::core(),
 		];
 	}
 
@@ -160,17 +159,6 @@ final class PysMapping {
 		return [
 			'enabled'  => 'reddit_enabled',
 			'pixel_id' => 'reddit_pixel_id',
-		];
-	}
-
-	/**
-	 * Core PYS settings → cross-cutting lw-pixel options.
-	 *
-	 * @return array<string, string>
-	 */
-	private static function core(): array {
-		return [
-			'debug_enabled' => 'debug_mode',
 		];
 	}
 }

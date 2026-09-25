@@ -58,14 +58,6 @@ final class PixelCommand {
 				'value'   => ! empty( $options['disable_for_admins'] ) ? 'On' : 'Off',
 			],
 			[
-				'setting' => 'Debug mode',
-				'value'   => ! empty( $options['debug_mode'] ) ? 'On' : 'Off',
-			],
-			[
-				'setting' => 'Consent mode',
-				'value'   => (string) ( $options['consent_mode'] ?? '—' ),
-			],
-			[
 				'setting' => 'Medical mode',
 				'value'   => ! empty( $options['compliance_medical'] ) ? 'On' : 'Off',
 			],
