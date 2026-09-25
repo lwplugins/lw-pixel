@@ -143,6 +143,12 @@ final class ConfigCommand {
 			WP_CLI::error( "Unknown setting key: '{$key}'" );
 		}
 
+		// The sanitizer keeps the old code for a user without unfiltered_html
+		// (WP-CLI runs as no user unless --user is given): say so.
+		if ( SettingsSanitizer::raw_code_refused( $key ) ) {
+			WP_CLI::error( "'{$key}' needs a user with the unfiltered_html capability. Run it with --user=<administrator>." );
+		}
+
 		$value = self::cast_value( (string) $raw_value, $defaults[ $key ] );
 
 		$current         = Options::get_all();

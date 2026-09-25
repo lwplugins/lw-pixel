@@ -95,6 +95,18 @@ final class SettingsSanitizer {
 	}
 
 	/**
+	 * Whether a raw code key would be refused for the current user (who
+	 * lacks `unfiltered_html`), so callers can report it instead of
+	 * silently keeping the old value.
+	 *
+	 * @param string $key Setting key.
+	 * @return bool
+	 */
+	public static function raw_code_refused( string $key ): bool {
+		return in_array( $key, self::RAW_KEYS, true ) && ! current_user_can( 'unfiltered_html' );
+	}
+
+	/**
 	 * Sanitise a raw script blob.
 	 *
 	 * Only users with `unfiltered_html` may submit raw markup. On multisite,

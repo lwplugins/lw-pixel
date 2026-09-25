@@ -37,6 +37,23 @@ final class SettingsSanitizerTest extends MonkeyTestCase {
 		parent::tearDown();
 	}
 
+	/**
+	 * WP-CLI without --user has no unfiltered_html: `config set head_code`
+	 * must be able to report the refusal instead of a false "Success".
+	 */
+	public function test_raw_code_is_refused_without_unfiltered_html(): void {
+		Functions\when( 'current_user_can' )->justReturn( false );
+
+		$this->assertTrue( SettingsSanitizer::raw_code_refused( 'head_code' ) );
+		$this->assertFalse( SettingsSanitizer::raw_code_refused( 'fb_pixel_id' ) );
+	}
+
+	public function test_raw_code_is_allowed_with_unfiltered_html(): void {
+		Functions\when( 'current_user_can' )->justReturn( true );
+
+		$this->assertFalse( SettingsSanitizer::raw_code_refused( 'footer_code' ) );
+	}
+
 	public function test_preserves_line_breaks_in_thankyou_urls(): void {
 		// Real sanitize_textarea_field() keeps internal newlines, only
 		// trimming the ends - unlike sanitize_text_field().
