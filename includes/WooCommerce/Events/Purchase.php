@@ -17,6 +17,8 @@ use LightweightPlugins\Pixel\WooCommerce\ProductData;
  */
 final class Purchase extends AbstractEvent {
 
+	public const TRACKED_META = '_lw_pixel_purchase_tracked';
+
 	/**
 	 * Order id.
 	 *
@@ -50,12 +52,7 @@ final class Purchase extends AbstractEvent {
 			return false;
 		}
 
-		if ( ! parent::should_fire() ) {
-			return false;
-		}
-
-		$this->mark_tracked();
-		return true;
+		return parent::should_fire();
 	}
 
 	protected function option_key(): string {
@@ -83,15 +80,37 @@ final class Purchase extends AbstractEvent {
 	 * @return bool
 	 */
 	private function already_tracked(): bool {
-		return (bool) get_post_meta( $this->order_id, '_lw_pixel_purchase_tracked', true );
+		$order = $this->order();
+
+		return null !== $order && (bool) $order->get_meta( self::TRACKED_META, true );
 	}
 
 	/**
 	 * Mark the order as tracked.
 	 *
+	 * Called only once the event has actually been printed into the page
+	 * (see EventManager::queue()'s $on_emit), so a Purchase that never
+	 * reached the browser is retried on the next thank-you page view.
+	 *
 	 * @return void
 	 */
-	private function mark_tracked(): void {
-		update_post_meta( $this->order_id, '_lw_pixel_purchase_tracked', '1' );
+	public function mark_tracked(): void {
+		$order = $this->order();
+
+		if ( null !== $order ) {
+			$order->update_meta_data( self::TRACKED_META, '1' );
+			$order->save();
+		}
+	}
+
+	/**
+	 * The order (via the WC CRUD API, HPOS-safe).
+	 *
+	 * @return \WC_Order|null
+	 */
+	private function order(): ?\WC_Order {
+		$order = function_exists( 'wc_get_order' ) ? wc_get_order( $this->order_id ) : false;
+
+		return $order instanceof \WC_Order ? $order : null;
 	}
 }

@@ -44,6 +44,7 @@ final class ScriptLoader {
 
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'wp_head', [ $this, 'print_payload' ], 1 );
+		add_action( 'wp_footer', [ $this, 'print_late_payload' ], 5 );
 	}
 
 	/**
@@ -89,14 +90,45 @@ final class ScriptLoader {
 
 		$this->queue_resolved_events();
 
-		$payload = $this->event_manager->build_frontend_payload();
+		$this->print_island( 'lw-pixel-data', $this->event_manager->build_frontend_payload() );
+		$this->event_manager->mark_printed();
+	}
 
+	/**
+	 * Print events queued after wp_head (e.g. the classic-theme Purchase)
+	 * into a second data island that the runtime merges on load.
+	 *
+	 * @return void
+	 */
+	public function print_late_payload(): void {
+		if ( ! did_action( 'wp_head' ) || ! $this->pixel_manager->has_any_configured() ) {
+			return;
+		}
+
+		$events = $this->event_manager->build_late_events();
+
+		if ( [] !== $events ) {
+			$this->print_island( 'lw-pixel-late', [ 'events' => $events ] );
+		}
+
+		$this->event_manager->mark_printed();
+	}
+
+	/**
+	 * Print a JSON data island.
+	 *
+	 * @param string               $id   Element id.
+	 * @param array<string, mixed> $data Payload.
+	 * @return void
+	 */
+	private function print_island( string $id, array $data ): void {
 		// JSON_HEX_TAG/AMP/APOS/QUOT prevents an attacker-controlled string (e.g. a
 		// post title containing "</script>") from breaking out of the data island.
-		$json = (string) wp_json_encode( $payload, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT );
+		$json = (string) wp_json_encode( $data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT );
 
 		printf(
-			'<script id="lw-pixel-data" type="application/json">%s</script>' . "\n",
+			'<script id="%s" type="application/json">%s</script>' . "\n",
+			esc_attr( $id ),
 			$json // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped via JSON_HEX_TAG flags above.
 		);
 	}

@@ -8,6 +8,7 @@
 	'use strict';
 
 	var DATA_NODE_ID = 'lw-pixel-data';
+	var LATE_NODE_ID = 'lw-pixel-late';
 	var payload      = null;
 	var initialized  = {};
 
@@ -47,8 +48,8 @@
 		return getConsentCategories()[category] === true;
 	}
 
-	function readPayload() {
-		var node = document.getElementById( DATA_NODE_ID );
+	function readJson(id) {
+		var node = document.getElementById( id );
 		if ( ! node) {
 			return null;
 		}
@@ -57,6 +58,20 @@
 		} catch (e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Read the head payload and merge the events of the late (footer) island,
+	 * which carries events known only after <head> was printed — e.g. the
+	 * WooCommerce Purchase on classic themes.
+	 */
+	function readPayload() {
+		var data = readJson( DATA_NODE_ID );
+		var late = readJson( LATE_NODE_ID );
+		if (data && late && late.events && late.events.length) {
+			data.events = (data.events || []).concat( late.events );
+		}
+		return data;
 	}
 
 	function loadScript(src, attrs) {

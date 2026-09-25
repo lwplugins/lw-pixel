@@ -32,6 +32,13 @@ final class Integration {
 	private EventManager $event_manager;
 
 	/**
+	 * Orders whose Purchase is already queued in this request.
+	 *
+	 * @var array<int, bool>
+	 */
+	private array $queued_orders = [];
+
+	/**
 	 * Constructor.
 	 *
 	 * @param EventManager $event_manager Event manager instance.
@@ -102,10 +109,15 @@ final class Integration {
 	 * @return void
 	 */
 	public function queue_purchase( int $order_id ): void {
+		if ( isset( $this->queued_orders[ $order_id ] ) ) {
+			return;
+		}
+
 		$event = new Purchase( $order_id );
 
 		if ( $event->should_fire() ) {
-			$this->event_manager->queue( $event->get_name(), $event->get_params() );
+			$this->queued_orders[ $order_id ] = true;
+			$this->event_manager->queue( $event->get_name(), $event->get_params(), [ $event, 'mark_tracked' ] );
 		}
 	}
 

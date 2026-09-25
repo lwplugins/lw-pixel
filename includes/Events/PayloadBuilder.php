@@ -72,6 +72,18 @@ final class PayloadBuilder {
 	}
 
 	/**
+	 * Resolve events only (for the late, footer data island).
+	 *
+	 * @param array<int, array{name: string, params: array<string, mixed>}> $queue Queued events.
+	 * @return array<int, array<string, mixed>>
+	 */
+	public function build_events( array $queue ): array {
+		$active_ids = array_keys( $this->pixels( $this->consent_manager->has_client_gating() ) );
+
+		return $this->resolve_events( $queue, $active_ids );
+	}
+
+	/**
 	 * Configured pixels for the payload.
 	 *
 	 * @param bool $client_gating When true, consent is applied client-side, so
