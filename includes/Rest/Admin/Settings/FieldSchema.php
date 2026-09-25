@@ -25,12 +25,6 @@ final class FieldSchema {
 	public const SAFE_ID = '/^[A-Za-z0-9_-]{1,64}$/';
 
 	/**
-	 * Options nothing reads at runtime: not written through the admin API
-	 * (kept here until they leave DefaultOptions).
-	 */
-	private const RETIRED = [ 'debug_mode', 'gads_remarketing', 'pinterest_em_enabled', 'consent_mode' ];
-
-	/**
 	 * Largest custom code blob, in bytes.
 	 */
 	public const MAX_CODE_BYTES = 65536;
@@ -113,7 +107,7 @@ final class FieldSchema {
 	public static function rule( string $key ): ?array {
 		$defaults = Options::get_defaults();
 
-		if ( ! array_key_exists( $key, $defaults ) || in_array( $key, self::RETIRED, true ) ) {
+		if ( ! array_key_exists( $key, $defaults ) ) {
 			return null;
 		}
 

@@ -79,7 +79,7 @@ Validation per key (`Settings/FieldSchema` + `Settings/ValueParser`):
 | `consent_marketing_pixels`, `consent_analytics_pixels`, `consent_unclassified_pixels` | arrays of registered pixel IDs. After the save, a pixel may appear in only one list. Send all three when you move a pixel. |
 | `head_code`, `body_open_code`, `footer_code` | raw, max. 64 KB, trimmed, backslashes kept. **Requires `unfiltered_html`**, otherwise a field error. |
 | secrets | `null` keeps the stored value, `""` removes it, and any other string (printable ASCII, no spaces, max. 512) replaces it. A locked key is a field error. |
-| retired: `debug_mode`, `gads_remarketing`, `pinterest_em_enabled`, `consent_mode` | rejected as unknown (nothing reads them) |
+| removed in 1.3.0: `debug_mode`, `gads_remarketing`, `pinterest_em_enabled`, `consent_mode` | rejected as unknown |
 | unknown keys | field error `Unknown setting.` |
 
 The validated keys are merged over the stored options and passed through
