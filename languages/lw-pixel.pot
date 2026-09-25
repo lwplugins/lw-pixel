@@ -1,0 +1,1699 @@
+# Copyright (C) 2026 LW Plugins
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: LW Pixel 1.2.4\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-25T22:59:35+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: lw-pixel\n"
+
+#. Plugin Name of the plugin
+#: lw-pixel.php
+#: includes/Admin/SettingsPage.php:133
+msgid "LW Pixel"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: lw-pixel.php
+msgid "https://github.com/lwplugins/lw-pixel"
+msgstr ""
+
+#. Description of the plugin
+#: lw-pixel.php
+msgid "Lightweight tracking pixel manager — ChatGPT Ads, Meta, Google Analytics 4, Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat and X, with server-side conversions."
+msgstr ""
+
+#. Author of the plugin
+#: lw-pixel.php
+#: includes/Admin/ParentPage.php:97
+#: includes/Admin/ParentPage.php:98
+#: includes/Admin/ParentPage.php:119
+msgid "LW Plugins"
+msgstr ""
+
+#. Author URI of the plugin
+#: lw-pixel.php
+msgid "https://lwplugins.com"
+msgstr ""
+
+#: includes/Admin/ParentPage.php:120
+msgid "Lightweight plugins for WordPress - minimal footprint, maximum impact."
+msgstr ""
+
+#: includes/Admin/ParentPage.php:181
+#: build/index.js:1
+#: build/index.js:11
+#: build/index.js:15
+msgid "Active"
+msgstr ""
+
+#: includes/Admin/ParentPage.php:188
+#: build/index.js:1
+msgid "Settings"
+msgstr ""
+
+#: includes/Admin/ParentPage.php:192
+msgid "Get Plugin"
+msgstr ""
+
+#: includes/Admin/SettingsPage.php:62
+#: includes/Admin/SettingsPage.php:63
+#: build/index.js:13
+msgid "Pixel"
+msgstr ""
+
+#: includes/Admin/SettingsPage.php:134
+msgid "The settings screen files are missing. Re-install the plugin from a release ZIP, or run \"npm install && npm run build\" in the plugin directory."
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxes.php:43
+msgid "Event configuration"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:27
+#: build/index.js:7
+msgid "Event name"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:30
+#: build/index.js:7
+msgid "Generic event name (PascalCase). Each pixel will receive its mapped variant."
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:34
+#: build/index.js:7
+msgid "Trigger"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:40
+#: build/index.js:7
+msgid "CSS selector"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:43
+msgid "For \"Click element\" trigger."
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:47
+#: includes/CustomEvents/MetaBoxRenderer.php:98
+#: build/index.js:7
+msgid "Scroll percentage"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:50
+msgid "For \"Scroll\" trigger (1-100)."
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:54
+#: build/index.js:7
+msgid "Time on page (s)"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:57
+#: build/index.js:7
+msgid "For \"Time on page\" trigger."
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:61
+#: build/index.js:7
+msgid "Page URL pattern"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:64
+#: build/index.js:7
+msgid "Where the event should fire. Empty = all pages. Wildcards (*) supported."
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:68
+#: build/index.js:7
+msgid "Value"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:72
+#: build/index.js:7
+msgid "Optional event value + ISO currency code."
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:76
+msgid "Fire once"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:80
+#: build/index.js:7
+msgid "Fire only once per browser session"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:96
+#: build/index.js:7
+msgid "On page load"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:97
+#: build/index.js:7
+msgid "Click element (CSS selector)"
+msgstr ""
+
+#: includes/CustomEvents/MetaBoxRenderer.php:99
+#: build/index.js:7
+#: build/index.js:14
+msgid "Time on page"
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:84
+msgid "Custom Events"
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:85
+msgid "Custom Event"
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:86
+msgid "Add New"
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:87
+msgid "Add New Custom Event"
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:88
+msgid "Edit Custom Event"
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:89
+msgid "New Custom Event"
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:90
+msgid "View Custom Event"
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:91
+msgid "Search Custom Events"
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:92
+msgid "No custom events found."
+msgstr ""
+
+#: includes/CustomEvents/PostType.php:93
+msgid "No custom events in trash."
+msgstr ""
+
+#: includes/Pixels/BingPixel.php:38
+#: build/index.js:14
+msgid "Microsoft Bing UET"
+msgstr ""
+
+#: includes/Pixels/ChatGptPixel.php:27
+#: build/index.js:1
+#: build/index.js:13
+msgid "ChatGPT Ads"
+msgstr ""
+
+#: includes/Pixels/FacebookPixel.php:40
+msgid "Meta (Facebook) Pixel"
+msgstr ""
+
+#: includes/Pixels/GoogleAds.php:22
+#: build/index.js:14
+msgid "Google Ads"
+msgstr ""
+
+#: includes/Pixels/GoogleAnalytics4.php:40
+#: build/index.js:14
+msgid "Google Analytics 4"
+msgstr ""
+
+#: includes/Pixels/GoogleTagManager.php:22
+#: build/index.js:14
+msgid "Google Tag Manager"
+msgstr ""
+
+#: includes/Pixels/PinterestPixel.php:39
+#: build/index.js:14
+msgid "Pinterest Tag"
+msgstr ""
+
+#: includes/Pixels/RedditPixel.php:39
+#: build/index.js:14
+msgid "Reddit Pixel"
+msgstr ""
+
+#: includes/Pixels/SnapchatPixel.php:39
+#: build/index.js:14
+msgid "Snapchat Pixel"
+msgstr ""
+
+#: includes/Pixels/TikTokPixel.php:39
+#: build/index.js:14
+msgid "TikTok Pixel"
+msgstr ""
+
+#: includes/Pixels/XPixel.php:40
+#: build/index.js:14
+msgid "X (Twitter) Pixel"
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:67
+#: build/index.js:1
+msgid "Give the event a name."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:73
+#: build/index.js:1
+msgid "A click trigger needs a CSS selector."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:116
+#: build/index.js:1
+msgid "Start with a letter, then use letters, digits or underscores (max. 40), e.g. MyCustomEvent."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:117
+#: includes/Rest/Admin/Settings/ValueParser.php:48
+msgid "Choose one of the listed options."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:118
+#: build/index.js:1
+msgid "This is not a usable CSS selector."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:121
+#: build/index.js:1
+msgid "Start with / (a path such as /products/*) or leave it empty for every page."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:122
+#: build/index.js:1
+msgid "Use a number such as 10 or 9.99, or leave it empty."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:123
+#: build/index.js:1
+msgid "Use a three-letter currency code such as HUF, EUR or USD."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:124
+msgid "Unknown field."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:147
+#: includes/Rest/Admin/Settings/SettingsInput.php:120
+#: includes/Rest/Admin/Settings/ValueParser.php:89
+#: includes/Rest/Admin/Settings/ValueParser.php:212
+#: includes/Rest/Admin/Settings/ValueParser.php:267
+#: includes/Rest/Admin/Settings/ValueParser.php:287
+msgid "Must be text."
+msgstr ""
+
+#. translators: %d: maximum number of characters.
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:154
+#: includes/Rest/Admin/Settings/ValueParser.php:294
+#, php-format
+msgid "Use at most %d characters."
+msgstr ""
+
+#. translators: 1: smallest allowed number, 2: largest allowed number.
+#: includes/Rest/Admin/CustomEvents/CustomEventInput.php:179
+#, php-format
+msgid "Use a whole number from %1$d to %2$d."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventsController.php:123
+msgid "The event could not be deleted."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventsController.php:153
+msgid "Some fields are not valid. Nothing was saved."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventsController.php:162
+msgid "The event could not be saved."
+msgstr ""
+
+#: includes/Rest/Admin/CustomEvents/CustomEventsController.php:176
+msgid "This custom event does not exist."
+msgstr ""
+
+#: includes/Rest/Admin/MigratorController.php:62
+msgid "This import source is not available."
+msgstr ""
+
+#: includes/Rest/Admin/Routes.php:106
+msgid "The request is too large."
+msgstr ""
+
+#: includes/Rest/Admin/Settings/SettingsInput.php:53
+msgid "Unknown setting."
+msgstr ""
+
+#: includes/Rest/Admin/Settings/SettingsInput.php:57
+msgid "Only users who may post unfiltered HTML can change custom code."
+msgstr ""
+
+#. translators: %s: PHP constant name.
+#: includes/Rest/Admin/Settings/SettingsInput.php:115
+#, php-format
+msgid "This key is set in wp-config.php (%s), so it cannot be changed here."
+msgstr ""
+
+#: includes/Rest/Admin/Settings/SettingsInput.php:127
+msgid "Paste the key exactly as shown, without spaces."
+msgstr ""
+
+#. translators: %s: pixel ID.
+#: includes/Rest/Admin/Settings/SettingsInput.php:166
+#, php-format
+msgid "Pixel \"%s\" is in more than one consent category."
+msgstr ""
+
+#: includes/Rest/Admin/Settings/ValueParser.php:77
+msgid "Must be true or false."
+msgstr ""
+
+#: includes/Rest/Admin/Settings/ValueParser.php:104
+msgid "This ID does not have the expected format. Copy it again from the ad platform."
+msgstr ""
+
+#: includes/Rest/Admin/Settings/ValueParser.php:119
+#: includes/Rest/Admin/Settings/ValueParser.php:152
+msgid "Must be a comma-separated list."
+msgstr ""
+
+#. translators: 1: smallest allowed number, 2: largest allowed number.
+#: includes/Rest/Admin/Settings/ValueParser.php:129
+#, php-format
+msgid "Use whole numbers from %1$d to %2$d, separated by commas."
+msgstr ""
+
+#: includes/Rest/Admin/Settings/ValueParser.php:161
+msgid "Use file extensions such as pdf or zip (letters and digits only), separated by commas."
+msgstr ""
+
+#. translators: %d: maximum number of lines.
+#: includes/Rest/Admin/Settings/ValueParser.php:220
+#, php-format
+msgid "Use at most %d lines."
+msgstr ""
+
+#. translators: %d: maximum number of characters.
+#: includes/Rest/Admin/Settings/ValueParser.php:226
+#, php-format
+msgid "Each line can be at most %d characters long."
+msgstr ""
+
+#: includes/Rest/Admin/Settings/ValueParser.php:242
+msgid "Must be a list of pixel IDs."
+msgstr ""
+
+#. translators: %s: pixel ID.
+#: includes/Rest/Admin/Settings/ValueParser.php:250
+#, php-format
+msgid "Unknown pixel: \"%s\"."
+msgstr ""
+
+#. translators: %d: maximum size in kilobytes.
+#: includes/Rest/Admin/Settings/ValueParser.php:272
+#, php-format
+msgid "The code can be at most %d KB."
+msgstr ""
+
+#: includes/Rest/Admin/SettingsController.php:85
+msgid "Some settings are not valid. Nothing was saved."
+msgstr ""
+
+#: includes/Server/ChatGptCAPI.php:125
+msgid "Save a ChatGPT Ads pixel ID and Conversions API key first."
+msgstr ""
+
+#: includes/Server/ChatGptCAPI.php:156
+msgid "Connected. ChatGPT Ads accepted a test event (validation only, nothing was recorded)."
+msgstr ""
+
+#: includes/Server/ChatGptCAPI.php:160
+msgid "ChatGPT Ads rejected the API key. Check the key and that it belongs to this pixel."
+msgstr ""
+
+#: includes/Server/ChatGptCAPI.php:164
+msgid "Could not reach the ChatGPT Ads API from this server."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/Server/ChatGptCAPI.php:169
+#, php-format
+msgid "ChatGPT Ads returned HTTP %d. Check the pixel ID and API key."
+msgstr ""
+
+#: includes/SiteManager/Integration.php:40
+msgid "Tracking Pixels"
+msgstr ""
+
+#: includes/SiteManager/Integration.php:41
+msgid "Tracking pixel management abilities."
+msgstr ""
+
+#: includes/SiteManager/PixelAbilities.php:42
+msgid "Get Pixel Options"
+msgstr ""
+
+#: includes/SiteManager/PixelAbilities.php:43
+msgid "Get LW Pixel settings (pixel ids, event toggles, advanced)."
+msgstr ""
+
+#: includes/SiteManager/PixelAbilities.php:59
+msgid "Set Pixel Options"
+msgstr ""
+
+#: includes/SiteManager/PixelAbilities.php:60
+msgid "Update LW Pixel settings."
+msgstr ""
+
+#: includes/SiteManager/PixelAbilities.php:70
+msgid "Key-value pairs of settings to update."
+msgstr ""
+
+#: includes/SiteManager/PixelAbilities.php:95
+msgid "List Pixels"
+msgstr ""
+
+#: includes/SiteManager/PixelAbilities.php:96
+msgid "List all pixel providers with their configuration status."
+msgstr ""
+
+#: includes/SiteManager/PixelService.php:53
+msgid "No options provided."
+msgstr ""
+
+#. translators: %d: number of updated keys
+#: includes/SiteManager/PixelService.php:77
+#, php-format
+msgid "Updated %d option(s)."
+msgstr ""
+
+#: includes/Tools/Migrators/PysMigrator.php:25
+msgid "PixelYourSite (Free / Pro)"
+msgstr ""
+
+#: lw-pixel.php:40
+msgid "Autoloader not found. Please run \"composer install\" in the plugin directory, or re-install the plugin from a release ZIP."
+msgstr ""
+
+#: build/index.js:1
+msgid "Loading…"
+msgstr ""
+
+#: build/index.js:1
+msgid "Try again"
+msgstr ""
+
+#: build/index.js:1
+msgid "That did not work. Please reload the page and try again."
+msgstr ""
+
+#: build/index.js:1
+msgid "Settings saved."
+msgstr ""
+
+#: build/index.js:1
+msgid "Nothing was saved. Fix the highlighted fields and save again."
+msgstr ""
+
+#: build/index.js:1
+msgid "Custom event saved."
+msgstr ""
+
+#: build/index.js:1
+msgid "Custom event switched on."
+msgstr ""
+
+#: build/index.js:1
+msgid "Custom event switched off."
+msgstr ""
+
+#: build/index.js:1
+msgid "Custom event deleted."
+msgstr ""
+
+#: build/index.js:1
+msgid "LW Plugins (opens in a new tab)"
+msgstr ""
+
+#: build/index.js:1
+#: build/index.js:14
+msgid "Pixels"
+msgstr ""
+
+#: build/index.js:1
+msgid "Tracking"
+msgstr ""
+
+#: build/index.js:1
+msgid "Privacy"
+msgstr ""
+
+#: build/index.js:1
+msgid "Overview"
+msgstr ""
+
+#: build/index.js:1
+#: build/index.js:13
+msgid "Meta"
+msgstr ""
+
+#: build/index.js:1
+msgid "Meta Pixel and Conversions API"
+msgstr ""
+
+#: build/index.js:1
+msgid "Google"
+msgstr ""
+
+#: build/index.js:1
+msgid "Google Analytics, Ads and Tag Manager"
+msgstr ""
+
+#: build/index.js:1
+msgid "ChatGPT Ads conversion tracking"
+msgstr ""
+
+#: build/index.js:1
+msgid "Other networks"
+msgstr ""
+
+#: build/index.js:1
+msgid "Other ad networks"
+msgstr ""
+
+#: build/index.js:1
+msgid "Events"
+msgstr ""
+
+#: build/index.js:1
+msgid "Forms"
+msgstr ""
+
+#: build/index.js:1
+#: build/index.js:14
+msgid "Form integrations"
+msgstr ""
+
+#: build/index.js:1
+msgid "WooCommerce"
+msgstr ""
+
+#: build/index.js:1
+#: build/index.js:7
+#: build/index.js:13
+msgid "Custom events"
+msgstr ""
+
+#: build/index.js:1
+#: build/index.js:13
+msgid "Consent"
+msgstr ""
+
+#: build/index.js:1
+msgid "Compliance"
+msgstr ""
+
+#: build/index.js:1
+msgid "Advanced"
+msgstr ""
+
+#: build/index.js:1
+msgid "Tools"
+msgstr ""
+
+#: build/index.js:1
+#: build/index.js:14
+msgid "New"
+msgstr ""
+
+#: build/index.js:1
+msgid "Inactive"
+msgstr ""
+
+#: build/index.js:1
+msgid "Has invalid settings"
+msgstr ""
+
+#: build/index.js:1
+msgid "LW Pixel home"
+msgstr ""
+
+#: build/index.js:1
+msgid "LW Pixel sections"
+msgstr ""
+
+#: build/index.js:1
+msgid "Documentation"
+msgstr ""
+
+#: build/index.js:1
+msgid "(opens in a new tab)"
+msgstr ""
+
+#: build/index.js:1
+msgid "Unsaved changes"
+msgstr ""
+
+#: build/index.js:1
+msgid "Discard"
+msgstr ""
+
+#: build/index.js:1
+msgid "Save changes"
+msgstr ""
+
+#: build/index.js:1
+msgid "Save"
+msgstr ""
+
+#: build/index.js:1
+msgid "Set in wp-config.php"
+msgstr ""
+
+#: build/index.js:1
+#: build/index.js:7
+#: build/index.js:9
+#: build/index.js:11
+#: build/index.js:13
+#: build/index.js:15
+msgid "Off"
+msgstr ""
+
+#: build/index.js:1
+#: build/index.js:7
+#: build/index.js:11
+msgid "On"
+msgstr ""
+
+#. translators: %s: PHP constant name.
+#: build/index.js:2
+#, js-format
+msgid "Set in wp-config.php (%s)"
+msgstr ""
+
+#: build/index.js:2
+msgid "Nothing saved yet."
+msgstr ""
+
+#: build/index.js:2
+msgid "The saved key will be removed when you save."
+msgstr ""
+
+#: build/index.js:2
+msgid "Saved: <hint />"
+msgstr ""
+
+#: build/index.js:2
+msgid "Paste a new key to replace it"
+msgstr ""
+
+#: build/index.js:2
+msgid "Hide key"
+msgstr ""
+
+#: build/index.js:2
+msgid "Show key"
+msgstr ""
+
+#: build/index.js:2
+msgid "Remove"
+msgstr ""
+
+#: build/index.js:2
+msgid "Keep it"
+msgstr ""
+
+#: build/index.js:2
+msgid "Sends one sample event with a validate-only flag: OpenAI checks the pixel ID and the key, and records nothing."
+msgstr ""
+
+#: build/index.js:2
+msgid "Save your changes first: the test uses the saved pixel ID and key."
+msgstr ""
+
+#: build/index.js:2
+msgid "Save a pixel ID and a Conversions API key to run the test."
+msgstr ""
+
+#: build/index.js:2
+msgid "Test the connection"
+msgstr ""
+
+#: build/index.js:2
+msgid "Test connection"
+msgstr ""
+
+#: build/index.js:2
+msgid "Connection works"
+msgstr ""
+
+#: build/index.js:2
+msgid "Connection failed"
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: build/index.js:3
+#, js-format
+msgid "(HTTP %d)"
+msgstr ""
+
+#. translators: %s: CSS selector.
+#: build/index.js:5
+#, js-format
+msgid "Click on %s"
+msgstr ""
+
+#. translators: %d: scroll depth in percent.
+#: build/index.js:6
+#, js-format
+msgid "Scrolled to %d%%"
+msgstr ""
+
+#. translators: %d: seconds.
+#: build/index.js:7
+#, js-format
+msgid "After %d seconds on the page"
+msgstr ""
+
+#: build/index.js:7
+msgid "Leave the editor and discard your unsaved changes?"
+msgstr ""
+
+#: build/index.js:7
+msgid "Discard changes"
+msgstr ""
+
+#: build/index.js:7
+msgid "All custom events"
+msgstr ""
+
+#: build/index.js:7
+msgid "Delete this custom event?"
+msgstr ""
+
+#: build/index.js:7
+#: build/index.js:11
+msgid "Delete"
+msgstr ""
+
+#: build/index.js:7
+msgid "New custom event"
+msgstr ""
+
+#: build/index.js:7
+msgid "Run this event"
+msgstr ""
+
+#: build/index.js:7
+msgid "Label"
+msgstr ""
+
+#: build/index.js:7
+msgid "Optional. Only shown in this list; the event name is used when empty."
+msgstr ""
+
+#: build/index.js:7
+msgid "The event fires when a visitor clicks an element matching this selector (or anything inside it)."
+msgstr ""
+
+#: build/index.js:7
+msgid "For \"Scroll\" trigger (1–100)."
+msgstr ""
+
+#: build/index.js:7
+msgid "Currency"
+msgstr ""
+
+#: build/index.js:7
+msgid "Fire your own events on page load, on a click, at a scroll depth or after some time on the page. Every active pixel receives them."
+msgstr ""
+
+#: build/index.js:7
+msgid "Add custom event"
+msgstr ""
+
+#. translators: %d: maximum number of events.
+#: build/index.js:8
+#, js-format
+msgid "Only the first %d switched-on events run on your site."
+msgstr ""
+
+#: build/index.js:8
+msgid "No custom events yet."
+msgstr ""
+
+#. translators: %s: event name.
+#: build/index.js:9
+#, js-format
+msgid "Run %s"
+msgstr ""
+
+#: build/index.js:9
+msgid "All pages"
+msgstr ""
+
+#: build/index.js:9
+msgid "Edit"
+msgstr ""
+
+#. translators: %s: event name.
+#: build/index.js:10
+#, js-format
+msgid "Delete %s"
+msgstr ""
+
+#. translators: %s: event name.
+#: build/index.js:11
+#, js-format
+msgid "Delete the custom event \"%s\"?"
+msgstr ""
+
+#: build/index.js:11
+msgid "Yes"
+msgstr ""
+
+#: build/index.js:11
+msgid "No"
+msgstr ""
+
+#: build/index.js:11
+msgid "(active)"
+msgstr ""
+
+#: build/index.js:11
+msgid "(not active)"
+msgstr ""
+
+#: build/index.js:11
+#: build/index.js:14
+msgid "ID missing"
+msgstr ""
+
+#: build/index.js:11
+msgid "Set (hidden)"
+msgstr ""
+
+#: build/index.js:11
+msgid "Not set"
+msgstr ""
+
+#: build/index.js:11
+msgid "empty"
+msgstr ""
+
+#: build/index.js:11
+msgid "Detected"
+msgstr ""
+
+#: build/index.js:11
+msgid "Not detected"
+msgstr ""
+
+#: build/index.js:11
+msgid "Save or discard your changes first: the import writes the saved settings."
+msgstr ""
+
+#: build/index.js:11
+msgid "This will overwrite matching LW Pixel options. Continue?"
+msgstr ""
+
+#: build/index.js:11
+msgid "Import"
+msgstr ""
+
+#. translators: %d: number of imported settings.
+#: build/index.js:12
+#, js-format
+msgid "Import finished: %d setting updated."
+msgid_plural "Import finished: %d settings updated."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of settings.
+#: build/index.js:13
+#, js-format
+msgid "Import %d setting"
+msgid_plural "Import %d settings"
+msgstr[0] ""
+msgstr[1] ""
+
+#: build/index.js:13
+msgid "Source plugin is not active and no legacy data was found in the database."
+msgstr ""
+
+#: build/index.js:13
+msgid "Nothing to migrate — no matching settings were found."
+msgstr ""
+
+#: build/index.js:13
+msgid "LW Pixel option"
+msgstr ""
+
+#: build/index.js:13
+msgid "Current value"
+msgstr ""
+
+#: build/index.js:13
+msgid "Will become"
+msgstr ""
+
+#: build/index.js:13
+msgid "Import settings from another plugin"
+msgstr ""
+
+#: build/index.js:13
+msgid "Bring your existing pixel configuration over to LW Pixel without retyping every ID."
+msgstr ""
+
+#: build/index.js:13
+msgid "Report copied."
+msgstr ""
+
+#: build/index.js:13
+msgid "System report"
+msgstr ""
+
+#: build/index.js:13
+msgid "Attach it to a support request. Secrets and custom code are left out (only their length is shown)."
+msgstr ""
+
+#: build/index.js:13
+msgid "Copy"
+msgstr ""
+
+#: build/index.js:13
+msgid "Download"
+msgstr ""
+
+#: build/index.js:13
+msgid "Pixel status"
+msgstr ""
+
+#: build/index.js:13
+msgid "Enabled"
+msgstr ""
+
+#: build/index.js:13
+msgid "Configured"
+msgstr ""
+
+#: build/index.js:13
+msgid "System report (JSON)"
+msgstr ""
+
+#: build/index.js:13
+msgid "GA4"
+msgstr ""
+
+#: build/index.js:13
+msgid "This overview shows the saved settings. Save your changes to see them here."
+msgstr ""
+
+#: build/index.js:13
+msgid "Active pixels"
+msgstr ""
+
+#: build/index.js:13
+msgid "Switched on and configured"
+msgstr ""
+
+#: build/index.js:13
+msgid "Server-side"
+msgstr ""
+
+#: build/index.js:13
+msgid "Conversions sent from your server"
+msgstr ""
+
+#: build/index.js:13
+msgid "LW Cookie"
+msgstr ""
+
+#: build/index.js:13
+msgid "Not managed"
+msgstr ""
+
+#: build/index.js:13
+msgid "Pixels wait for consent"
+msgstr ""
+
+#: build/index.js:13
+msgid "Every pixel fires"
+msgstr ""
+
+#. translators: %d: number of enabled custom events.
+#: build/index.js:14
+#, js-format
+msgid "%d event switched on"
+msgid_plural "%d events switched on"
+msgstr[0] ""
+msgstr[1] ""
+
+#: build/index.js:14
+msgid "Every ad and analytics platform LW Pixel can send your events to."
+msgstr ""
+
+#: build/index.js:14
+msgid "Configure"
+msgstr ""
+
+#: build/index.js:14
+msgid "Detected plugins"
+msgstr ""
+
+#: build/index.js:14
+msgid "Meta Pixel"
+msgstr ""
+
+#: build/index.js:14
+msgid "Pixel ID missing"
+msgstr ""
+
+#: build/index.js:14
+msgid "Loads the Meta (Facebook, Instagram) pixel and sends your events to it."
+msgstr ""
+
+#: build/index.js:14
+msgid "Pixel ID"
+msgstr ""
+
+#: build/index.js:14
+msgid "Your Meta Pixel ID (numeric)."
+msgstr ""
+
+#: build/index.js:14
+msgid "Enable advanced matching for logged-in users"
+msgstr ""
+
+#: build/index.js:14
+msgid "Sends hashed email/phone to improve match rate."
+msgstr ""
+
+#: build/index.js:14
+msgid "Conversion API (server-side)"
+msgstr ""
+
+#: build/index.js:14
+msgid "Token or pixel ID missing"
+msgstr ""
+
+#: build/index.js:14
+msgid "Send events server-side via Conversion API"
+msgstr ""
+
+#: build/index.js:14
+msgid "Access Token"
+msgstr ""
+
+#: build/index.js:14
+msgid "Generate in Events Manager → Settings → Conversion API."
+msgstr ""
+
+#: build/index.js:14
+msgid "Test event code"
+msgstr ""
+
+#: build/index.js:14
+msgid "Optional. Use to test events in Events Manager → Test Events."
+msgstr ""
+
+#: build/index.js:14
+msgid "Send external_id (logged-in user ID, hashed) for better matching"
+msgstr ""
+
+#: build/index.js:14
+msgid "Re-send Purchase to CAPI when WooCommerce order completes/processes"
+msgstr ""
+
+#: build/index.js:14
+msgid "Captures the final order value after payment confirmation."
+msgstr ""
+
+#: build/index.js:14
+msgid "WooCommerce is not active, so there are no orders to re-send."
+msgstr ""
+
+#: build/index.js:14
+msgid "The Conversion API needs the Pixel ID above too, even when the browser pixel is off."
+msgstr ""
+
+#: build/index.js:14
+msgid "Measurement ID missing"
+msgstr ""
+
+#: build/index.js:14
+msgid "Enable Google Analytics 4"
+msgstr ""
+
+#: build/index.js:14
+msgid "Measurement ID"
+msgstr ""
+
+#: build/index.js:14
+msgid "Your GA4 Measurement ID (starts with G-)."
+msgstr ""
+
+#: build/index.js:14
+msgid "Anonymize IP addresses"
+msgstr ""
+
+#: build/index.js:14
+msgid "Debug Mode"
+msgstr ""
+
+#: build/index.js:14
+msgid "Enable debug mode (use Realtime + DebugView)"
+msgstr ""
+
+#: build/index.js:14
+msgid "Measurement Protocol"
+msgstr ""
+
+#: build/index.js:14
+msgid "Send server-side events via the GA4 Measurement Protocol"
+msgstr ""
+
+#: build/index.js:14
+msgid "MP API Secret"
+msgstr ""
+
+#: build/index.js:14
+msgid "Generate in GA4 Admin → Data Streams → Measurement Protocol API secrets."
+msgstr ""
+
+#: build/index.js:14
+msgid "Conversion ID missing"
+msgstr ""
+
+#: build/index.js:14
+msgid "Enable Google Ads conversion tracking"
+msgstr ""
+
+#: build/index.js:14
+msgid "Conversion ID"
+msgstr ""
+
+#: build/index.js:14
+msgid "Your Google Ads Conversion ID (starts with AW-)."
+msgstr ""
+
+#: build/index.js:14
+msgid "Conversion label"
+msgstr ""
+
+#: build/index.js:14
+msgid "Used for the Purchase event conversion."
+msgstr ""
+
+#: build/index.js:14
+msgid "Container ID missing"
+msgstr ""
+
+#: build/index.js:14
+msgid "Enable Google Tag Manager"
+msgstr ""
+
+#: build/index.js:14
+msgid "Container ID"
+msgstr ""
+
+#: build/index.js:14
+msgid "Your GTM container ID (starts with GTM-)."
+msgstr ""
+
+#: build/index.js:14
+msgid "Push to dataLayer only (do not load the GTM script)"
+msgstr ""
+
+#: build/index.js:14
+msgid "Useful when the GTM script is loaded by another plugin."
+msgstr ""
+
+#: build/index.js:14
+msgid "ChatGPT Ads pixel"
+msgstr ""
+
+#: build/index.js:14
+msgid "Measure the purchases, sign-ups and leads your ChatGPT ads bring. Loads the ChatGPT Ads measurement pixel in the browser (marketing consent)."
+msgstr ""
+
+#: build/index.js:14
+msgid "Your ChatGPT Ads pixel ID from the Ads Manager."
+msgstr ""
+
+#: build/index.js:14
+msgid "Advanced matching"
+msgstr ""
+
+#: build/index.js:14
+msgid "Sends SHA-256 hashed email, phone, name and user ID (logged-in users in the browser, the customer’s billing data with server-side purchases) to improve attribution."
+msgstr ""
+
+#: build/index.js:14
+msgid "Debug mode"
+msgstr ""
+
+#: build/index.js:14
+msgid "Logs every pixel call in the browser console (test mode). Turn off on a live site."
+msgstr ""
+
+#: build/index.js:14
+msgid "Conversions API (server-side)"
+msgstr ""
+
+#: build/index.js:14
+msgid "API key or pixel ID missing"
+msgstr ""
+
+#: build/index.js:14
+msgid "Also sends conversions from your server, deduplicated with the browser events."
+msgstr ""
+
+#: build/index.js:14
+msgid "Conversions API key"
+msgstr ""
+
+#: build/index.js:14
+msgid "Create it in the Ads Manager. Stored in the database; you can instead define LW_PIXEL_CHATGPT_API_KEY in wp-config.php (takes precedence)."
+msgstr ""
+
+#: build/index.js:14
+msgid "Browser and server-side events respect the marketing consent category of LW Cookie. Without a consent plugin they are sent to every visitor."
+msgstr ""
+
+#: build/index.js:14
+msgid "Your TikTok Pixel ID (from Events Manager)."
+msgstr ""
+
+#: build/index.js:14
+msgid "Tag ID"
+msgstr ""
+
+#: build/index.js:14
+msgid "Your Pinterest Tag ID."
+msgstr ""
+
+#: build/index.js:14
+msgid "UET Tag ID"
+msgstr ""
+
+#: build/index.js:14
+msgid "Your Bing UET Tag ID."
+msgstr ""
+
+#: build/index.js:14
+msgid "Advertiser ID"
+msgstr ""
+
+#: build/index.js:14
+msgid "Your Reddit Advertiser ID."
+msgstr ""
+
+#: build/index.js:14
+msgid "Your Snapchat Pixel ID (UUID format)."
+msgstr ""
+
+#: build/index.js:14
+msgid "Your X Universal Pixel ID."
+msgstr ""
+
+#: build/index.js:14
+msgid "Standard events"
+msgstr ""
+
+#: build/index.js:14
+msgid "Sent to every active pixel, each in its own event format."
+msgstr ""
+
+#: build/index.js:14
+msgid "PageView"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire PageView on every page"
+msgstr ""
+
+#: build/index.js:14
+msgid "ViewContent"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire ViewContent on singular templates (posts, pages, CPTs)"
+msgstr ""
+
+#: build/index.js:14
+msgid "Search"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire Search on the search results page"
+msgstr ""
+
+#: build/index.js:14
+msgid "Lead"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire Lead on form submissions. Choose the form plugins on the Forms screen."
+msgstr ""
+
+#: build/index.js:14
+msgid "Auto-tracked events"
+msgstr ""
+
+#: build/index.js:14
+msgid "Visitor behaviour tracked without any code."
+msgstr ""
+
+#: build/index.js:14
+msgid "Scroll depth"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire Scroll events at percentage thresholds"
+msgstr ""
+
+#: build/index.js:14
+msgid "Thresholds (%)"
+msgstr ""
+
+#: build/index.js:14
+msgid "Comma-separated percentages (1–100)."
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire TimeOnPage events at second thresholds"
+msgstr ""
+
+#: build/index.js:14
+msgid "Thresholds (seconds)"
+msgstr ""
+
+#: build/index.js:14
+msgid "Comma-separated seconds."
+msgstr ""
+
+#: build/index.js:14
+msgid "Downloads"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire Download events on file links"
+msgstr ""
+
+#: build/index.js:14
+msgid "File extensions"
+msgstr ""
+
+#: build/index.js:14
+msgid "Comma-separated file extensions to track."
+msgstr ""
+
+#: build/index.js:14
+msgid "Login"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire Login event when a user logs in"
+msgstr ""
+
+#: build/index.js:14
+msgid "Sign-up"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire CompleteRegistration event on user signup"
+msgstr ""
+
+#: build/index.js:14
+msgid "Comment"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire Comment event on new comment submission"
+msgstr ""
+
+#: build/index.js:14
+msgid "Phone clicks"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire a Contact event when a visitor clicks a tel: link"
+msgstr ""
+
+#: build/index.js:14
+msgid "Email clicks"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire a Contact event when a visitor clicks a mailto: link"
+msgstr ""
+
+#: build/index.js:14
+msgid "Thank-you pages"
+msgstr ""
+
+#: build/index.js:14
+msgid "Fire a Lead event when the URL matches one of the fragments below"
+msgstr ""
+
+#: build/index.js:14
+msgid "URL fragments"
+msgstr ""
+
+#: build/index.js:14
+msgid "One URL fragment per line, e.g. koszonjuk. Matched case-insensitively against the page address, including any query string."
+msgstr ""
+
+#: build/index.js:14
+msgid "A successful submission fires a Lead event, also when the form is sent without reloading the page."
+msgstr ""
+
+#: build/index.js:14
+msgid "The Lead event is switched off on the Events screen, so form submissions are not tracked."
+msgstr ""
+
+#: build/index.js:14
+msgid "Open Events"
+msgstr ""
+
+#. translators: %s: form plugin name.
+#: build/index.js:15
+#, js-format
+msgid "Track %s submissions"
+msgstr ""
+
+#: build/index.js:15
+msgid "Not installed"
+msgstr ""
+
+#: build/index.js:15
+msgid "WooCommerce is not active. Activate it to enable ecommerce events. Your settings here are kept until then."
+msgstr ""
+
+#: build/index.js:15
+msgid "Ecommerce events"
+msgstr ""
+
+#: build/index.js:15
+msgid "View Product"
+msgstr ""
+
+#: build/index.js:15
+msgid "Fire ViewContent on product pages"
+msgstr ""
+
+#: build/index.js:15
+msgid "View Category"
+msgstr ""
+
+#: build/index.js:15
+msgid "Fire ViewCategory on category archives"
+msgstr ""
+
+#: build/index.js:15
+msgid "View Cart"
+msgstr ""
+
+#: build/index.js:15
+msgid "Fire ViewCart on the cart page"
+msgstr ""
+
+#: build/index.js:15
+msgid "Add to Cart"
+msgstr ""
+
+#: build/index.js:15
+msgid "Fire AddToCart when products are added"
+msgstr ""
+
+#: build/index.js:15
+msgid "Initiate Checkout"
+msgstr ""
+
+#: build/index.js:15
+msgid "Fire InitiateCheckout on the checkout page"
+msgstr ""
+
+#: build/index.js:15
+msgid "Add Payment Info"
+msgstr ""
+
+#: build/index.js:15
+msgid "Fire AddPaymentInfo when payment method is selected"
+msgstr ""
+
+#: build/index.js:15
+msgid "Purchase"
+msgstr ""
+
+#: build/index.js:15
+msgid "Fire Purchase on the order-received page"
+msgstr ""
+
+#: build/index.js:15
+msgid "Product data"
+msgstr ""
+
+#: build/index.js:15
+msgid "Use SKU"
+msgstr ""
+
+#: build/index.js:15
+msgid "Use product SKU as content_id (instead of post ID)"
+msgstr ""
+
+#: build/index.js:15
+msgid "Include tax in event value"
+msgstr ""
+
+#: build/index.js:15
+msgid "Content ID prefix"
+msgstr ""
+
+#: build/index.js:15
+msgid "Optional prefix for content_id (e.g. \"wc_post_id_\")."
+msgstr ""
+
+#: build/index.js:15
+msgid "Marketing"
+msgstr ""
+
+#: build/index.js:15
+msgid "Analytics"
+msgstr ""
+
+#: build/index.js:15
+msgid "Functional"
+msgstr ""
+
+#: build/index.js:15
+msgid "LW Cookie is active: every pixel waits until the visitor accepts its category, also on cached pages."
+msgstr ""
+
+#: build/index.js:15
+msgid "No consent plugin detected. Without LW Cookie (or a consent plugin that uses the lw_pixel_is_category_allowed filter) every pixel fires for every visitor."
+msgstr ""
+
+#: build/index.js:15
+msgid "Consent categories"
+msgstr ""
+
+#: build/index.js:15
+msgid "Choose the cookie category each pixel belongs to. A pixel fires only after the visitor accepts that category."
+msgstr ""
+
+#: build/index.js:15
+msgid "Not gated (always fires)"
+msgstr ""
+
+#: build/index.js:15
+msgid "Auto (Meta resolves geo)"
+msgstr ""
+
+#: build/index.js:15
+msgid "Force California"
+msgstr ""
+
+#: build/index.js:15
+msgid "Medical traffic mode"
+msgstr ""
+
+#: build/index.js:15
+msgid "Strips identifiable parameters (IP, UA, advanced matching, page URL params) from event payloads. Recommended for healthcare / medical sites."
+msgstr ""
+
+#: build/index.js:15
+msgid "Treat this site as medical / health traffic"
+msgstr ""
+
+#: build/index.js:15
+msgid "Limited Data Use (LDU)"
+msgstr ""
+
+#: build/index.js:15
+msgid "Adds the Meta data_processing_options block to CAPI events for California (CCPA) compliance."
+msgstr ""
+
+#: build/index.js:15
+msgid "Mark events with LDU"
+msgstr ""
+
+#: build/index.js:15
+msgid "LDU mode"
+msgstr ""
+
+#: build/index.js:15
+msgid "\"Auto\" lets Meta resolve geo. \"Force California\" sets country=1, state=1000."
+msgstr ""
+
+#: build/index.js:15
+msgid "LDU applies to Meta Conversion API events, which are switched off on the Meta screen."
+msgstr ""
+
+#: build/index.js:15
+msgid "General"
+msgstr ""
+
+#: build/index.js:15
+msgid "Do not load pixels for users with manage_options capability"
+msgstr ""
+
+#: build/index.js:15
+msgid "Recommended. Prevents your own admin sessions from polluting reports."
+msgstr ""
+
+#: build/index.js:15
+msgid "Custom code"
+msgstr ""
+
+#: build/index.js:15
+msgid "Raw HTML/JS injected on every page. No sanitization is performed — make sure your code is trusted."
+msgstr ""
+
+#: build/index.js:15
+msgid "Read only: your account may not post unfiltered HTML (on multisite only super admins can), so you cannot change custom code here."
+msgstr ""
+
+#: build/index.js:15
+msgid "<head> code"
+msgstr ""
+
+#: build/index.js:15
+msgid "After <body>"
+msgstr ""
+
+#: build/index.js:15
+msgid "Before </body>"
+msgstr ""
