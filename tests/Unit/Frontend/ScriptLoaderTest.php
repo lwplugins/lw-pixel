@@ -82,4 +82,16 @@ final class ScriptLoaderTest extends MonkeyTestCase {
 
 		$this->assertFalse( $emitted );
 	}
+
+	/**
+	 * The localized nonce only served a logged-out AJAX endpoint that leaked
+	 * draft/private product data; neither may come back.
+	 */
+	public function test_enqueue_prints_no_ajax_nonce(): void {
+		Functions\expect( 'wp_enqueue_script' )->once();
+		Functions\expect( 'wp_localize_script' )->never();
+		Functions\expect( 'wp_create_nonce' )->never();
+
+		$this->loader->enqueue();
+	}
 }

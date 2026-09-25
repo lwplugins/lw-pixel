@@ -21,4 +21,12 @@ if ( ! defined( 'MINUTE_IN_SECONDS' ) ) {
 	define( 'MINUTE_IN_SECONDS', 60 );
 }
 
+// Plugin constants normally defined by lw-pixel.php.
+if ( ! defined( 'LW_PIXEL_URL' ) ) {
+	define( 'LW_PIXEL_URL', 'https://example.test/wp-content/plugins/lw-pixel/' );
+}
+if ( ! defined( 'LW_PIXEL_VERSION' ) ) {
+	define( 'LW_PIXEL_VERSION', 'test' );
+}
+
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';

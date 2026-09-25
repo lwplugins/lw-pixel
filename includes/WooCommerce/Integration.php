@@ -49,9 +49,6 @@ final class Integration {
 		add_action( 'wp', [ $this, 'queue_view_events' ] );
 		add_action( 'woocommerce_add_to_cart', [ $this, 'queue_add_to_cart' ], 10, 4 );
 		add_action( 'woocommerce_thankyou', [ $this, 'queue_purchase' ] );
-
-		add_action( 'wp_ajax_lw_pixel_add_to_cart', [ $this, 'ajax_add_to_cart' ] );
-		add_action( 'wp_ajax_nopriv_lw_pixel_add_to_cart', [ $this, 'ajax_add_to_cart' ] );
 	}
 
 	/**
@@ -119,29 +116,5 @@ final class Integration {
 			$this->queued_orders[ $order_id ] = true;
 			$this->event_manager->queue( $event->get_name(), $event->get_params(), [ $event, 'mark_tracked' ] );
 		}
-	}
-
-	/**
-	 * Lightweight AJAX endpoint used by the cart fragments to fire AddToCart for AJAX add-to-cart buttons.
-	 *
-	 * @return void
-	 */
-	public function ajax_add_to_cart(): void {
-		check_ajax_referer( 'lw_pixel_ajax', 'nonce' );
-
-		$product_id = isset( $_POST['product_id'] ) ? (int) $_POST['product_id'] : 0;
-		$quantity   = isset( $_POST['quantity'] ) ? max( 1, (int) $_POST['quantity'] ) : 1;
-
-		if ( $product_id <= 0 ) {
-			wp_send_json_error();
-		}
-
-		$event = new AddToCart( $product_id, $quantity );
-		wp_send_json_success(
-			[
-				'event'  => $event->get_name(),
-				'params' => $event->get_params(),
-			]
-		);
 	}
 }

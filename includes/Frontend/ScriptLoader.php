@@ -67,15 +67,6 @@ final class ScriptLoader {
 				'strategy'  => 'defer',
 			]
 		);
-
-		wp_localize_script(
-			'lw-pixel',
-			'lwPixelAjax',
-			[
-				'url'   => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'lw_pixel_ajax' ),
-			]
-		);
 	}
 
 	/**
