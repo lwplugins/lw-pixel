@@ -49,8 +49,7 @@ final class PinterestPixel extends AbstractPixel {
 
 	public function get_frontend_config(): array {
 		return [
-			'tagId'     => $this->primary_id(),
-			'emEnabled' => (bool) $this->get_option( 'em_enabled' ),
+			'tagId' => $this->primary_id(),
 		];
 	}
 

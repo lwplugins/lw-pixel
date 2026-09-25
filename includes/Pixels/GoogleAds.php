@@ -1,6 +1,6 @@
 <?php
 /**
- * Google Ads provider (conversion + remarketing).
+ * Google Ads provider (conversion tracking).
  *
  * @package LightweightPlugins\Pixel
  */
@@ -34,7 +34,6 @@ final class GoogleAds extends AbstractPixel {
 		return [
 			'conversionId'    => $this->primary_id(),
 			'conversionLabel' => (string) $this->get_option( 'conversion_label', '' ),
-			'remarketing'     => (bool) $this->get_option( 'remarketing' ),
 		];
 	}
 

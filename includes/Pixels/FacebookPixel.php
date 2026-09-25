@@ -52,8 +52,6 @@ final class FacebookPixel extends AbstractPixel {
 		return [
 			'pixelId'          => $this->primary_id(),
 			'advancedMatching' => (bool) $this->get_option( 'advanced_matching' ),
-			'capiEnabled'      => (bool) $this->get_option( 'capi_enabled' ),
-			'testEventCode'    => (string) $this->get_option( 'test_event_code', '' ),
 		];
 	}
 
