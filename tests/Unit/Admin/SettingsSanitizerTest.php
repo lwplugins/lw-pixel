@@ -86,4 +86,18 @@ final class SettingsSanitizerTest extends MonkeyTestCase {
 
 		$this->assertSame( '<script>existing</script>', $result['head_code'] );
 	}
+
+	/**
+	 * options.php unslashes the POST before the sanitize callback; a second
+	 * unslash turned /\d+/ into /d+/ and wore backslashes away on each save.
+	 */
+	public function test_raw_code_keeps_backslashes(): void {
+		Functions\when( 'current_user_can' )->justReturn( true );
+		Functions\when( 'wp_unslash' )->alias( 'stripslashes' );
+		$code = '<script>if (/\\d+/.test(x)) { y = "a\\\\b"; }</script>';
+
+		$result = SettingsSanitizer::sanitize( [ 'head_code' => $code ] );
+
+		$this->assertSame( $code, $result['head_code'] );
+	}
 }

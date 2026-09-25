@@ -98,6 +98,9 @@ final class SettingsSanitizer {
 			return $fallback;
 		}
 
-		return trim( wp_unslash( (string) $value ) );
+		// No wp_unslash(): options.php already unslashes before update_option(),
+		// and the CLI / ability / migrator inputs were never slashed. A second
+		// unslash stripped real backslashes (e.g. /\d+/ in a script) on every save.
+		return trim( (string) $value );
 	}
 }

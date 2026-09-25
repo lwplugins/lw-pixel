@@ -44,7 +44,6 @@ final class PixelServiceTest extends MonkeyTestCase {
 		Functions\when( 'sanitize_text_field' )->returnArg();
 		Functions\when( 'sanitize_textarea_field' )->returnArg();
 		Functions\when( 'current_user_can' )->justReturn( true );
-		Functions\when( 'wp_unslash' )->returnArg();
 		Functions\when( '__' )->returnArg();
 		Functions\when( 'update_option' )->alias(
 			function ( $name, $value ): bool {
