@@ -9,30 +9,24 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Forms;
 
-use LightweightPlugins\Pixel\Events\EventManager;
 use LightweightPlugins\Pixel\Events\Lead;
+use LightweightPlugins\Pixel\Events\PendingEventStore;
 use LightweightPlugins\Pixel\Options;
 
 /**
  * Hooks into supported form plugins to fire Lead events.
+ *
+ * Most form plugins submit over AJAX or REST, where no page (and no data
+ * island) is rendered, so the Lead is stored in the PendingEventStore and
+ * delivered on the visitor's next page view. A classic full-page submission
+ * that renders a page in the same request picks it up on that page.
  */
 final class FormDetector {
 
 	/**
-	 * Event manager.
-	 *
-	 * @var EventManager
-	 */
-	private EventManager $event_manager;
-
-	/**
 	 * Constructor.
-	 *
-	 * @param EventManager $event_manager Event manager.
 	 */
-	public function __construct( EventManager $event_manager ) {
-		$this->event_manager = $event_manager;
-
+	public function __construct() {
 		$this->register_hooks();
 	}
 
@@ -111,7 +105,7 @@ final class FormDetector {
 	}
 
 	/**
-	 * Queue a Lead event from a normalized form descriptor.
+	 * Store a Lead event from a normalized form descriptor.
 	 *
 	 * @param array{id: int, name: string, source: string} $form Normalized form data.
 	 * @return void
@@ -126,7 +120,7 @@ final class FormDetector {
 		);
 
 		if ( $event->should_fire() ) {
-			$this->event_manager->queue( $event->get_name(), $event->get_params() );
+			PendingEventStore::push_for_current_visitor( $event->get_name(), $event->get_params() );
 		}
 	}
 }

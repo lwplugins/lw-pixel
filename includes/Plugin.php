@@ -99,7 +99,7 @@ final class Plugin {
 
 		new ScriptLoader( $this->pixel_manager, $this->event_manager );
 		new HeadFooterScripts();
-		new FormDetector( $this->event_manager );
+		new FormDetector();
 
 		if ( is_woocommerce_active() ) {
 			new WooCommerceIntegration( $this->event_manager );
