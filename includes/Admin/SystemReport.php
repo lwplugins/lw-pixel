@@ -14,9 +14,14 @@ use LightweightPlugins\Pixel\Options;
 use function LightweightPlugins\Pixel\lw_pixel;
 
 /**
- * Builds a diagnostic report shown in the Settings → System Report tab.
+ * Builds the diagnostic report shown (and downloadable) on the Tools screen.
  */
 final class SystemReport {
+
+	/**
+	 * Custom code options: reported only as their length.
+	 */
+	private const CODE_KEYS = [ 'head_code', 'body_open_code', 'footer_code' ];
 
 	/**
 	 * Generate the full report payload.
@@ -27,7 +32,7 @@ final class SystemReport {
 		return [
 			'environment'  => self::environment(),
 			'pixels'       => self::pixels(),
-			'integrations' => self::integrations(),
+			'integrations' => Integrations::detect(),
 			'options'      => self::redacted_options(),
 		];
 	}
@@ -72,36 +77,15 @@ final class SystemReport {
 	}
 
 	/**
-	 * Detected integrations.
-	 *
-	 * @return array<string, bool>
-	 */
-	private static function integrations(): array {
-		return [
-			'woocommerce'     => class_exists( '\\WooCommerce' ),
-			'lw_cookie'       => defined( 'LW_COOKIE_VERSION' ),
-			'lw_site_manager' => defined( 'LW_SITE_MANAGER_VERSION' ),
-			'cf7'             => defined( 'WPCF7_VERSION' ),
-			'wpforms'         => defined( 'WPFORMS_VERSION' ),
-			'elementor_pro'   => defined( 'ELEMENTOR_PRO_VERSION' ),
-			'forminator'      => defined( 'FORMINATOR_VERSION' ),
-			'formidable'      => class_exists( '\\FrmAppController' ),
-			'ninja_forms'     => class_exists( '\\Ninja_Forms' ),
-			'fluent_forms'    => defined( 'FLUENTFORM_VERSION' ),
-			'ws_form'         => class_exists( '\\WS_Form' ),
-			'gravity_forms'   => class_exists( '\\GFForms' ),
-		];
-	}
-
-	/**
-	 * Options with secrets redacted.
+	 * Options without secrets or custom code: a report is pasted into
+	 * support tickets, and custom code often carries third-party keys.
 	 *
 	 * @return array<string, mixed>
 	 */
 	private static function redacted_options(): array {
 		$opts = Options::get_all();
 
-		foreach ( Options::SECRET_KEYS as $key ) {
+		foreach ( array_merge( Options::SECRET_KEYS, self::CODE_KEYS ) as $key ) {
 			if ( ! empty( $opts[ $key ] ) ) {
 				$opts[ $key ] = '***REDACTED*** (' . strlen( (string) $opts[ $key ] ) . ' chars)';
 			}
