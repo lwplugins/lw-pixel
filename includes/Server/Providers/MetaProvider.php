@@ -69,11 +69,19 @@ final class MetaProvider implements ServerProviderInterface {
 	}
 
 	public function send( array $events ): array {
-		$result = FacebookCAPI::send_events( $events );
+		$ok     = true;
+		$status = 0;
+
+		// Meta accepts at most 1000 events per request.
+		foreach ( array_chunk( $events, 1000 ) as $chunk ) {
+			$result = FacebookCAPI::send_events( $chunk );
+			$ok     = $ok && $result['ok'];
+			$status = $result['status'];
+		}
 
 		return [
-			'ok'     => $result['ok'],
-			'status' => $result['status'],
+			'ok'     => $ok,
+			'status' => $status,
 		];
 	}
 

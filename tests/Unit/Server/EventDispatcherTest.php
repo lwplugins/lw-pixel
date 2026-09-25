@@ -28,6 +28,7 @@ final class EventDispatcherTest extends CapiTestCase {
 		Functions\when( 'wp_get_current_user' )->justReturn( new class() { public function exists(): bool { return false; } } ); // phpcs:ignore
 		Functions\when( 'esc_url_raw' )->returnArg();
 		Functions\when( 'has_filter' )->justReturn( false );
+		Functions\when( 'wp_doing_cron' )->justReturn( false );
 		$_SERVER['REMOTE_ADDR']     = '203.0.113.7';
 		$_SERVER['HTTP_USER_AGENT'] = 'Browser/1.0';
 		$_SERVER['REQUEST_URI']     = '/cart/';
@@ -36,6 +37,22 @@ final class EventDispatcherTest extends CapiTestCase {
 	protected function tearDown(): void {
 		DispatchQueue::reset();
 		parent::tearDown();
+	}
+
+	/**
+	 * A cron job or a script (e.g. a user import) is no visitor's action.
+	 */
+	public function test_nothing_is_queued_from_cron(): void {
+		Functions\when( 'wp_doing_cron' )->justReturn( true );
+
+		$this->assertFalse( EventDispatcher::capture( 'CompleteRegistration', [], 'evt-1', EventDispatcher::SCOPE_VISITOR ) );
+		$this->assertSame( [], DispatchQueue::pending() );
+	}
+
+	public function test_nothing_is_queued_without_a_user_agent(): void {
+		unset( $_SERVER['HTTP_USER_AGENT'] );
+
+		$this->assertFalse( EventDispatcher::capture( 'CompleteRegistration', [], 'evt-1', EventDispatcher::SCOPE_VISITOR ) );
 	}
 
 	public function test_visitor_event_is_queued_for_meta_with_the_shared_event_id(): void {

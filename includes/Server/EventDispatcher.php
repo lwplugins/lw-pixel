@@ -29,6 +29,7 @@ use LightweightPlugins\Pixel\Consent\Manager as ConsentManager;
  *
  * Consent: every provider is checked against its own pixel's consent
  * category for the visitor making the request, exactly like the browser.
+ * Without a visitor request (WP-CLI, cron, no user agent) nothing is sent.
  */
 final class EventDispatcher {
 
@@ -53,7 +54,8 @@ final class EventDispatcher {
 
 		$providers = ServerProviders::active();
 
-		if ( [] === $providers || ( self::SCOPE_PAGE === $scope && ! self::page_is_private( $name ) ) ) {
+		if ( [] === $providers || ! self::is_visitor_request()
+			|| ( self::SCOPE_PAGE === $scope && ! self::page_is_private( $name ) ) ) {
 			return false;
 		}
 
@@ -80,6 +82,21 @@ final class EventDispatcher {
 		}
 
 		return $queued;
+	}
+
+	/**
+	 * Whether a visitor's browser made this request. WP-CLI, cron and
+	 * requests without a user agent (user imports, `wp user create`,
+	 * scripts) are not a visitor's action: nothing is sent for them.
+	 *
+	 * @return bool
+	 */
+	private static function is_visitor_request(): bool {
+		if ( ( defined( 'WP_CLI' ) && WP_CLI ) || wp_doing_cron() ) {
+			return false;
+		}
+
+		return '' !== ClientRequest::user_agent();
 	}
 
 	/**
