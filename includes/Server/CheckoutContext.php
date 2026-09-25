@@ -9,17 +9,30 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Server;
 
+use LightweightPlugins\Pixel\Consent\Manager as ConsentManager;
+
 /**
  * Stores IP, user agent, `_fbp`, `_fbc` and the source URL on the order while
  * the customer's own checkout request is running, so the Conversion API
  * Purchase later sends the customer's data — never that of the admin or
  * payment webhook that moves the order to processing/completed.
  *
+ * The visitor's consent for the Meta pixel is recorded at the same time.
+ * It is resolved exactly like the browser pixel's gating: through LW Cookie
+ * when it is active (it reads the visitor's consent cookie, which the
+ * checkout request carries), otherwise through the
+ * `lw_pixel_is_category_allowed` filter, which defaults to allowed — the
+ * same default under which the browser pixels fire. When consent is not
+ * given, only the refusal is stored: no IP, user agent or cookies.
+ *
  * Written through the WC order CRUD API, so it works with HPOS.
  */
 final class CheckoutContext {
 
 	public const META_KEY = '_lw_pixel_capi_context';
+
+	public const GRANTED = 'granted';
+	public const DENIED  = 'denied';
 
 	/**
 	 * Register checkout hooks (classic shortcode checkout + Store API / block checkout).
@@ -61,8 +74,32 @@ final class CheckoutContext {
 			return;
 		}
 
-		$order->update_meta_data( self::META_KEY, self::from_request() );
+		$context = self::consent_given( $order )
+			? array_merge( [ 'consent' => self::GRANTED ], self::from_request() )
+			: [ 'consent' => self::DENIED ];
+
+		$order->update_meta_data( self::META_KEY, $context );
 		$order->save();
+	}
+
+	/**
+	 * Whether the visitor placing the order allows the Meta pixel.
+	 *
+	 * @param \WC_Order $order Order being placed.
+	 * @return bool
+	 */
+	private static function consent_given( \WC_Order $order ): bool {
+		$allowed = ( new ConsentManager() )->is_pixel_allowed( 'fb' );
+
+		/**
+		 * Filter whether the server-side Purchase may be sent for this order.
+		 *
+		 * Evaluated once, in the customer's checkout request.
+		 *
+		 * @param bool      $allowed Consent state resolved like the browser pixel.
+		 * @param \WC_Order $order   Order being placed.
+		 */
+		return (bool) apply_filters( 'lw_pixel_capi_purchase_consent', $allowed, $order );
 	}
 
 	/**
@@ -81,7 +118,8 @@ final class CheckoutContext {
 	}
 
 	/**
-	 * The stored context, or an empty array when none was captured.
+	 * The stored context, or an empty array when none was captured or the
+	 * customer did not consent.
 	 *
 	 * @param \WC_Order $order Order.
 	 * @return array<string, string>
@@ -89,7 +127,7 @@ final class CheckoutContext {
 	public static function get( \WC_Order $order ): array {
 		$context = $order->get_meta( self::META_KEY, true );
 
-		if ( ! is_array( $context ) || empty( $context['ua'] ) ) {
+		if ( ! is_array( $context ) || self::GRANTED !== ( $context['consent'] ?? '' ) || empty( $context['ua'] ) ) {
 			return [];
 		}
 

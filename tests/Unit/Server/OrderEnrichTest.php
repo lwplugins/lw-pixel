@@ -20,6 +20,7 @@ use LightweightPlugins\Pixel\Server\OrderEnrich;
 final class OrderEnrichTest extends CapiTestCase {
 
 	private const CUSTOMER_CONTEXT = [
+		'consent' => CheckoutContext::GRANTED,
 		'ip'  => '203.0.113.7',
 		'ua'  => 'CustomerBrowser/1.0',
 		'fbp' => 'fb.1.111.customer',
@@ -61,6 +62,20 @@ final class OrderEnrichTest extends CapiTestCase {
 		$this->assertSame( 'https://shop.test/checkout/', $event['event_source_url'] );
 		$this->assertArrayNotHasKey( 'external_id', $event['user_data'] );
 		$this->assertSame( hash( 'sha256', 'buyer@example.com' ), $event['user_data']['em'] );
+	}
+
+	/**
+	 * GDPR: a visitor who refused marketing cookies at checkout must not
+	 * have their order data sent to Meta from the server.
+	 */
+	public function test_skips_orders_whose_customer_refused_consent(): void {
+		Functions\when( 'wc_get_order' )->justReturn(
+			$this->order( [ CheckoutContext::META_KEY => [ 'consent' => CheckoutContext::DENIED ] ] )
+		);
+
+		OrderEnrich::enrich( 42 );
+
+		$this->assertSame( [], $this->sent );
 	}
 
 	public function test_skips_orders_without_a_captured_checkout_context(): void {

@@ -55,9 +55,10 @@ final class OrderEnrich {
 		}
 
 		// Only the context captured during the customer's own checkout is
-		// sent. Without it (order created in wp-admin, via the REST API, or
-		// before this was recorded) there is no customer browser data to
-		// attribute, and the current request belongs to someone else.
+		// sent, and only when they consented to the Meta pixel there. Without
+		// it (consent refused, order created in wp-admin or via the REST API,
+		// or placed before this was recorded) nothing is sent: there is no
+		// consent on record, and the current request belongs to someone else.
 		$context = CheckoutContext::get( $order );
 		if ( [] === $context ) {
 			return;
