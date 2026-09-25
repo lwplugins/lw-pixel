@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Tools\Migrators;
 
+use LightweightPlugins\Pixel\Admin\SettingsSanitizer;
 use LightweightPlugins\Pixel\Options;
 
 /**
@@ -42,50 +43,66 @@ final class PysMigrator implements MigratorInterface {
 	public function preview(): array {
 		$preview = [];
 		$current = Options::get_all();
+		$skipped = [];
 
-		foreach ( PysMapping::all() as $bucket => $field_map ) {
-			$source = PysReader::read( $bucket );
-
-			foreach ( $field_map as $pys_key => $lw_key ) {
-				if ( ! array_key_exists( $pys_key, $source ) ) {
-					continue;
-				}
-
-				$preview[ $lw_key ] = [
-					'from' => $current[ $lw_key ] ?? null,
-					'to'   => self::cast( $lw_key, $source[ $pys_key ] ),
-				];
-			}
+		foreach ( self::collect( $skipped ) as $lw_key => $value ) {
+			$preview[ $lw_key ] = [
+				'from' => $current[ $lw_key ] ?? null,
+				'to'   => $value,
+			];
 		}
 
 		return $preview;
 	}
 
 	public function run(): array {
-		$updated = [];
 		$skipped = [];
-		$options = Options::get_all();
+		$values  = self::collect( $skipped );
+
+		// Same sanitizer as the settings form, CLI and abilities: the
+		// migrator runs on admin_init, before register_setting() exists.
+		Options::save( SettingsSanitizer::sanitize( array_merge( Options::get_all(), $values ) ) );
+
+		return [
+			'updated' => array_keys( $values ),
+			'skipped' => $skipped,
+		];
+	}
+
+	/**
+	 * Collect the values to import, keyed by lw-pixel option.
+	 *
+	 * A blank source value never overwrites anything, and when several
+	 * source keys map to one option (e.g. gtm_id / container_id) the first
+	 * non-empty one wins.
+	 *
+	 * @param array<int, string> $skipped Receives the source keys not imported.
+	 * @return array<string, mixed>
+	 */
+	private static function collect( array &$skipped ): array {
+		$values = [];
 
 		foreach ( PysMapping::all() as $bucket => $field_map ) {
 			$source = PysReader::read( $bucket );
 
 			foreach ( $field_map as $pys_key => $lw_key ) {
-				if ( ! array_key_exists( $pys_key, $source ) ) {
+				if ( ! array_key_exists( $pys_key, $source ) || array_key_exists( $lw_key, $values ) ) {
 					$skipped[] = "{$bucket}.{$pys_key}";
 					continue;
 				}
 
-				$options[ $lw_key ] = self::cast( $lw_key, $source[ $pys_key ] );
-				$updated[]          = $lw_key;
+				$value = self::cast( $lw_key, $source[ $pys_key ] );
+
+				if ( '' === $value || [] === $value ) {
+					$skipped[] = "{$bucket}.{$pys_key}";
+					continue;
+				}
+
+				$values[ $lw_key ] = $value;
 			}
 		}
 
-		Options::save( $options );
-
-		return [
-			'updated' => array_values( array_unique( $updated ) ),
-			'skipped' => $skipped,
-		];
+		return $values;
 	}
 
 	/**
