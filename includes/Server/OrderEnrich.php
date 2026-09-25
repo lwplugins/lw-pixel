@@ -17,8 +17,15 @@ use LightweightPlugins\Pixel\WooCommerce\ProductData;
 
 /**
  * Listens for WC order completion / processing and dispatches a Purchase to CAPI.
+ *
+ * The status change often happens inside the checkout/payment request, so
+ * the HTTP call to Meta is handed to Action Scheduler (bundled with
+ * WooCommerce) instead of blocking the customer. Only when Action Scheduler
+ * is unavailable is it sent inline.
  */
 final class OrderEnrich {
+
+	public const ASYNC_HOOK = 'lw_pixel_capi_send_purchase';
 
 	private const TRACKED_META = '_lw_pixel_capi_purchase_tracked';
 
@@ -36,21 +43,59 @@ final class OrderEnrich {
 
 		add_action( 'woocommerce_order_status_completed', [ self::class, 'enrich' ] );
 		add_action( 'woocommerce_order_status_processing', [ self::class, 'enrich' ] );
+		add_action( self::ASYNC_HOOK, [ self::class, 'send' ] );
 	}
 
 	/**
-	 * Send a Purchase to CAPI for the given order, if not yet tracked.
+	 * Queue the CAPI Purchase for the given order.
 	 *
 	 * @param int $order_id Order id.
 	 * @return void
 	 */
 	public static function enrich( int $order_id ): void {
-		if ( $order_id <= 0 || self::already_tracked( $order_id ) ) {
+		if ( $order_id <= 0 ) {
 			return;
 		}
 
+		// Unique: the processing → completed pair queues a single action.
+		if ( function_exists( 'as_enqueue_async_action' )
+			&& as_enqueue_async_action( self::ASYNC_HOOK, [ $order_id ], 'lw-pixel', true ) > 0 ) {
+			return;
+		}
+
+		self::send( $order_id );
+	}
+
+	/**
+	 * Send the CAPI Purchase for the given order, once.
+	 *
+	 * The order is marked tracked only when Meta accepted the event, so a
+	 * failed send is retried on the next status change.
+	 *
+	 * @param int $order_id Order id.
+	 * @return void
+	 */
+	public static function send( int $order_id ): void {
+		if ( $order_id <= 0 || ! OrderLock::acquire( $order_id ) ) {
+			return;
+		}
+
+		try {
+			self::send_locked( $order_id );
+		} finally {
+			OrderLock::release( $order_id );
+		}
+	}
+
+	/**
+	 * Check → send → mark, while holding the order lock.
+	 *
+	 * @param int $order_id Order id.
+	 * @return void
+	 */
+	private static function send_locked( int $order_id ): void {
 		$order = function_exists( 'wc_get_order' ) ? wc_get_order( $order_id ) : false;
-		if ( ! $order instanceof \WC_Order ) {
+		if ( ! $order instanceof \WC_Order || $order->get_meta( self::TRACKED_META, true ) ) {
 			return;
 		}
 
@@ -69,14 +114,17 @@ final class OrderEnrich {
 			return;
 		}
 
-		FacebookCAPI::send_server_event(
+		$result = FacebookCAPI::send_server_event(
 			'Purchase',
 			self::custom_data( $params ),
 			array_merge( UserDataBuilder::for_order( $order_id ), CheckoutContext::to_user_data( $context ) ),
 			$context['url'] ?? ''
 		);
 
-		update_post_meta( $order_id, self::TRACKED_META, '1' );
+		if ( $result['ok'] ) {
+			$order->update_meta_data( self::TRACKED_META, '1' );
+			$order->save();
+		}
 	}
 
 	/**
@@ -104,15 +152,5 @@ final class OrderEnrich {
 			'contents'     => $contents,
 			'content_type' => 'product',
 		];
-	}
-
-	/**
-	 * Whether this order's CAPI Purchase has been sent.
-	 *
-	 * @param int $order_id Order id.
-	 * @return bool
-	 */
-	private static function already_tracked( int $order_id ): bool {
-		return (bool) get_post_meta( $order_id, self::TRACKED_META, true );
 	}
 }

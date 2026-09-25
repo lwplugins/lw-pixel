@@ -28,12 +28,6 @@ final class OrderEnrichTest extends CapiTestCase {
 		'url' => 'https://shop.test/checkout/',
 	];
 
-	protected function setUp(): void {
-		parent::setUp();
-		Functions\when( 'get_post_meta' )->justReturn( '' );
-		Functions\when( 'update_post_meta' )->justReturn( true );
-	}
-
 	/**
 	 * An admin marks a BACS order processing in wp-admin: the payload must
 	 * carry the customer's checkout context, not the admin's request data.
@@ -50,7 +44,7 @@ final class OrderEnrichTest extends CapiTestCase {
 		Functions\expect( 'wp_get_current_user' )->never();
 		Functions\when( 'wc_get_order' )->justReturn( $this->order( [ CheckoutContext::META_KEY => self::CUSTOMER_CONTEXT ] ) );
 
-		OrderEnrich::enrich( 42 );
+		OrderEnrich::send( 42 );
 
 		$this->assertCount( 1, $this->sent );
 		$event = $this->sent[0]['data'][0];
@@ -73,7 +67,7 @@ final class OrderEnrichTest extends CapiTestCase {
 			$this->order( [ CheckoutContext::META_KEY => [ 'consent' => CheckoutContext::DENIED ] ] )
 		);
 
-		OrderEnrich::enrich( 42 );
+		OrderEnrich::send( 42 );
 
 		$this->assertSame( [], $this->sent );
 	}
@@ -81,7 +75,73 @@ final class OrderEnrichTest extends CapiTestCase {
 	public function test_skips_orders_without_a_captured_checkout_context(): void {
 		Functions\when( 'wc_get_order' )->justReturn( $this->order() );
 
+		OrderEnrich::send( 42 );
+
+		$this->assertSame( [], $this->sent );
+	}
+
+	public function test_enrich_queues_the_send_instead_of_blocking_checkout(): void {
+		Functions\expect( 'as_enqueue_async_action' )
+			->once()
+			->with( OrderEnrich::ASYNC_HOOK, [ 42 ], 'lw-pixel', true )
+			->andReturn( 7 );
+
 		OrderEnrich::enrich( 42 );
+
+		$this->assertSame( [], $this->sent );
+	}
+
+	public function test_marks_the_order_tracked_when_meta_accepts_the_event(): void {
+		$order = $this->order( [ CheckoutContext::META_KEY => self::CUSTOMER_CONTEXT ] );
+		$order->shouldReceive( 'update_meta_data' )->once()->with( '_lw_pixel_capi_purchase_tracked', '1' );
+		$order->shouldReceive( 'save' )->once();
+		Functions\when( 'wc_get_order' )->justReturn( $order );
+
+		OrderEnrich::send( 42 );
+
+		$this->assertCount( 1, $this->sent );
+	}
+
+	/**
+	 * A rejected or failed call must not mark the order, so the next status
+	 * change can retry instead of silently losing the Purchase.
+	 */
+	public function test_does_not_mark_the_order_tracked_when_meta_returns_an_error(): void {
+		$this->status = 400;
+		$order        = $this->order( [ CheckoutContext::META_KEY => self::CUSTOMER_CONTEXT ] );
+		$order->shouldReceive( 'update_meta_data' )->never();
+		$order->shouldReceive( 'save' )->never();
+		Functions\when( 'wc_get_order' )->justReturn( $order );
+
+		OrderEnrich::send( 42 );
+
+		$this->assertCount( 1, $this->sent );
+	}
+
+	public function test_does_not_send_an_already_tracked_order(): void {
+		Functions\when( 'wc_get_order' )->justReturn(
+			$this->order(
+				[
+					CheckoutContext::META_KEY          => self::CUSTOMER_CONTEXT,
+					'_lw_pixel_capi_purchase_tracked' => '1',
+				]
+			)
+		);
+
+		OrderEnrich::send( 42 );
+
+		$this->assertSame( [], $this->sent );
+	}
+
+	/**
+	 * A concurrent request (e.g. the payment webhook) holds the order lock:
+	 * this one must not send a second Purchase.
+	 */
+	public function test_does_not_send_while_another_request_holds_the_order_lock(): void {
+		$GLOBALS['wpdb'] = $this->wpdb( '0' );
+		Functions\expect( 'wc_get_order' )->never();
+
+		OrderEnrich::send( 42 );
 
 		$this->assertSame( [], $this->sent );
 	}

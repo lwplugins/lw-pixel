@@ -51,6 +51,7 @@ abstract class CapiTestCase extends MonkeyTestCase {
 		Functions\when( 'wp_unslash' )->returnArg();
 		Functions\when( 'home_url' )->alias( static fn ( $path = '' ): string => 'https://shop.test' . $path );
 		Functions\when( 'wc_get_checkout_url' )->justReturn( 'https://shop.test/checkout/' );
+		$GLOBALS['wpdb'] = $this->wpdb( '1' );
 		Functions\when( 'wp_remote_post' )->alias(
 			function ( $url, $args ): array {
 				unset( $url );
@@ -61,6 +62,7 @@ abstract class CapiTestCase extends MonkeyTestCase {
 	}
 
 	protected function tearDown(): void {
+		unset( $GLOBALS['wpdb'] );
 		Options::clear_cache();
 		$_SERVER = array_diff_key( $_SERVER, array_flip( [ 'REMOTE_ADDR', 'HTTP_USER_AGENT', 'REQUEST_URI' ] ) );
 		$_COOKIE = [];
@@ -87,6 +89,24 @@ abstract class CapiTestCase extends MonkeyTestCase {
 	}
 
 	/**
+	 * A $wpdb double whose GET_LOCK answers with the given value.
+	 *
+	 * @param string $lock_result '1' = acquired, '0' = held elsewhere.
+	 * @return object
+	 */
+	protected function wpdb( string $lock_result ): object {
+		$wpdb         = Mockery::mock( 'wpdb' );
+		$wpdb->prefix = 'wp_';
+		$wpdb->shouldReceive( 'prepare' )->andReturnUsing(
+			static fn ( $query, ...$args ): string => vsprintf( str_replace( '%s', "'%s'", (string) $query ), $args )
+		);
+		$wpdb->shouldReceive( 'get_var' )->andReturn( $lock_result );
+		$wpdb->shouldReceive( 'query' )->andReturn( 1 );
+
+		return $wpdb;
+	}
+
+	/**
 	 * A guest WC order mock with the given order meta.
 	 *
 	 * @param array<string, mixed> $meta Order meta.
@@ -97,6 +117,8 @@ abstract class CapiTestCase extends MonkeyTestCase {
 		$order->shouldReceive( 'get_meta' )->andReturnUsing(
 			static fn ( $key ) => $meta[ $key ] ?? ''
 		);
+		$order->shouldReceive( 'update_meta_data' )->byDefault();
+		$order->shouldReceive( 'save' )->byDefault();
 		$order->shouldReceive( 'get_items' )->andReturn( [] );
 		$order->shouldReceive( 'get_total' )->andReturn( 99.0 );
 		$order->shouldReceive( 'get_subtotal' )->andReturn( 80.0 );
