@@ -9,6 +9,30 @@ on:
     branches: [main]
 
 jobs:
+  admin-build:
+    name: Admin build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Build
+        run: npm ci && npm run build
+
+      # build/ is committed (the release ships it); a stale copy fails here.
+      - name: Committed build is up to date
+        run: git diff --exit-code -- build languages
+
+      - name: Lint JS
+        run: npm run lint:js
+
   phpcs:
     name: PHP CodeSniffer
     runs-on: ubuntu-latest
