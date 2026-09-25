@@ -1,5 +1,42 @@
 # Changelog
 
+## [1.3.0] - 2026-09-26
+
+### Added
+- ChatGPT Ads conversion tracking. The ChatGPT Ads measurement pixel in the browser and the Conversions API from the server, deduplicated with a shared event ID: product views, add to cart, checkout started, orders (once per order), form leads, signups, page views and custom events. Consent-gated, optional hashed advanced matching, debug mode and a connection test. The API key can also be set as LW_PIXEL_CHATGPT_API_KEY in wp-config.php.
+- Redesigned settings screen: grouped side navigation, overview page, Save / Discard with Ctrl/Cmd+S, unsaved-change tracking, loading skeletons, mobile layout. Secret keys are write-only and shown masked.
+- Custom event editor in the settings screen (the old screen was not linked from anywhere) with trigger-dependent fields and selector checks.
+- Consent page: choose the consent category of every pixel.
+- Server-side events now work as promised: the Meta Conversion API sends every standard event (not only the order Purchase), the GA4 Measurement Protocol sends when GA4 is not loaded by LW Pixel, and the ChatGPT Ads Conversions API sends. Browser and server copies share one event ID, so each is counted once.
+
+### Security
+- Server-side Purchase events respect the visitor's cookie consent; nothing is sent from the server when marketing cookies were refused.
+- The server-side Purchase sends the customer's own checkout data. Before, an admin, cron job or payment webhook changing the order status could send that request's IP, browser and cookies.
+- The Conversion API token and Measurement Protocol secret are no longer shown in plaintext by the Site Manager ability, WP-CLI or the importer preview.
+- Removed an unused AJAX endpoint that let logged-out visitors read the name, price and SKU of draft and private products.
+- Pending events of logged-out visitors are tied to a short-lived cookie token instead of IP + browser, so visitors behind the same network no longer receive each other's events.
+- Checkout data stored for server-side sending is included in WooCommerce's personal data export and erasure, and deleted once every provider has sent the Purchase.
+
+### Fixed
+- The Purchase event reaches the browser on classic themes, and an order is marked as tracked only after the event was printed.
+- GA4 no longer counts a purchase twice: the browser purchase carries transaction ID, items and value (without shipping and tax), and the Measurement Protocol does not repeat it while the GA4 tag runs.
+- No Purchase for failed or cancelled orders.
+- Form leads fire for forms submitted over AJAX or REST (Contact Form 7, Elementor Pro, Fluent Forms, Ninja Forms, Forminator, WS Form, WPForms), on the visitor's next page view. Elementor Pro and Forminator leads include the form ID and name, and WS Form leads fire at all.
+- Server-side sending no longer slows down checkout or page loads, retries a failed provider without resending to the others, and never sends a purchase twice.
+- Add to cart from AJAX and block carts reaches the browser pixels on the next page view.
+- Meta advanced matching: phone numbers get the billing country's calling code, accented names are lowercased correctly, postcodes are normalised.
+- Backslashes in custom head, body and footer code are no longer removed on every save; WP-CLI reports an error instead of "Success" when it may not change custom code.
+- Saving the settings no longer switches off the WooCommerce events while WooCommerce is inactive.
+- The settings importer sanitises what it imports and never replaces a configured ID with an empty value.
+- Custom events: URL patterns ignore query strings, an invalid CSS selector no longer throws on every click, and the events are cached instead of queried on every page.
+- Medical mode also covers ChatGPT Ads, the GA4 Measurement Protocol and Meta server event names.
+- The Conversion API uses a supported Meta Graph API version (v26.0), changeable with the lw_pixel_capi_api_version filter.
+
+### Changed
+- Requires PHP 8.0 (was 8.2) and WordPress 6.6.
+- Removed four settings that had no effect (debug mode, Google Ads remarketing, Pinterest enhanced match, consent mode) and the lw_pixel_settings_tabs filter.
+- Meta server-side Purchase with "Order Enrich" off is sent from the thank-you page; hashed customer data is sent only with Advanced Matching on.
+
 ## [1.2.4] - 2026-09-25
 
 ### Fixed
