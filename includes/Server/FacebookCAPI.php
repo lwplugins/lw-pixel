@@ -19,8 +19,15 @@ use LightweightPlugins\Pixel\Options;
  */
 final class FacebookCAPI {
 
-	private const API_VERSION = 'v18.0';
-	private const API_URL     = 'https://graph.facebook.com/%s/%s/events';
+	/**
+	 * Graph API version (v18.0 expired on 2026-01-26). v26.0 checked against
+	 * Meta's version table and the Conversions API "Using the API" docs on
+	 * 2026-09-26; the /events payload used here is unchanged.
+	 * Filterable via `lw_pixel_capi_api_version`.
+	 */
+	public const API_VERSION = 'v26.0';
+
+	private const API_URL = 'https://graph.facebook.com/%s/%s/events';
 
 	/**
 	 * Send a single event on behalf of the visitor making the current request.
@@ -100,7 +107,7 @@ final class FacebookCAPI {
 		}
 
 		$response = wp_remote_post(
-			sprintf( self::API_URL, self::API_VERSION, $pixel_id ),
+			sprintf( self::API_URL, self::api_version(), $pixel_id ),
 			[
 				'headers'  => [ 'Content-Type' => 'application/json' ],
 				'body'     => wp_json_encode( $body ),
@@ -143,6 +150,17 @@ final class FacebookCAPI {
 		$advanced = UserDataBuilder::for_current_request();
 
 		return array_filter( array_merge( $base, $advanced, $extra ) );
+	}
+
+	/**
+	 * The Graph API version to call (e.g. "v26.0").
+	 *
+	 * @return string
+	 */
+	public static function api_version(): string {
+		$version = (string) apply_filters( 'lw_pixel_capi_api_version', self::API_VERSION );
+
+		return 1 === preg_match( '/^v\d+\.\d+$/', $version ) ? $version : self::API_VERSION;
 	}
 
 	/**
