@@ -23,19 +23,18 @@ import FieldErrors from './FieldErrors';
 import StatusBadge from './StatusBadge';
 
 /**
- * Status badge of a switchable card: on and complete, on but missing
- * something, or off.
+ * Status badge of a switchable card: on and complete, or on but missing
+ * something (none while off: the header switch says so).
  *
  * @param {boolean} on       Switched on.
  * @param {boolean} complete Everything it needs is filled in.
  * @param {string}  missing  Label when on but incomplete.
- * @return {Element} Badge.
+ * @return {Element|null} Badge.
  */
 export function stateBadge( on, complete, missing ) {
 	if ( ! on ) {
-		return (
-			<StatusBadge status="idle">{ __( 'Off', 'lw-pixel' ) }</StatusBadge>
-		);
+		// The header switch already says Off.
+		return null;
 	}
 	return complete ? (
 		<StatusBadge status="ok">{ __( 'Active', 'lw-pixel' ) }</StatusBadge>

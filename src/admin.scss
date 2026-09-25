@@ -1032,14 +1032,15 @@ body.lw-pixel-screen {
 // Cards with a card-level switch -------------------------------------------------------
 
 .lw-px-card {
+	// The switch stays top-right of the header at every width.
 	&__header {
-		flex-wrap: wrap;
+		align-items: flex-start;
 		gap: $gap-md;
 	}
 
 	&__lead {
 		display: flex;
-		flex: 1 1 320px;
+		flex: 1 1 auto;
 		align-items: flex-start;
 		gap: $gap-md;
 		min-width: 0;
@@ -1065,7 +1066,7 @@ body.lw-pixel-screen {
 
 	&__switch {
 		flex: none;
-		margin: 0;
+		margin: 8px 0 0;
 	}
 
 	&.is-off &__icon {
@@ -1362,6 +1363,12 @@ body.lw-pixel-screen {
 		display: flex;
 		flex: none;
 		gap: 4px;
+	}
+}
+
+@media (max-width: 600px) {
+	.lw-px-card__icon {
+		display: none;
 	}
 }
 
