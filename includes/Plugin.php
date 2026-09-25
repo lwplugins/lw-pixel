@@ -21,10 +21,10 @@ use LightweightPlugins\Pixel\Forms\FormDetector;
 use LightweightPlugins\Pixel\Frontend\HeadFooterScripts;
 use LightweightPlugins\Pixel\Frontend\ScriptLoader;
 use LightweightPlugins\Pixel\Pixels\PixelManager;
+use LightweightPlugins\Pixel\Rest\Admin\Routes as AdminRoutes;
 use LightweightPlugins\Pixel\Server\DispatchQueue;
 use LightweightPlugins\Pixel\Server\OrderEnrich;
 use LightweightPlugins\Pixel\SiteManager\Integration as SiteManagerIntegration;
-use LightweightPlugins\Pixel\Tools\MigrationRunner;
 use LightweightPlugins\Pixel\WooCommerce\Integration as WooCommerceIntegration;
 
 /**
@@ -87,7 +87,8 @@ final class Plugin {
 		DispatchQueue::register();
 		MedicalMode::register();
 		LduMode::register();
-		MigrationRunner::register();
+		// REST requests are not is_admin(): register the admin routes always.
+		AdminRoutes::register();
 
 		new Hooks( $this->pixel_manager, $this->consent_manager );
 
