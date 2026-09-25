@@ -86,6 +86,35 @@ final class ServerPurchaseTest extends CapiTestCase {
 	}
 
 	/**
+	 * Every consented provider accepted it: the IP, user agent and browser
+	 * identifiers are not kept on the order.
+	 */
+	public function test_forgets_the_checkout_context_once_every_provider_sent(): void {
+		$order = $this->order( [ CheckoutContext::META_KEY => self::CONTEXT ] );
+		$order->shouldReceive( 'delete_meta_data' )->once()->with( CheckoutContext::META_KEY );
+		Functions\when( 'wc_get_order' )->justReturn( $order );
+
+		ServerPurchase::send( 42 );
+	}
+
+	public function test_keeps_the_context_while_a_provider_failed(): void {
+		$this->status = 500;
+		$order        = $this->order( [ CheckoutContext::META_KEY => self::CONTEXT ] );
+		$order->shouldReceive( 'delete_meta_data' )->never();
+		Functions\when( 'wc_get_order' )->justReturn( $order );
+
+		ServerPurchase::send( 42 );
+	}
+
+	public function test_keeps_the_context_for_a_provider_of_the_other_trigger(): void {
+		$order = $this->order( [ CheckoutContext::META_KEY => self::CONTEXT ] );
+		$order->shouldReceive( 'delete_meta_data' )->never();
+		Functions\when( 'wc_get_order' )->justReturn( $order );
+
+		ServerPurchase::send( 42, [ 'fb' ] );
+	}
+
+	/**
 	 * Meta already accepted it; only the failed provider is retried.
 	 */
 	public function test_skips_providers_already_marked(): void {

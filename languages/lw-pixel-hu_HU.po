@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LW Pixel\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
-"POT-Creation-Date: 2026-09-25T23:27:04+00:00\n"
+"POT-Creation-Date: 2026-09-25T23:33:13+00:00\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -456,6 +456,10 @@ msgid "ChatGPT Ads returned HTTP %d. Check the pixel ID and API key."
 msgstr ""
 "A ChatGPT Ads HTTP %d választ adott. Ellenőrizd a pixelazonosítót és az API-"
 "kulcsot."
+
+#: includes/Server/OrderPrivacy.php:45
+msgid "Tracking context (LW Pixel)"
+msgstr "Követési adatok (LW Pixel)"
 
 #: includes/SiteManager/Integration.php:40
 msgid "Tracking Pixels"

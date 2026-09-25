@@ -125,6 +125,7 @@ abstract class CapiTestCase extends MonkeyTestCase {
 		);
 		$order->shouldReceive( 'update_meta_data' )->byDefault();
 		$order->shouldReceive( 'save' )->byDefault();
+		$order->shouldReceive( 'delete_meta_data' )->byDefault();
 		$order->shouldReceive( 'get_items' )->andReturn( [] );
 		$order->shouldReceive( 'get_total' )->andReturn( 99.0 );
 		$order->shouldReceive( 'get_subtotal' )->andReturn( 80.0 );

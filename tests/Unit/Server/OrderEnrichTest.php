@@ -114,7 +114,9 @@ final class OrderEnrichTest extends CapiTestCase {
 	public function test_marks_the_order_tracked_when_meta_accepts_the_event(): void {
 		$order = $this->order( [ CheckoutContext::META_KEY => self::CUSTOMER_CONTEXT ] );
 		$order->shouldReceive( 'update_meta_data' )->once()->with( '_lw_pixel_capi_purchase_tracked', '1' );
-		$order->shouldReceive( 'save' )->once();
+		// Saved once for the flag, then again when the no longer needed context is dropped.
+		$order->shouldReceive( 'save' )->twice();
+		$order->shouldReceive( 'delete_meta_data' )->once()->with( CheckoutContext::META_KEY );
 		Functions\when( 'wc_get_order' )->justReturn( $order );
 
 		OrderEnrich::send( 42 );

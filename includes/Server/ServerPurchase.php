@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace LightweightPlugins\Pixel\Server;
 
 use LightweightPlugins\Pixel\Events\EventId;
+use LightweightPlugins\Pixel\Server\Providers\ServerProviderInterface;
 use LightweightPlugins\Pixel\WooCommerce\Events\Purchase;
 use LightweightPlugins\Pixel\WooCommerce\ProductData;
 
@@ -69,19 +70,20 @@ final class ServerPurchase {
 			return;
 		}
 
-		$params = null;
+		$params  = null;
+		$pending = false;
 
 		foreach ( ServerProviders::active() as $id => $provider ) {
-			if ( ( [] !== $only && ! in_array( $id, $only, true ) ) || $order->get_meta( self::tracked_meta( $id ), true ) ) {
-				continue;
-			}
-
 			// Only the context captured during the customer's own checkout
 			// is used, and only with their consent for this provider. Without
 			// it (consent refused, order created in wp-admin or via the REST
 			// API, placed before this was recorded) nothing is sent.
-			$checkout = CheckoutContext::get( $order, $id );
-			if ( [] === $checkout ) {
+			if ( $order->get_meta( self::tracked_meta( $id ), true ) || [] === CheckoutContext::get( $order, $id ) ) {
+				continue;
+			}
+
+			if ( [] !== $only && ! in_array( $id, $only, true ) ) {
+				$pending = true;
 				continue;
 			}
 
@@ -90,20 +92,54 @@ final class ServerPurchase {
 				return;
 			}
 
-			$context = RequestContext::from_checkout( $checkout, CustomerData::from_order( $order ) );
-			$event   = $provider->build( 'Purchase', $params, EventId::for_order( $order_id ), $context );
+			$pending = ! self::send_one( $order, $id, $provider, $params ) || $pending;
+		}
 
-			if ( null === $event ) {
-				continue;
-			}
+		if ( ! $pending ) {
+			self::forget_context( $order );
+		}
+	}
 
-			$result = $provider->send( [ $event ] );
-			DispatchQueue::report( $id, $result['ok'], $result['status'] );
+	/**
+	 * Build and send one provider's Purchase.
+	 *
+	 * @param \WC_Order               $order    Order.
+	 * @param string                  $id       Provider id.
+	 * @param ServerProviderInterface $provider Provider.
+	 * @param array<string, mixed>    $params   Generic Purchase params.
+	 * @return bool True when nothing is left to send for this provider
+	 *              (accepted, or the provider does not take this Purchase).
+	 */
+	private static function send_one( \WC_Order $order, string $id, ServerProviderInterface $provider, array $params ): bool {
+		$context = RequestContext::from_checkout( CheckoutContext::get( $order, $id ), CustomerData::from_order( $order ) );
+		$event   = $provider->build( 'Purchase', $params, EventId::for_order( (int) $order->get_id() ), $context );
 
-			if ( $result['ok'] ) {
-				$order->update_meta_data( self::tracked_meta( $id ), '1' );
-				$order->save();
-			}
+		if ( null === $event ) {
+			return true;
+		}
+
+		$result = $provider->send( [ $event ] );
+		DispatchQueue::report( $id, $result['ok'], $result['status'] );
+
+		if ( $result['ok'] ) {
+			$order->update_meta_data( self::tracked_meta( $id ), '1' );
+			$order->save();
+		}
+
+		return $result['ok'];
+	}
+
+	/**
+	 * Every provider is done: the checkout context (IP, user agent, browser
+	 * identifiers) is no longer needed, so it is not kept.
+	 *
+	 * @param \WC_Order $order Order.
+	 * @return void
+	 */
+	private static function forget_context( \WC_Order $order ): void {
+		if ( '' !== $order->get_meta( CheckoutContext::META_KEY, true ) ) {
+			$order->delete_meta_data( CheckoutContext::META_KEY );
+			$order->save();
 		}
 	}
 }

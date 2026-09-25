@@ -24,6 +24,7 @@ use LightweightPlugins\Pixel\Pixels\PixelManager;
 use LightweightPlugins\Pixel\Rest\Admin\Routes as AdminRoutes;
 use LightweightPlugins\Pixel\Server\DispatchQueue;
 use LightweightPlugins\Pixel\Server\OrderEnrich;
+use LightweightPlugins\Pixel\Server\OrderPrivacy;
 use LightweightPlugins\Pixel\SiteManager\Integration as SiteManagerIntegration;
 use LightweightPlugins\Pixel\WooCommerce\Integration as WooCommerceIntegration;
 
@@ -84,6 +85,7 @@ final class Plugin {
 		SiteManagerIntegration::init();
 		AutoEvents::register();
 		OrderEnrich::register();
+		OrderPrivacy::register();
 		DispatchQueue::register();
 		MedicalMode::register();
 		LduMode::register();
