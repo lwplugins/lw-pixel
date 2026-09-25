@@ -27,6 +27,13 @@ final class SettingsSanitizer {
 	private const TEXTAREA_KEYS = [ 'event_thankyou_urls' ];
 
 	/**
+	 * Identifier keys limited to a safe character set. The ChatGPT Ads pixel
+	 * ID format is not documented, so only characters that are safe in a URL
+	 * query value are kept — no pattern is assumed.
+	 */
+	private const IDENTIFIER_KEYS = [ 'chatgpt_pixel_id' ];
+
+	/**
 	 * Sanitise the submitted values.
 	 *
 	 * @param array<string, mixed> $input Submitted input.
@@ -65,6 +72,15 @@ final class SettingsSanitizer {
 
 		if ( is_array( $default ) ) {
 			return is_array( $value ) ? array_map( 'sanitize_text_field', $value ) : (array) $fallback;
+		}
+
+		// A masked secret sent back by a read API means "keep the stored one".
+		if ( in_array( $key, Options::SECRET_KEYS, true ) && Options::SECRET_MASK === $value ) {
+			return $fallback;
+		}
+
+		if ( in_array( $key, self::IDENTIFIER_KEYS, true ) ) {
+			return null === $value ? $fallback : (string) preg_replace( '/[^A-Za-z0-9_.:-]/', '', sanitize_text_field( (string) $value ) );
 		}
 
 		if ( in_array( $key, self::RAW_KEYS, true ) ) {

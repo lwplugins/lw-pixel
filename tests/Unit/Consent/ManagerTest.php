@@ -70,4 +70,26 @@ final class ManagerTest extends MonkeyTestCase {
 		$this->assertSame( 'analytics', $map['ga4'] );
 		$this->assertSame( 'functional', $map['gtm'] );
 	}
+
+	/**
+	 * Lists saved before ChatGPT Ads existed do not contain it; it must not
+	 * become an uncategorized (always allowed) pixel.
+	 */
+	public function test_provider_missing_from_saved_lists_gets_its_default_category(): void {
+		Functions\when( 'wp_parse_args' )->alias(
+			static fn ( $args, $defaults = array() ) => array_merge( (array) $defaults, (array) $args )
+		);
+		Functions\when( 'get_option' )->justReturn(
+			array(
+				'consent_marketing_pixels'    => array( 'fb' ),
+				'consent_analytics_pixels'    => array( 'ga4', 'tiktok' ),
+				'consent_unclassified_pixels' => array( 'gtm' ),
+			)
+		);
+
+		$map = ( new Manager() )->get_pixel_categories();
+
+		$this->assertSame( 'marketing', $map['chatgpt'] );
+		$this->assertSame( 'analytics', $map['tiktok'], 'An explicit saved category wins.' );
+	}
 }

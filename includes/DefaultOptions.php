@@ -22,6 +22,7 @@ final class DefaultOptions {
 	public static function all(): array {
 		return array_merge(
 			self::pixels(),
+			self::chatgpt(),
 			self::events(),
 			self::woocommerce(),
 			self::forms(),
@@ -72,6 +73,22 @@ final class DefaultOptions {
 			'snapchat_pixel_id'     => '',
 			'x_enabled'             => false,
 			'x_pixel_id'            => '',
+		];
+	}
+
+	/**
+	 * ChatGPT Ads defaults (browser pixel + Conversions API).
+	 *
+	 * @return array<string, mixed>
+	 */
+	private static function chatgpt(): array {
+		return [
+			'chatgpt_enabled'           => false,
+			'chatgpt_pixel_id'          => '',
+			'chatgpt_debug'             => false,
+			'chatgpt_advanced_matching' => false,
+			'chatgpt_capi_enabled'      => false,
+			'chatgpt_api_key'           => '',
 		];
 	}
 
@@ -149,7 +166,7 @@ final class DefaultOptions {
 	private static function consent(): array {
 		return [
 			'consent_mode'                => 'lw_cookie',
-			'consent_marketing_pixels'    => [ 'fb', 'tiktok', 'pinterest', 'gads', 'reddit', 'snapchat', 'x' ],
+			'consent_marketing_pixels'    => [ 'fb', 'tiktok', 'pinterest', 'gads', 'reddit', 'snapchat', 'x', 'chatgpt' ],
 			'consent_analytics_pixels'    => [ 'ga4', 'bing' ],
 			'consent_unclassified_pixels' => [ 'gtm' ],
 		];

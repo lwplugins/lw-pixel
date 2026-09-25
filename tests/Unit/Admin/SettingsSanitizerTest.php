@@ -100,4 +100,32 @@ final class SettingsSanitizerTest extends MonkeyTestCase {
 
 		$this->assertSame( $code, $result['head_code'] );
 	}
+
+	public function test_chatgpt_pixel_id_keeps_only_safe_characters(): void {
+		Functions\when( 'sanitize_text_field' )->alias( static fn ( $value ): string => trim( (string) $value ) );
+
+		$result = SettingsSanitizer::sanitize( [ 'chatgpt_pixel_id' => ' abc-123_X"><script> ' ] );
+
+		$this->assertSame( 'abc-123_Xscript', $result['chatgpt_pixel_id'] );
+	}
+
+	public function test_masked_secret_keeps_the_stored_value(): void {
+		Functions\when( 'get_option' )->justReturn( [ 'chatgpt_api_key' => 'sk-stored' ] );
+		Functions\when( 'sanitize_text_field' )->alias( static fn ( $value ): string => trim( (string) $value ) );
+
+		$result = SettingsSanitizer::sanitize( [ 'chatgpt_api_key' => Options::SECRET_MASK ] );
+
+		$this->assertSame( 'sk-stored', $result['chatgpt_api_key'] );
+	}
+
+	public function test_chatgpt_defaults_exist_with_expected_types(): void {
+		$defaults = Options::get_defaults();
+
+		$this->assertFalse( $defaults['chatgpt_enabled'] );
+		$this->assertSame( '', $defaults['chatgpt_pixel_id'] );
+		$this->assertFalse( $defaults['chatgpt_debug'] );
+		$this->assertFalse( $defaults['chatgpt_capi_enabled'] );
+		$this->assertSame( '', $defaults['chatgpt_api_key'] );
+		$this->assertContains( 'chatgpt_api_key', Options::SECRET_KEYS );
+	}
 }

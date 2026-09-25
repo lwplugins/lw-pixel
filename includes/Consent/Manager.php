@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Consent;
 
+use LightweightPlugins\Pixel\DefaultOptions;
 use LightweightPlugins\Pixel\Options;
 
 /**
@@ -112,10 +113,35 @@ final class Manager {
 	 * @return array<string, string>
 	 */
 	private function build_pixel_categories(): array {
-		$marketing    = (array) Options::get( 'consent_marketing_pixels' );
-		$analytics    = (array) Options::get( 'consent_analytics_pixels' );
-		$unclassified = (array) Options::get( 'consent_unclassified_pixels' );
+		$map = self::categorize(
+			(array) Options::get( 'consent_marketing_pixels' ),
+			(array) Options::get( 'consent_analytics_pixels' ),
+			(array) Options::get( 'consent_unclassified_pixels' )
+		);
 
+		// A provider added in a later version is missing from lists saved by
+		// an earlier one, and an uncategorized pixel is always allowed. Give
+		// such pixels their default category, so a new provider (e.g.
+		// ChatGPT Ads) never fires before consent.
+		$defaults = DefaultOptions::all();
+		$fallback = self::categorize(
+			(array) $defaults['consent_marketing_pixels'],
+			(array) $defaults['consent_analytics_pixels'],
+			(array) $defaults['consent_unclassified_pixels']
+		);
+
+		return $map + $fallback;
+	}
+
+	/**
+	 * Build a pixel id → category map from the three lists.
+	 *
+	 * @param array<int|string, mixed> $marketing    Marketing pixel ids.
+	 * @param array<int|string, mixed> $analytics    Analytics pixel ids.
+	 * @param array<int|string, mixed> $unclassified Unclassified pixel ids.
+	 * @return array<string, string>
+	 */
+	private static function categorize( array $marketing, array $analytics, array $unclassified ): array {
 		$map = [];
 
 		foreach ( $marketing as $id ) {
