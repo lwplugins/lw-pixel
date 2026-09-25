@@ -32,6 +32,7 @@ final class MedicalMode {
 
 		add_filter( 'lw_pixel_event_params', [ self::class, 'strip_event_params' ], 100, 2 );
 		add_filter( 'lw_pixel_capi_user_data', [ self::class, 'strip_user_data' ], 100 );
+		add_filter( 'lw_pixel_capi_event_body', [ self::class, 'strip_meta_event' ], 100 );
 		add_filter( 'lw_pixel_chatgpt_capi_event', [ self::class, 'strip_chatgpt_event' ], 100 );
 		add_filter( 'lw_pixel_ga4_mp_event', [ self::class, 'strip_ga4_event' ], 100 );
 		add_filter( 'lw_pixel_chatgpt_browser_user', '__return_empty_array', 100 );
@@ -54,6 +55,21 @@ final class MedicalMode {
 
 		foreach ( (array) ( $event['data']['contents'] ?? [] ) as $i => $item ) {
 			unset( $event['data']['contents'][ $i ]['name'] );
+		}
+
+		return $event;
+	}
+
+	/**
+	 * Meta Conversions API: drop the content name (product title, Lead form
+	 * name) and the search term from custom_data.
+	 *
+	 * @param array<string, mixed> $event Server event.
+	 * @return array<string, mixed>
+	 */
+	public static function strip_meta_event( array $event ): array {
+		if ( isset( $event['custom_data'] ) && is_array( $event['custom_data'] ) ) {
+			unset( $event['custom_data']['content_name'], $event['custom_data']['search_string'] );
 		}
 
 		return $event;

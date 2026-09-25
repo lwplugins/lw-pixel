@@ -34,6 +34,21 @@ final class MedicalModeTest extends TestCase {
 		$this->assertSame( [ 'id' => '1' ], $event['data']['contents'][0] );
 	}
 
+	public function test_meta_event_drops_content_name_and_search_term(): void {
+		$event = MedicalMode::strip_meta_event(
+			[
+				'event_name'  => 'Lead',
+				'custom_data' => [
+					'content_name'  => 'Cancer screening form',
+					'search_string' => 'hiv test',
+					'value'         => 1.0,
+				],
+			]
+		);
+
+		$this->assertSame( [ 'value' => 1.0 ], $event['custom_data'] );
+	}
+
 	public function test_ga4_event_drops_url_search_and_item_names(): void {
 		$event = MedicalMode::strip_ga4_event(
 			[
