@@ -2,10 +2,10 @@
 /**
  * Plugin Name:       LW Pixel
  * Plugin URI:        https://github.com/lwplugins/lw-pixel
- * Description:       Lightweight tracking pixel manager — Meta, Google Analytics 4, Google Ads, GTM, TikTok, Pinterest, Bing in one minimal plugin.
+ * Description:       Lightweight tracking pixel manager — ChatGPT Ads, Meta, Google Analytics 4, Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat and X, with server-side conversions.
  * Version:           1.2.4
- * Requires at least: 6.0
- * Requires PHP:      8.2
+ * Requires at least: 6.6
+ * Requires PHP:      8.0
  * Author:            LW Plugins
  * Author URI:        https://lwplugins.com
  * License:           GPL-2.0-or-later

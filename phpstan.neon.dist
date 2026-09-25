@@ -5,6 +5,12 @@ includes:
 parameters:
 	level: 5
 
+	# The plugin supports PHP 8.0 upwards, so analyse against the lowest
+	# supported version — anything newer would let 8.1+ syntax slip through.
+	phpVersion:
+		min: 80000
+		max: 80599
+
 	paths:
 		- lw-pixel.php
 		- includes/

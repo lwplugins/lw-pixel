@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4716f010c7246b1a2b66de8d1dce5ad7",
+    "content-hash": "86dfa50a0d93a9876f7e77d51df70cfb",
     "packages": [
         {
             "name": "composer/installers",
@@ -2961,7 +2961,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.2"
+        "php": ">=8.0"
     },
     "platform-dev": {},
     "plugin-api-version": "2.9.0"
