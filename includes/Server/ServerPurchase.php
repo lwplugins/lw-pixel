@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace LightweightPlugins\Pixel\Server;
 
 use LightweightPlugins\Pixel\Events\EventId;
+use LightweightPlugins\Pixel\WooCommerce\Events\Purchase;
 use LightweightPlugins\Pixel\WooCommerce\ProductData;
 
 /**
@@ -63,7 +64,8 @@ final class ServerPurchase {
 	 */
 	private static function send_locked( int $order_id, array $only ): void {
 		$order = function_exists( 'wc_get_order' ) ? wc_get_order( $order_id ) : false;
-		if ( ! $order instanceof \WC_Order ) {
+		// Queued earlier, the order may have failed or been cancelled since.
+		if ( ! $order instanceof \WC_Order || ! Purchase::counts( $order ) ) {
 			return;
 		}
 

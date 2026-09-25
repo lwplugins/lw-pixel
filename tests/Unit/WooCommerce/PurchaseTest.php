@@ -60,13 +60,41 @@ final class PurchaseTest extends MonkeyTestCase {
 	}
 
 	/**
+	 * WooCommerce shows the thank-you page for a declined payment too.
+	 *
+	 * @dataProvider provide_statuses
+	 */
+	public function test_fires_only_for_orders_that_are_a_purchase( string $status, bool $fires ): void {
+		$this->order( '', $status );
+
+		$this->assertSame( $fires, ( new Purchase( 42 ) )->should_fire() );
+	}
+
+	/**
+	 * @return array<string, array{0: string, 1: bool}>
+	 */
+	public static function provide_statuses(): array {
+		return [
+			'failed'     => [ 'failed', false ],
+			'cancelled'  => [ 'cancelled', false ],
+			'pending'    => [ 'pending', true ],
+			'on-hold'    => [ 'on-hold', true ],
+			'processing' => [ 'processing', true ],
+		];
+	}
+
+	/**
 	 * Register a WC order mock with the given tracked-flag value.
 	 *
 	 * @param string $tracked Stored flag.
+	 * @param string $status  Order status.
 	 * @return \Mockery\MockInterface
 	 */
-	private function order( string $tracked ) {
+	private function order( string $tracked, string $status = 'processing' ) {
 		$order = Mockery::mock( 'WC_Order' );
+		$order->shouldReceive( 'has_status' )->andReturnUsing(
+			static fn ( $statuses ): bool => in_array( $status, (array) $statuses, true )
+		);
 		$order->shouldReceive( 'get_meta' )->with( Purchase::TRACKED_META, true )->andReturn( $tracked );
 		$order->shouldReceive( 'get_items' )->andReturn( [] );
 		$order->shouldReceive( 'get_total' )->andReturn( 10.0 );

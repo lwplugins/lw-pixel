@@ -20,6 +20,17 @@ final class Purchase extends AbstractEvent {
 	public const TRACKED_META = '_lw_pixel_purchase_tracked';
 
 	/**
+	 * Order statuses that are not a purchase. WooCommerce shows the
+	 * thank-you page (and fires `woocommerce_thankyou`) for a declined
+	 * payment too. Pending and on-hold still count: offsite gateways return
+	 * the customer before their callback, and BACS / cheque orders wait
+	 * on-hold for the transfer.
+	 *
+	 * @var array<int, string>
+	 */
+	public const NOT_A_PURCHASE = [ 'failed', 'cancelled' ];
+
+	/**
 	 * Order id.
 	 *
 	 * @var int
@@ -48,11 +59,26 @@ final class Purchase extends AbstractEvent {
 			return false;
 		}
 
+		$order = $this->order();
+		if ( null !== $order && ! self::counts( $order ) ) {
+			return false;
+		}
+
 		if ( $this->already_tracked() ) {
 			return false;
 		}
 
 		return parent::should_fire();
+	}
+
+	/**
+	 * Whether the order is a purchase (not failed or cancelled).
+	 *
+	 * @param \WC_Order $order Order.
+	 * @return bool
+	 */
+	public static function counts( \WC_Order $order ): bool {
+		return ! $order->has_status( self::NOT_A_PURCHASE );
 	}
 
 	protected function option_key(): string {

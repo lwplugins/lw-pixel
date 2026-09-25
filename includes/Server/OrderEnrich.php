@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace LightweightPlugins\Pixel\Server;
 
 use LightweightPlugins\Pixel\Options;
+use LightweightPlugins\Pixel\WooCommerce\Events\Purchase;
 
 /**
  * When the Purchase is sent from the server:
@@ -73,7 +74,13 @@ final class OrderEnrich {
 	 * @return void
 	 */
 	public static function thankyou( $order_id ): void {
-		if ( ! Options::get( 'fb_order_enrich' ) ) {
+		if ( Options::get( 'fb_order_enrich' ) ) {
+			return;
+		}
+
+		// The thank-you page is shown for a declined payment too.
+		$order = function_exists( 'wc_get_order' ) ? wc_get_order( (int) $order_id ) : false;
+		if ( $order instanceof \WC_Order && Purchase::counts( $order ) ) {
 			self::queue( (int) $order_id, self::TRIGGER_THANKYOU );
 		}
 	}

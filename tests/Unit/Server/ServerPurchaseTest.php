@@ -137,8 +137,27 @@ final class ServerPurchaseTest extends CapiTestCase {
 		$this->assertSame( [ 'fb' ], OrderEnrich::providers_for( OrderEnrich::TRIGGER_THANKYOU ) );
 	}
 
+	public function test_thankyou_of_a_failed_order_queues_nothing(): void {
+		$this->use_options( [ 'fb_order_enrich' => false ] );
+		Functions\when( 'wc_get_order' )->justReturn( $this->order( [], 'failed' ) );
+		Functions\expect( 'as_enqueue_async_action' )->never();
+
+		OrderEnrich::thankyou( 42 );
+
+		$this->assertSame( [], $this->sent );
+	}
+
+	public function test_a_queued_send_skips_an_order_cancelled_since(): void {
+		Functions\when( 'wc_get_order' )->justReturn( $this->order( [ CheckoutContext::META_KEY => self::CONTEXT ], 'cancelled' ) );
+
+		ServerPurchase::send( 42 );
+
+		$this->assertSame( [], $this->sent );
+	}
+
 	public function test_thankyou_trigger_is_queued_separately(): void {
 		$this->use_options( [ 'fb_order_enrich' => false ] );
+		Functions\when( 'wc_get_order' )->justReturn( $this->order( [], 'on-hold' ) );
 		Functions\expect( 'as_enqueue_async_action' )
 			->once()
 			->with( OrderEnrich::ASYNC_HOOK, [ 42, OrderEnrich::TRIGGER_THANKYOU ], 'lw-pixel', false )

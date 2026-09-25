@@ -111,11 +111,15 @@ abstract class CapiTestCase extends MonkeyTestCase {
 	/**
 	 * A guest WC order mock with the given order meta.
 	 *
-	 * @param array<string, mixed> $meta Order meta.
+	 * @param array<string, mixed> $meta   Order meta.
+	 * @param string               $status Order status.
 	 * @return \Mockery\MockInterface
 	 */
-	protected function order( array $meta = [] ) {
+	protected function order( array $meta = [], string $status = 'processing' ) {
 		$order = Mockery::mock( 'WC_Order' );
+		$order->shouldReceive( 'has_status' )->andReturnUsing(
+			static fn ( $statuses ): bool => in_array( $status, (array) $statuses, true )
+		);
 		$order->shouldReceive( 'get_meta' )->andReturnUsing(
 			static fn ( $key ) => $meta[ $key ] ?? ''
 		);
