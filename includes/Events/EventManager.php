@@ -11,6 +11,7 @@ namespace LightweightPlugins\Pixel\Events;
 
 use LightweightPlugins\Pixel\Consent\Manager as ConsentManager;
 use LightweightPlugins\Pixel\Pixels\PixelManager;
+use LightweightPlugins\Pixel\Server\EventDispatcher;
 
 /**
  * Bridges queued generic events to provider-specific payloads via PayloadBuilder.
@@ -34,7 +35,7 @@ final class EventManager {
 	/**
 	 * Pending events keyed by name.
 	 *
-	 * @var array<int, array{name: string, params: array<string, mixed>}>
+	 * @var array<int, array{name: string, params: array<string, mixed>, event_id?: string}>
 	 */
 	private array $queue = [];
 
@@ -66,18 +67,37 @@ final class EventManager {
 	/**
 	 * Queue an event to be sent during the current request.
 	 *
-	 * @param string               $name    Event name.
-	 * @param array<string, mixed> $params  Event params.
-	 * @param callable|null        $on_emit Called once the event has actually
-	 *                                      been printed into the page (e.g. to
-	 *                                      mark an order as tracked).
+	 * Unless the scope is "browser", the server-side copies are captured
+	 * right away (see EventDispatcher); when any was, the browser copy gets
+	 * the same event id so the platforms keep only one.
+	 *
+	 * @param string               $name     Event name.
+	 * @param array<string, mixed> $params   Event params.
+	 * @param callable|null        $on_emit  Called once the event has actually
+	 *                                       been printed into the page (e.g. to
+	 *                                       mark an order as tracked).
+	 * @param string               $scope    EventDispatcher::SCOPE_* constant.
+	 * @param string               $event_id Fixed event id (e.g. an order's).
 	 * @return void
 	 */
-	public function queue( string $name, array $params = [], ?callable $on_emit = null ): void {
-		$this->queue[] = [
+	public function queue( string $name, array $params = [], ?callable $on_emit = null, string $scope = EventDispatcher::SCOPE_PAGE, string $event_id = '' ): void {
+		if ( EventDispatcher::SCOPE_BROWSER !== $scope ) {
+			$candidate = '' !== $event_id ? $event_id : EventId::generate();
+			$event_id  = EventDispatcher::capture( $name, $params, $candidate, $scope ) ? $candidate : $event_id;
+		}
+
+		$entry = [
 			'name'   => $name,
 			'params' => $params,
 		];
+
+		// Without a server-side copy, no id is printed: the runtime creates
+		// one per visitor, so a cached page never shares an id.
+		if ( '' !== $event_id ) {
+			$entry['event_id'] = $event_id;
+		}
+
+		$this->queue[] = $entry;
 
 		if ( null !== $on_emit ) {
 			$this->emit_callbacks[ count( $this->queue ) - 1 ] = $on_emit;

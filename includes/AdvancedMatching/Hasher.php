@@ -57,6 +57,17 @@ final class Hasher {
 	}
 
 	/**
+	 * UTF-8 aware lowercase (plain strtolower() leaves "É" unchanged, so
+	 * the hash would not match Meta's).
+	 *
+	 * @param string $value Value.
+	 * @return string
+	 */
+	public static function lowercase( string $value ): string {
+		return function_exists( 'mb_strtolower' ) ? mb_strtolower( $value, 'UTF-8' ) : strtolower( $value );
+	}
+
+	/**
 	 * Normalise a value before hashing.
 	 *
 	 * @param string $field Field name.
@@ -64,16 +75,21 @@ final class Hasher {
 	 * @return string
 	 */
 	private static function normalize( string $field, string $value ): string {
-		$value = strtolower( $value );
+		$value = self::lowercase( $value );
 
 		switch ( $field ) {
 			case 'em':
 				return filter_var( $value, FILTER_VALIDATE_EMAIL ) ? $value : '';
 			case 'ph':
+				// Callers pass PhoneNormalizer output (country code included);
+				// this only guarantees digits without leading zeroes.
 				$digits = preg_replace( '/\D+/', '', $value );
-				return is_string( $digits ) ? $digits : '';
+				return is_string( $digits ) ? ltrim( $digits, '0' ) : '';
 			case 'fn':
 			case 'ln':
+				// Meta: lowercase, no punctuation; UTF-8 characters are kept.
+				$cleaned = preg_replace( '/[\s!-\/:-@\[-`{-~]+/u', '', $value );
+				return is_string( $cleaned ) ? $cleaned : '';
 			case 'ct':
 				$cleaned = preg_replace( '/\s+/', '', $value );
 				return is_string( $cleaned ) ? $cleaned : '';

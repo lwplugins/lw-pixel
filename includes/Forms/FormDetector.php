@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace LightweightPlugins\Pixel\Forms;
 
 use LightweightPlugins\Pixel\Events\Lead;
-use LightweightPlugins\Pixel\Events\PendingEventStore;
+use LightweightPlugins\Pixel\Events\VisitorEvents;
 use LightweightPlugins\Pixel\Options;
 
 /**
@@ -141,7 +141,7 @@ final class FormDetector {
 		);
 
 		if ( $event->should_fire() ) {
-			PendingEventStore::push_for_current_visitor( $event->get_name(), $event->get_params() );
+			VisitorEvents::record( $event->get_name(), $event->get_params() );
 		}
 	}
 }

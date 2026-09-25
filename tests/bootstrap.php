@@ -20,6 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! defined( 'MINUTE_IN_SECONDS' ) ) {
 	define( 'MINUTE_IN_SECONDS', 60 );
 }
+if ( ! defined( 'HOUR_IN_SECONDS' ) ) {
+	define( 'HOUR_IN_SECONDS', 3600 );
+}
 
 // Plugin constants normally defined by lw-pixel.php.
 if ( ! defined( 'LW_PIXEL_URL' ) ) {

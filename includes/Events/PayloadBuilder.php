@@ -123,14 +123,31 @@ final class PayloadBuilder {
 				continue;
 			}
 
-			$resolved[] = [
-				'name'   => $event['name'],
-				'params' => $event['params'],
-				'mapped' => $mapped,
-			];
+			$resolved[] = self::entry( $event, $mapped );
 		}
 
 		return $resolved;
+	}
+
+	/**
+	 * A resolved event for the data island (with its event id, when it has one).
+	 *
+	 * @param array<string, mixed>                $event  Queued event.
+	 * @param array<string, array<string, mixed>> $mapped Provider payloads.
+	 * @return array<string, mixed>
+	 */
+	private static function entry( array $event, array $mapped ): array {
+		$entry = [
+			'name'   => $event['name'],
+			'params' => $event['params'],
+			'mapped' => $mapped,
+		];
+
+		if ( ! empty( $event['event_id'] ) ) {
+			$entry['event_id'] = (string) $event['event_id'];
+		}
+
+		return $entry;
 	}
 
 	/**
@@ -183,8 +200,8 @@ final class PayloadBuilder {
 	/**
 	 * Resolve pending server-side events.
 	 *
-	 * @param array<int, array{name: string, params: array<string, mixed>}> $pending    Pending events.
-	 * @param array<int, string>                                            $active_ids Active pixel ids.
+	 * @param array<int, array{name: string, params: array<string, mixed>, event_id?: string}> $pending    Pending events.
+	 * @param array<int, string>                                                               $active_ids Active pixel ids.
 	 * @return array<int, array<string, mixed>>
 	 */
 	private function resolve_pending( array $pending, array $active_ids ): array {
@@ -194,11 +211,7 @@ final class PayloadBuilder {
 			$mapped = $this->map_for_all( (string) $event['name'], (array) $event['params'], $active_ids );
 
 			if ( [] !== $mapped ) {
-				$resolved[] = [
-					'name'   => $event['name'],
-					'params' => $event['params'],
-					'mapped' => $mapped,
-				];
+				$resolved[] = self::entry( $event, $mapped );
 			}
 		}
 

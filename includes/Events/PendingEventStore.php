@@ -40,11 +40,12 @@ final class PendingEventStore {
 	 * Anonymous visitors are skipped unless they allow at least one tracking
 	 * category, so no token cookie is set without consent.
 	 *
-	 * @param string               $name   Event name.
-	 * @param array<string, mixed> $params Event params.
+	 * @param string               $name     Event name.
+	 * @param array<string, mixed> $params   Event params.
+	 * @param string               $event_id Event id shared with the server-side copy.
 	 * @return void
 	 */
-	public static function push_for_current_visitor( string $name, array $params ): void {
+	public static function push_for_current_visitor( string $name, array $params, string $event_id = '' ): void {
 		$owner = self::current_owner();
 
 		if ( '' === $owner ) {
@@ -57,18 +58,19 @@ final class PendingEventStore {
 			$owner = self::mint_owner();
 		}
 
-		self::push( $owner, $name, $params );
+		self::push( $owner, $name, $params, $event_id );
 	}
 
 	/**
 	 * Push an event for a given visitor key.
 	 *
-	 * @param string               $owner  Visitor key.
-	 * @param string               $name   Event name.
-	 * @param array<string, mixed> $params Event params.
+	 * @param string               $owner    Visitor key.
+	 * @param string               $name     Event name.
+	 * @param array<string, mixed> $params   Event params.
+	 * @param string               $event_id Event id shared with the server-side copy.
 	 * @return void
 	 */
-	public static function push( string $owner, string $name, array $params ): void {
+	public static function push( string $owner, string $name, array $params, string $event_id = '' ): void {
 		if ( '' === $owner ) {
 			return;
 		}
@@ -80,10 +82,16 @@ final class PendingEventStore {
 			$pending = [];
 		}
 
-		$pending[] = [
+		$entry = [
 			'name'   => $name,
 			'params' => $params,
 		];
+
+		if ( '' !== $event_id ) {
+			$entry['event_id'] = $event_id;
+		}
+
+		$pending[] = $entry;
 
 		set_transient( $key, $pending, self::TTL );
 	}
@@ -95,7 +103,7 @@ final class PendingEventStore {
 	 * for page-cache plugins that honour DONOTCACHEPAGE.
 	 *
 	 * @param string $owner Visitor key.
-	 * @return array<int, array{name: string, params: array<string, mixed>}>
+	 * @return array<int, array{name: string, params: array<string, mixed>, event_id?: string}>
 	 */
 	public static function pop( string $owner ): array {
 		if ( '' === $owner ) {

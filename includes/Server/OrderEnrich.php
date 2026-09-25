@@ -1,8 +1,6 @@
 <?php
 /**
- * WooCommerce order enrichment — fires CAPI Purchase events when an order's
- * status changes (e.g. pending → completed) so the pixel team gets the final
- * payment value rather than the intermediate state captured at thank-you time.
+ * WooCommerce hooks for the server-side Purchase.
  *
  * @package LightweightPlugins\Pixel
  */
@@ -11,31 +9,33 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Server;
 
-use LightweightPlugins\Pixel\AdvancedMatching\UserDataBuilder;
 use LightweightPlugins\Pixel\Options;
-use LightweightPlugins\Pixel\WooCommerce\ProductData;
 
 /**
- * Listens for WC order completion / processing and dispatches a Purchase to CAPI.
+ * When the Purchase is sent from the server:
+ * - GA4 Measurement Protocol and ChatGPT Ads Conversions API: when the
+ *   order reaches processing or completed (payment confirmed, final value).
+ * - Meta Conversions API: the same with "Re-send Purchase when the order
+ *   completes/processes" (`fb_order_enrich`) on; otherwise on the thank-you
+ *   page, together with the browser Purchase.
  *
- * The status change often happens inside the checkout/payment request, so
- * the HTTP call to Meta is handed to Action Scheduler (bundled with
- * WooCommerce) instead of blocking the customer. Only when Action Scheduler
- * is unavailable is it sent inline.
+ * The HTTP calls are handed to Action Scheduler (bundled with WooCommerce)
+ * so checkout is never slowed down; inline only when it is unavailable.
  */
 final class OrderEnrich {
 
 	public const ASYNC_HOOK = 'lw_pixel_capi_send_purchase';
 
-	private const TRACKED_META = '_lw_pixel_capi_purchase_tracked';
+	public const TRIGGER_STATUS   = 'status';
+	public const TRIGGER_THANKYOU = 'thankyou';
 
 	/**
-	 * Register hooks.
+	 * Register hooks when any server-side provider is active.
 	 *
 	 * @return void
 	 */
 	public static function register(): void {
-		if ( ! Options::get( 'fb_capi_enabled' ) || ! Options::get( 'fb_order_enrich' ) ) {
+		if ( [] === ServerProviders::active() ) {
 			return;
 		}
 
@@ -43,114 +43,89 @@ final class OrderEnrich {
 
 		add_action( 'woocommerce_order_status_completed', [ self::class, 'enrich' ] );
 		add_action( 'woocommerce_order_status_processing', [ self::class, 'enrich' ] );
-		add_action( self::ASYNC_HOOK, [ self::class, 'send' ] );
+		add_action( 'woocommerce_thankyou', [ self::class, 'thankyou' ] );
+		add_action( self::ASYNC_HOOK, [ self::class, 'send' ], 10, 2 );
 	}
 
 	/**
-	 * Queue the CAPI Purchase for the given order.
+	 * Order status reached processing/completed.
 	 *
 	 * @param int $order_id Order id.
 	 * @return void
 	 */
 	public static function enrich( int $order_id ): void {
+		self::queue( $order_id, self::TRIGGER_STATUS );
+	}
+
+	/**
+	 * The customer's thank-you page.
+	 *
+	 * @param mixed $order_id Order id.
+	 * @return void
+	 */
+	public static function thankyou( $order_id ): void {
+		if ( ! Options::get( 'fb_order_enrich' ) ) {
+			self::queue( (int) $order_id, self::TRIGGER_THANKYOU );
+		}
+	}
+
+	/**
+	 * Queue (or, without Action Scheduler, run) a send.
+	 *
+	 * @param int    $order_id Order id.
+	 * @param string $trigger  TRIGGER_* constant.
+	 * @return void
+	 */
+	private static function queue( int $order_id, string $trigger ): void {
 		if ( $order_id <= 0 ) {
 			return;
 		}
 
-		// Unique: the processing → completed pair queues a single action.
+		// The status trigger keeps the pre-1.3.0 arguments, so the
+		// processing → completed pair still queues a single (unique) action.
+		$args = self::TRIGGER_STATUS === $trigger ? [ $order_id ] : [ $order_id, $trigger ];
+
 		if ( function_exists( 'as_enqueue_async_action' )
-			&& as_enqueue_async_action( self::ASYNC_HOOK, [ $order_id ], 'lw-pixel', true ) > 0 ) {
+			&& as_enqueue_async_action( self::ASYNC_HOOK, $args, 'lw-pixel', true ) > 0 ) {
 			return;
 		}
 
-		self::send( $order_id );
+		self::send( $order_id, $trigger );
 	}
 
 	/**
-	 * Send the CAPI Purchase for the given order, once.
+	 * Send the Purchase to the providers that belong to this trigger.
 	 *
-	 * The order is marked tracked only when Meta accepted the event, so a
-	 * failed send is retried on the next status change.
-	 *
-	 * @param int $order_id Order id.
+	 * @param int    $order_id Order id.
+	 * @param string $trigger  TRIGGER_* constant.
 	 * @return void
 	 */
-	public static function send( int $order_id ): void {
-		if ( $order_id <= 0 || ! OrderLock::acquire( $order_id ) ) {
-			return;
-		}
+	public static function send( int $order_id, string $trigger = self::TRIGGER_STATUS ): void {
+		$providers = self::providers_for( $trigger );
 
-		try {
-			self::send_locked( $order_id );
-		} finally {
-			OrderLock::release( $order_id );
+		if ( [] !== $providers ) {
+			ServerPurchase::send( $order_id, $providers );
 		}
 	}
 
 	/**
-	 * Check → send → mark, while holding the order lock.
+	 * Provider ids sending the Purchase on a trigger.
 	 *
-	 * @param int $order_id Order id.
-	 * @return void
+	 * @param string $trigger TRIGGER_* constant.
+	 * @return array<int, string>
 	 */
-	private static function send_locked( int $order_id ): void {
-		$order = function_exists( 'wc_get_order' ) ? wc_get_order( $order_id ) : false;
-		if ( ! $order instanceof \WC_Order || $order->get_meta( self::TRACKED_META, true ) ) {
-			return;
+	public static function providers_for( string $trigger ): array {
+		$meta_on_status = (bool) Options::get( 'fb_order_enrich' );
+		$ids            = [];
+
+		foreach ( array_keys( ServerProviders::active() ) as $id ) {
+			$on_status = 'fb' !== $id || $meta_on_status;
+
+			if ( ( self::TRIGGER_STATUS === $trigger ) === $on_status ) {
+				$ids[] = $id;
+			}
 		}
 
-		// Only the context captured during the customer's own checkout is
-		// sent, and only when they consented to the Meta pixel there. Without
-		// it (consent refused, order created in wp-admin or via the REST API,
-		// or placed before this was recorded) nothing is sent: there is no
-		// consent on record, and the current request belongs to someone else.
-		$context = CheckoutContext::get( $order );
-		if ( [] === $context ) {
-			return;
-		}
-
-		$params = ProductData::for_order( $order_id );
-		if ( [] === $params ) {
-			return;
-		}
-
-		$result = FacebookCAPI::send_server_event(
-			'Purchase',
-			self::custom_data( $params ),
-			array_merge( UserDataBuilder::for_order( $order_id ), CheckoutContext::to_user_data( $context ) ),
-			$context['url'] ?? ''
-		);
-
-		if ( $result['ok'] ) {
-			$order->update_meta_data( self::TRACKED_META, '1' );
-			$order->save();
-		}
-	}
-
-	/**
-	 * Build the custom_data block for the Meta CAPI Purchase event.
-	 *
-	 * @param array<string, mixed> $params Order params.
-	 * @return array<string, mixed>
-	 */
-	private static function custom_data( array $params ): array {
-		$contents = [];
-
-		foreach ( (array) ( $params['contents'] ?? [] ) as $item ) {
-			$contents[] = [
-				'id'         => $item['content_id'] ?? '',
-				'quantity'   => (int) ( $item['quantity'] ?? 1 ),
-				'item_price' => (float) ( $item['price'] ?? 0 ),
-			];
-		}
-
-		return [
-			'currency'     => $params['currency'] ?? 'USD',
-			'value'        => (float) ( $params['value'] ?? 0 ),
-			'order_id'     => (string) ( $params['order_id'] ?? '' ),
-			'num_items'    => (int) ( $params['num_items'] ?? count( $contents ) ),
-			'contents'     => $contents,
-			'content_type' => 'product',
-		];
+		return $ids;
 	}
 }

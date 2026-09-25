@@ -75,16 +75,6 @@ final class FacebookCAPI {
 	 * @return array{ok: bool, body: string}
 	 */
 	private static function dispatch( string $event_name, array $custom_data, array $user_data, string $source_url, ?int $event_timestamp ): array {
-		$pixel_id = (string) Options::get( 'fb_pixel_id', '' );
-		$token    = (string) Options::get( 'fb_capi_token', '' );
-
-		if ( '' === $pixel_id || '' === $token ) {
-			return [
-				'ok'   => false,
-				'body' => 'CAPI not configured.',
-			];
-		}
-
 		$event = [
 			'event_name'       => $event_name,
 			'event_time'       => $event_timestamp ?? time(),
@@ -94,20 +84,44 @@ final class FacebookCAPI {
 			'custom_data'      => $custom_data,
 		];
 
-		$event = (array) apply_filters( 'lw_pixel_capi_event_body', $event, $event_name );
+		$result = self::send_events( [ (array) apply_filters( 'lw_pixel_capi_event_body', $event, $event_name ) ] );
 
-		$test_code = (string) Options::get( 'fb_test_event_code', '' );
-		$body      = [
-			'data'         => [ $event ],
+		return [
+			'ok'   => $result['ok'],
+			'body' => $result['body'],
+		];
+	}
+
+	/**
+	 * POST a batch of complete event bodies to the Graph API.
+	 *
+	 * @param array<int, array<string, mixed>> $events Event bodies.
+	 * @return array{ok: bool, status: int, body: string}
+	 */
+	public static function send_events( array $events ): array {
+		$pixel_id = (string) Options::get( 'fb_pixel_id', '' );
+		$token    = (string) Options::get( 'fb_capi_token', '' );
+
+		if ( '' === $pixel_id || '' === $token || [] === $events ) {
+			return [
+				'ok'     => false,
+				'status' => 0,
+				'body'   => 'CAPI not configured.',
+			];
+		}
+
+		$body = [
+			'data'         => array_values( $events ),
 			'access_token' => $token,
 		];
 
+		$test_code = (string) Options::get( 'fb_test_event_code', '' );
 		if ( '' !== $test_code ) {
 			$body['test_event_code'] = $test_code;
 		}
 
 		$response = wp_remote_post(
-			sprintf( self::API_URL, self::api_version(), $pixel_id ),
+			sprintf( self::API_URL, self::api_version(), rawurlencode( $pixel_id ) ),
 			[
 				'headers'  => [ 'Content-Type' => 'application/json' ],
 				'body'     => wp_json_encode( $body ),
@@ -118,17 +132,18 @@ final class FacebookCAPI {
 
 		if ( is_wp_error( $response ) ) {
 			return [
-				'ok'   => false,
-				'body' => $response->get_error_message(),
+				'ok'     => false,
+				'status' => 0,
+				'body'   => $response->get_error_message(),
 			];
 		}
 
-		$code          = wp_remote_retrieve_response_code( $response );
-		$response_body = wp_remote_retrieve_body( $response );
+		$code = (int) wp_remote_retrieve_response_code( $response );
 
 		return [
-			'ok'   => 200 === $code,
-			'body' => $response_body,
+			'ok'     => 200 === $code,
+			'status' => $code,
+			'body'   => (string) wp_remote_retrieve_body( $response ),
 		];
 	}
 

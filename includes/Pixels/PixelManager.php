@@ -45,6 +45,7 @@ final class PixelManager {
 			new RedditPixel(),
 			new SnapchatPixel(),
 			new XPixel(),
+			new ChatGptPixel(),
 		];
 
 		foreach ( $defaults as $pixel ) {

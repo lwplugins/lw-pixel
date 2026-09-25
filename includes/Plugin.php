@@ -21,6 +21,7 @@ use LightweightPlugins\Pixel\Forms\FormDetector;
 use LightweightPlugins\Pixel\Frontend\HeadFooterScripts;
 use LightweightPlugins\Pixel\Frontend\ScriptLoader;
 use LightweightPlugins\Pixel\Pixels\PixelManager;
+use LightweightPlugins\Pixel\Server\DispatchQueue;
 use LightweightPlugins\Pixel\Server\OrderEnrich;
 use LightweightPlugins\Pixel\SiteManager\Integration as SiteManagerIntegration;
 use LightweightPlugins\Pixel\Tools\MigrationRunner;
@@ -83,6 +84,7 @@ final class Plugin {
 		SiteManagerIntegration::init();
 		AutoEvents::register();
 		OrderEnrich::register();
+		DispatchQueue::register();
 		MedicalMode::register();
 		LduMode::register();
 		MigrationRunner::register();

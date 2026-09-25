@@ -57,7 +57,10 @@ final class UserDataBuilder {
 
 		$raw = [
 			'em'      => (string) $order->get_billing_email(),
-			'ph'      => (string) $order->get_billing_phone(),
+			'ph'      => PhoneNormalizer::normalize(
+				(string) $order->get_billing_phone(),
+				PhoneNormalizer::calling_code( (string) $order->get_billing_country() )
+			),
 			'fn'      => (string) $order->get_billing_first_name(),
 			'ln'      => (string) $order->get_billing_last_name(),
 			'ct'      => (string) $order->get_billing_city(),

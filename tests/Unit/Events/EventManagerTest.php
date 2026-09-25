@@ -14,6 +14,7 @@ use LightweightPlugins\Pixel\Consent\Manager as ConsentManager;
 use LightweightPlugins\Pixel\Events\EventManager;
 use LightweightPlugins\Pixel\Options;
 use LightweightPlugins\Pixel\Pixels\PixelManager;
+use LightweightPlugins\Pixel\Server\EventDispatcher;
 use LightweightPlugins\Pixel\Tests\Unit\MonkeyTestCase;
 
 /**
@@ -79,5 +80,17 @@ final class EventManagerTest extends MonkeyTestCase {
 		$this->manager->mark_printed();
 
 		$this->assertSame( [], $this->manager->build_late_events() );
+	}
+
+	public function test_event_without_a_server_copy_prints_no_event_id(): void {
+		$this->manager->queue( 'PageView' );
+
+		$this->assertArrayNotHasKey( 'event_id', $this->manager->get_queue()[0] );
+	}
+
+	public function test_browser_scope_keeps_a_fixed_event_id(): void {
+		$this->manager->queue( 'Purchase', [ 'value' => 1.0 ], null, EventDispatcher::SCOPE_BROWSER, 'order-abc-1' );
+
+		$this->assertSame( 'order-abc-1', $this->manager->build_late_events()[0]['event_id'] );
 	}
 }

@@ -9,8 +9,11 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\WooCommerce;
 
+use LightweightPlugins\Pixel\Events\EventId;
 use LightweightPlugins\Pixel\Events\EventManager;
+use LightweightPlugins\Pixel\Events\VisitorEvents;
 use LightweightPlugins\Pixel\Options;
+use LightweightPlugins\Pixel\Server\EventDispatcher;
 use LightweightPlugins\Pixel\WooCommerce\Events\AddPaymentInfo;
 use LightweightPlugins\Pixel\WooCommerce\Events\AddToCart;
 use LightweightPlugins\Pixel\WooCommerce\Events\InitiateCheckout;
@@ -61,23 +64,26 @@ final class Integration {
 			return;
 		}
 
+		// Product and category pages may be page-cached; cart and checkout
+		// never are (they are per-visitor), so their events can always get
+		// a server-side copy.
 		$events = [
-			new ViewProduct(),
-			new ViewCategory(),
-			new ViewCart(),
-			new InitiateCheckout(),
-			new AddPaymentInfo(),
+			[ new ViewProduct(), EventDispatcher::SCOPE_PAGE ],
+			[ new ViewCategory(), EventDispatcher::SCOPE_PAGE ],
+			[ new ViewCart(), EventDispatcher::SCOPE_VISITOR ],
+			[ new InitiateCheckout(), EventDispatcher::SCOPE_VISITOR ],
+			[ new AddPaymentInfo(), EventDispatcher::SCOPE_VISITOR ],
 		];
 
-		foreach ( $events as $event ) {
+		foreach ( $events as [ $event, $scope ] ) {
 			if ( $event->should_fire() ) {
-				$this->event_manager->queue( $event->get_name(), $event->get_params() );
+				$this->event_manager->queue( $event->get_name(), $event->get_params(), null, $scope );
 			}
 		}
 	}
 
 	/**
-	 * Queue an AddToCart event when the cart is mutated server-side.
+	 * Record an AddToCart event when the cart is mutated server-side.
 	 *
 	 * @param string $cart_item_key Cart item key.
 	 * @param int    $product_id    Product id.
@@ -94,8 +100,12 @@ final class Integration {
 
 		$event = new AddToCart( $variation_id > 0 ? $variation_id : $product_id, $quantity );
 
+		// Most add-to-cart requests are AJAX / Store API calls that render
+		// no page, so the event goes through the pending store: the server
+		// copies are sent now, the browser copy on the next page view (the
+		// same page, for a classic form post that renders it).
 		if ( $event->should_fire() ) {
-			$this->event_manager->queue( $event->get_name(), $event->get_params() );
+			VisitorEvents::record( $event->get_name(), $event->get_params() );
 		}
 	}
 
@@ -114,7 +124,15 @@ final class Integration {
 
 		if ( $event->should_fire() ) {
 			$this->queued_orders[ $order_id ] = true;
-			$this->event_manager->queue( $event->get_name(), $event->get_params(), [ $event, 'mark_tracked' ] );
+			// The server-side Purchase is sent separately (Server\OrderEnrich),
+			// with this same order-based event id.
+			$this->event_manager->queue(
+				$event->get_name(),
+				$event->get_params(),
+				[ $event, 'mark_tracked' ],
+				EventDispatcher::SCOPE_BROWSER,
+				EventId::for_order( $order_id )
+			);
 		}
 	}
 }

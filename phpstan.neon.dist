@@ -43,3 +43,9 @@ parameters:
 		-
 			message: '#^Negated boolean expression is always false\.$#'
 			path: includes/WooCommerce/ProductData.php
+		# Same stub artefact: PhoneNormalizer::calling_code() runs without
+		# WooCommerce too (logged-in users' phone), the function_exists('WC')
+		# guard is real at runtime.
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			path: includes/AdvancedMatching/PhoneNormalizer.php

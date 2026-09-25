@@ -80,8 +80,10 @@ abstract class CapiTestCase extends MonkeyTestCase {
 		Functions\when( 'get_option' )->justReturn(
 			array_merge(
 				[
-					'fb_pixel_id'   => '123',
-					'fb_capi_token' => 'token',
+					'fb_capi_enabled' => true,
+					'fb_order_enrich' => true,
+					'fb_pixel_id'     => '123',
+					'fb_capi_token'   => 'token',
 				],
 				$options
 			)

@@ -111,11 +111,7 @@ final class AutoEvents {
 	 */
 	public static function flag_login( string $username, \WP_User $user ): void {
 		unset( $username );
-		PendingEventStore::push(
-			'u_' . (string) $user->ID,
-			'Login',
-			[ 'user_id' => (string) $user->ID ]
-		);
+		VisitorEvents::record_for_user( (int) $user->ID, 'Login', [ 'user_id' => (string) $user->ID ] );
 	}
 
 	/**
@@ -125,11 +121,12 @@ final class AutoEvents {
 	 * @return void
 	 */
 	public static function flag_signup( int $user_id ): void {
-		PendingEventStore::push(
-			'u_' . (string) $user_id,
-			'CompleteRegistration',
-			[ 'user_id' => (string) $user_id ]
-		);
+		// Someone logged in (an admin) creating the account is not the new
+		// user's own request: their browser still gets the event on their
+		// first visit, but nothing is sent server-side with the admin's data.
+		$own_request = get_current_user_id() <= 0;
+
+		VisitorEvents::record_for_user( $user_id, 'CompleteRegistration', [ 'user_id' => (string) $user_id ], $own_request );
 	}
 
 	/**
@@ -142,10 +139,7 @@ final class AutoEvents {
 	 */
 	public static function flag_comment( int $comment_id, int|string $approved, array $data ): void {
 		unset( $approved, $data );
-		PendingEventStore::push_for_current_visitor(
-			'Comment',
-			[ 'comment_id' => (string) $comment_id ]
-		);
+		VisitorEvents::record( 'Comment', [ 'comment_id' => (string) $comment_id ] );
 	}
 
 	/**

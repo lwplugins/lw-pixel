@@ -9,64 +9,107 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Server;
 
-use LightweightPlugins\Pixel\Options;
+use LightweightPlugins\Pixel\Consent\Manager as ConsentManager;
 
 /**
- * Decides which providers should receive a server-side copy of an event.
+ * Decides which providers get a server-side copy of an event and queues it
+ * with the same event id as the browser copy.
+ *
+ * Scopes:
+ * - visitor: the event belongs to this visitor's own request (form sent,
+ *   product added to cart, cart/checkout page, signup, login). Always
+ *   eligible.
+ * - page: a page-level event (page view, content view, search). Only sent
+ *   when the page cannot be served from a page cache (logged-in visitor or
+ *   DONOTCACHEPAGE already set): a cached page would give every visitor the
+ *   same event id and only the first would count. Filterable with
+ *   `lw_pixel_server_page_event`.
+ * - browser: never sent from here (the Purchase has its own, idempotent
+ *   path: ServerPurchase).
+ *
+ * Consent: every provider is checked against its own pixel's consent
+ * category for the visitor making the request, exactly like the browser.
  */
 final class EventDispatcher {
 
+	public const SCOPE_PAGE    = 'page';
+	public const SCOPE_VISITOR = 'visitor';
+	public const SCOPE_BROWSER = 'browser';
+
 	/**
-	 * Dispatch an event to all configured server-side endpoints.
+	 * Queue the server-side copies of an event.
 	 *
-	 * @param string               $event_name  Event name.
-	 * @param array<string, mixed> $custom_data Custom data block.
-	 * @param array<string, mixed> $user_data   User data block.
-	 * @return array<string, array{ok: bool, body: string}>
+	 * @param string               $name     Generic event name.
+	 * @param array<string, mixed> $params   Generic params.
+	 * @param string               $event_id Event id shared with the browser copy.
+	 * @param string               $scope    One of the SCOPE_* constants.
+	 * @return bool True when at least one copy was queued (the caller must
+	 *              then hand the same event id to the browser).
 	 */
-	public static function dispatch( string $event_name, array $custom_data = [], array $user_data = [] ): array {
-		$results = [];
-
-		if ( Options::get( 'fb_capi_enabled' ) ) {
-			$results['fb'] = FacebookCAPI::send_event( $event_name, $custom_data, $user_data );
+	public static function capture( string $name, array $params, string $event_id, string $scope ): bool {
+		if ( self::SCOPE_BROWSER === $scope || '' === $event_id ) {
+			return false;
 		}
 
-		if ( Options::get( 'ga4_mp_enabled' ) ) {
-			$results['ga4'] = GoogleAnalyticsMP::send_event(
-				self::generic_to_ga4( $event_name ),
-				$custom_data
-			);
+		$providers = ServerProviders::active();
+
+		if ( [] === $providers || ( self::SCOPE_PAGE === $scope && ! self::page_is_private( $name ) ) ) {
+			return false;
 		}
 
-		/**
-		 * Allow third-party providers to dispatch their own server-side copy.
-		 *
-		 * @param array $results Provider id → result.
-		 * @param string $event_name Event name.
-		 * @param array $custom_data Custom data block.
-		 * @param array $user_data User data block.
-		 */
-		return (array) apply_filters( 'lw_pixel_server_dispatch_results', $results, $event_name, $custom_data, $user_data );
+		$consent = new ConsentManager();
+		$context = null;
+		$queued  = false;
+
+		foreach ( $providers as $id => $provider ) {
+			if ( ! $consent->is_pixel_allowed( $id ) ) {
+				continue;
+			}
+
+			$context = $context ?? RequestContext::current();
+			$event   = $provider->build( $name, $params, $event_id, $context );
+
+			if ( null !== $event ) {
+				DispatchQueue::add( $id, $event );
+				$queued = true;
+			}
+		}
+
+		if ( $queued ) {
+			self::mark_private();
+		}
+
+		return $queued;
 	}
 
 	/**
-	 * Map a generic event name to the GA4 event name.
+	 * Whether the current page is served only to this visitor.
 	 *
-	 * @param string $name Generic event name.
-	 * @return string
+	 * @param string $name Event name.
+	 * @return bool
 	 */
-	private static function generic_to_ga4( string $name ): string {
-		$map = [
-			'PageView'         => 'page_view',
-			'ViewContent'      => 'view_item',
-			'ViewCategory'     => 'view_item_list',
-			'Search'           => 'search',
-			'Lead'             => 'generate_lead',
-			'AddToCart'        => 'add_to_cart',
-			'InitiateCheckout' => 'begin_checkout',
-			'Purchase'         => 'purchase',
-		];
+	private static function page_is_private( string $name ): bool {
+		$private = is_user_logged_in() || ( defined( 'DONOTCACHEPAGE' ) && DONOTCACHEPAGE );
 
-		return $map[ $name ] ?? strtolower( preg_replace( '/(?<!^)([A-Z])/', '_$1', $name ) ?? $name );
+		/**
+		 * Filter whether a page-level event may be sent server-side.
+		 *
+		 * Return true only when the page is never served from a cache.
+		 *
+		 * @param bool   $private Default: logged-in visitor or DONOTCACHEPAGE.
+		 * @param string $name    Event name.
+		 */
+		return (bool) apply_filters( 'lw_pixel_server_page_event', $private, $name );
+	}
+
+	/**
+	 * The page now carries a per-visitor event id: keep it out of page caches.
+	 *
+	 * @return void
+	 */
+	private static function mark_private(): void {
+		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+			define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- shared page-cache convention constant.
+		}
 	}
 }

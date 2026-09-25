@@ -74,6 +74,20 @@
 		return data;
 	}
 
+	/**
+	 * A random event id. Shared by every provider's copy of one event and,
+	 * when the server printed one, by the server-side copy (deduplication).
+	 */
+	function newEventId() {
+		try {
+			var bytes = new Uint8Array( 16 );
+			window.crypto.getRandomValues( bytes );
+			return Array.prototype.map.call( bytes, function (b) { return ('0' + b.toString( 16 )).slice( -2 ); } ).join( '' );
+		} catch (e) {
+			return String( Date.now() ) + String( Math.random() ).slice( 2 );
+		}
+	}
+
 	function loadScript(src, attrs) {
 		var s   = document.createElement( 'script' );
 		s.src   = src;
@@ -128,11 +142,11 @@
 				window.fbq( 'init', config.pixelId );
 				this.loaded = true;
 			},
-			fire: function (mapped, params) {
+			fire: function (mapped, params, eventId) {
 				if ( ! window.fbq || ! mapped) {
 					return;
 				}
-				window.fbq( mapped.type || 'track', mapped.name, mergeParams( mapped, params ) );
+				window.fbq( mapped.type || 'track', mapped.name, mergeParams( mapped, params ), eventId ? { eventID: eventId } : {} );
 			}
 		},
 
@@ -152,11 +166,15 @@
 					}
 				);
 			},
-			fire: function (mapped, params) {
+			fire: function (mapped, params, eventId) {
 				if ( ! window.gtag || ! mapped) {
 					return;
 				}
-				window.gtag( 'event', mapped.name, mergeParams( mapped, params ) );
+				var gaParams = mergeParams( mapped, params );
+				if (eventId) {
+					gaParams.event_id = eventId;
+				}
+				window.gtag( 'event', mapped.name, gaParams );
 			}
 		},
 
@@ -315,6 +333,49 @@
 			}
 		},
 
+		chatgpt: {
+			loaded: false,
+			init: function (config) {
+				if ( ! config.pixelId || this.loaded) {
+					return;
+				}
+				/* eslint-disable */
+				(function (w, d, s, u) {
+					if (w.oaiq) return;
+					var q = function () { q.q.push( arguments ); };
+					q.q = []; w.oaiq = q;
+					var js = d.createElement( s ); js.async = true; js.src = u;
+					var f = d.getElementsByTagName( s )[0]; f.parentNode.insertBefore( js, f );
+				})( window, document, 'script', 'https://bzrcdn.openai.com/sdk/oaiq.min.js' );
+				/* eslint-enable */
+				var options = { pixelId: config.pixelId };
+				if (config.debug) {
+					options.debug = true;
+				}
+				if (config.user) {
+					options.user = config.user;
+				}
+				window.oaiq( 'init', options );
+				this.loaded = true;
+			},
+			/**
+			 * `mapped` is {name, data, options}: the event type, its data shape
+			 * (built server-side, amounts in minor units) and custom options.
+			 * Runtime params are not merged — the data shape is strict.
+			 */
+			fire: function (mapped, params, eventId) {
+				if ( ! window.oaiq || ! mapped) {
+					return;
+				}
+				var options = {};
+				Object.keys( mapped.options || {} ).forEach( function (k) { options[k] = mapped.options[k]; } );
+				if (eventId) {
+					options.event_id = eventId;
+				}
+				window.oaiq( 'measure', mapped.name, mapped.data || {}, options );
+			}
+		},
+
 		x: {
 			init: function (config) {
 				if ( ! config.pixelId) {
@@ -379,12 +440,15 @@
 			function (list) {
 				list.forEach(
 					function (entry) {
+						// Kept on the entry: a pixel initialised later (consent
+						// given) must reuse the same id for this event.
+						entry.event_id = entry.event_id || newEventId();
 						Object.keys( entry.mapped || {} ).forEach(
 							function (pixelId) {
 								if ( ! allow[pixelId]) { return; }
 								var provider = providers[pixelId];
 								if ( ! provider || typeof provider.fire !== 'function') { return; }
-								try { provider.fire( entry.mapped[pixelId], entry.params || {} ); } catch (e) { /* noop */ }
+								try { provider.fire( entry.mapped[pixelId], entry.params || {}, entry.event_id ); } catch (e) { /* noop */ }
 							}
 						);
 					}
@@ -430,12 +494,13 @@
 	}
 
 	function fireMapped(mapped, params) {
+		var eventId = newEventId();
 		Object.keys( mapped || {} ).forEach(
 			function (pixelId) {
 				if ( ! initialized[pixelId]) { return; }
 				var provider = providers[pixelId];
 				if ( ! provider || typeof provider.fire !== 'function') { return; }
-				try { provider.fire( mapped[pixelId], params || {} ); } catch (e) { /* noop */ }
+				try { provider.fire( mapped[pixelId], params || {}, eventId ); } catch (e) { /* noop */ }
 			}
 		);
 	}
@@ -513,6 +578,7 @@
 	}
 
 	function fireCustomEvent(cev) {
+		var eventId = newEventId();
 		Object.keys( cev.mapped || {} ).forEach(
 			function (pixelId) {
 				if ( ! initialized[pixelId]) { return; }
@@ -520,7 +586,7 @@
 				if ( ! provider || typeof provider.fire !== 'function') {
 					return;
 				}
-				try { provider.fire( cev.mapped[pixelId], cev.params || {} ); } catch (e) { /* noop */ }
+				try { provider.fire( cev.mapped[pixelId], cev.params || {}, eventId ); } catch (e) { /* noop */ }
 			}
 		);
 
