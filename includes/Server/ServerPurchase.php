@@ -121,12 +121,16 @@ final class ServerPurchase {
 		$result = $provider->send( [ $event ] );
 		DispatchQueue::report( $id, $result['ok'], $result['status'] );
 
-		if ( $result['ok'] ) {
-			$order->update_meta_data( self::tracked_meta( $id ), '1' );
+		// A free order the provider rejects as invalid is not retried on
+		// every later trigger: it is marked skipped.
+		$skip = ! $result['ok'] && (float) ( $params['value'] ?? 0 ) <= 0 && self::is_rejected( $result['status'] );
+
+		if ( $result['ok'] || $skip ) {
+			$order->update_meta_data( self::tracked_meta( $id ), $skip ? 'skipped' : '1' );
 			$order->save();
 		}
 
-		return $result['ok'];
+		return $result['ok'] || $skip;
 	}
 
 	/**
@@ -141,5 +145,15 @@ final class ServerPurchase {
 			$order->delete_meta_data( CheckoutContext::META_KEY );
 			$order->save();
 		}
+	}
+
+	/**
+	 * A permanent rejection of the payload (4xx other than auth / rate limit).
+	 *
+	 * @param int $status HTTP status.
+	 * @return bool
+	 */
+	private static function is_rejected( int $status ): bool {
+		return $status >= 400 && $status < 500 && ! in_array( $status, [ 401, 403, 408, 429 ], true );
 	}
 }

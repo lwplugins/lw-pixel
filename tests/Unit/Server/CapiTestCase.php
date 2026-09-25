@@ -113,9 +113,10 @@ abstract class CapiTestCase extends MonkeyTestCase {
 	 *
 	 * @param array<string, mixed> $meta   Order meta.
 	 * @param string               $status Order status.
+	 * @param float                $total  Order total.
 	 * @return \Mockery\MockInterface
 	 */
-	protected function order( array $meta = [], string $status = 'processing' ) {
+	protected function order( array $meta = [], string $status = 'processing', float $total = 99.0 ) {
 		$order = Mockery::mock( 'WC_Order' );
 		$order->shouldReceive( 'has_status' )->andReturnUsing(
 			static fn ( $statuses ): bool => in_array( $status, (array) $statuses, true )
@@ -127,7 +128,7 @@ abstract class CapiTestCase extends MonkeyTestCase {
 		$order->shouldReceive( 'save' )->byDefault();
 		$order->shouldReceive( 'delete_meta_data' )->byDefault();
 		$order->shouldReceive( 'get_items' )->andReturn( [] );
-		$order->shouldReceive( 'get_total' )->andReturn( 99.0 );
+		$order->shouldReceive( 'get_total' )->andReturn( $total );
 		$order->shouldReceive( 'get_subtotal' )->andReturn( 80.0 );
 		$order->shouldReceive( 'get_currency' )->andReturn( 'HUF' );
 		$order->shouldReceive( 'get_id' )->andReturn( 42 );

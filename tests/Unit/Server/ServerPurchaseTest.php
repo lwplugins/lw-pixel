@@ -115,6 +115,32 @@ final class ServerPurchaseTest extends CapiTestCase {
 	}
 
 	/**
+	 * A free order the provider rejects is marked skipped, not retried on
+	 * every later trigger.
+	 */
+	public function test_a_rejected_free_order_is_marked_skipped(): void {
+		$this->status = 400;
+		$order        = $this->order( [ CheckoutContext::META_KEY => self::CONTEXT ], 'processing', 0.0 );
+		$order->shouldReceive( 'update_meta_data' )->once()->with( '_lw_pixel_capi_purchase_tracked', 'skipped' );
+		$order->shouldReceive( 'update_meta_data' )->once()->with( '_lw_pixel_server_purchase_chatgpt', 'skipped' );
+		Functions\when( 'wc_get_order' )->justReturn( $order );
+
+		ServerPurchase::send( 42 );
+
+		$this->assertEquals( 0, $this->sent[0]['data'][0]['custom_data']['value'], 'Meta requires value on a Purchase.' );
+		$this->assertSame( 'HUF', $this->sent[0]['data'][0]['custom_data']['currency'] );
+	}
+
+	public function test_a_rejected_paid_order_is_retried_later(): void {
+		$this->status = 400;
+		$order        = $this->order( [ CheckoutContext::META_KEY => self::CONTEXT ] );
+		$order->shouldReceive( 'update_meta_data' )->never();
+		Functions\when( 'wc_get_order' )->justReturn( $order );
+
+		ServerPurchase::send( 42 );
+	}
+
+	/**
 	 * Meta already accepted it; only the failed provider is retried.
 	 */
 	public function test_skips_providers_already_marked(): void {

@@ -34,8 +34,10 @@ final class MetaCustomData {
 			}
 		}
 
+		// Meta requires value and currency on a Purchase, so a free order
+		// (100% coupon, free product) sends 0 instead of leaving them out.
 		$value = self::value( $params );
-		if ( $value > 0 && '' !== (string) ( $params['currency'] ?? '' ) ) {
+		if ( ( $value > 0 || 'Purchase' === $name ) && '' !== (string) ( $params['currency'] ?? '' ) ) {
 			$data['value']    = $value;
 			$data['currency'] = (string) $params['currency'];
 		}
