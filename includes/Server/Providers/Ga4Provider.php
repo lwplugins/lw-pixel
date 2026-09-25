@@ -64,12 +64,20 @@ final class Ga4Provider implements ServerProviderInterface {
 			return null;
 		}
 
+		$event = [
+			'name'   => $ga4_name,
+			'params' => self::params( $name, $params, $event_id, $context ),
+		];
+
 		return [
 			'client_id' => $client_id,
-			'event'     => [
-				'name'   => $ga4_name,
-				'params' => self::params( $name, $params, $event_id, $context ),
-			],
+			/**
+			 * Filter a GA4 Measurement Protocol event before it is queued.
+			 *
+			 * @param array  $event Event ({name, params}).
+			 * @param string $name  Generic LW Pixel event name.
+			 */
+			'event'     => (array) apply_filters( 'lw_pixel_ga4_mp_event', $event, $name ),
 		];
 	}
 

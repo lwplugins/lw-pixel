@@ -32,6 +32,47 @@ final class MedicalMode {
 
 		add_filter( 'lw_pixel_event_params', [ self::class, 'strip_event_params' ], 100, 2 );
 		add_filter( 'lw_pixel_capi_user_data', [ self::class, 'strip_user_data' ], 100 );
+		add_filter( 'lw_pixel_chatgpt_capi_event', [ self::class, 'strip_chatgpt_event' ], 100 );
+		add_filter( 'lw_pixel_ga4_mp_event', [ self::class, 'strip_ga4_event' ], 100 );
+		add_filter( 'lw_pixel_chatgpt_browser_user', '__return_empty_array', 100 );
+	}
+
+	/**
+	 * ChatGPT Ads Conversions API: keep only the pixel's own browser
+	 * reference; drop IP, user agent, hashed identifiers, location and
+	 * item names.
+	 *
+	 * @param array<string, mixed> $event Event body.
+	 * @return array<string, mixed>
+	 */
+	public static function strip_chatgpt_event( array $event ): array {
+		$event['user'] = array_intersect_key( (array) ( $event['user'] ?? [] ), [ 'obref' => true ] );
+
+		if ( [] === $event['user'] ) {
+			unset( $event['user'] );
+		}
+
+		foreach ( (array) ( $event['data']['contents'] ?? [] ) as $i => $item ) {
+			unset( $event['data']['contents'][ $i ]['name'] );
+		}
+
+		return $event;
+	}
+
+	/**
+	 * GA4 Measurement Protocol: drop page URL, search term and item names.
+	 *
+	 * @param array<string, mixed> $event Event ({name, params}).
+	 * @return array<string, mixed>
+	 */
+	public static function strip_ga4_event( array $event ): array {
+		unset( $event['params']['page_location'], $event['params']['search_term'] );
+
+		foreach ( (array) ( $event['params']['items'] ?? [] ) as $i => $item ) {
+			unset( $event['params']['items'][ $i ]['item_name'] );
+		}
+
+		return $event;
 	}
 
 	/**

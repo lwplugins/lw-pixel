@@ -80,7 +80,12 @@ final class ChatGptPixel extends AbstractPixel {
 			return [];
 		}
 
-		$user = UserData::for_browser( CustomerData::current_user() );
+		/**
+		 * Filter the hashed advanced-matching data given to the pixel's init.
+		 *
+		 * @param array<string, string> $user Hashed / plain matching fields.
+		 */
+		$user = (array) apply_filters( 'lw_pixel_chatgpt_browser_user', UserData::for_browser( CustomerData::current_user() ) );
 
 		if ( [] !== $user && ! defined( 'DONOTCACHEPAGE' ) ) {
 			define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- shared page-cache convention constant.
