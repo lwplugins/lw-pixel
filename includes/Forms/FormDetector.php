@@ -33,6 +33,11 @@ final class FormDetector {
 	/**
 	 * Hook map: option key → [hook name, callback method, callback arity].
 	 *
+	 * Hook names and arguments checked against the plugins' source:
+	 * CF7 6.1.7, WPForms Lite 2.0.2.1, Elementor Pro 4.2.3, Forminator
+	 * 1.57.2, Formidable 6.35, Ninja Forms 3.15.4, Fluent Forms 6.2.14,
+	 * WS Form Lite 1.12.10, Gravity Forms 2.4.12.
+	 *
 	 * @return array<string, array{0: string, 1: string, 2: int}>
 	 */
 	private function hook_map(): array {
@@ -40,11 +45,11 @@ final class FormDetector {
 			'form_cf7'          => [ 'wpcf7_mail_sent', 'on_cf7', 1 ],
 			'form_wpforms'      => [ 'wpforms_process_complete', 'on_wpforms', 4 ],
 			'form_elementor'    => [ 'elementor_pro/forms/new_record', 'on_elementor', 2 ],
-			'form_forminator'   => [ 'forminator_form_after_save_entry', 'on_forminator', 2 ],
+			'form_forminator'   => [ 'forminator_form_after_save_entry', 'on_forminator', 1 ],
 			'form_formidable'   => [ 'frm_after_create_entry', 'on_formidable', 2 ],
 			'form_ninjaforms'   => [ 'ninja_forms_after_submission', 'on_ninjaforms', 1 ],
 			'form_fluentforms'  => [ 'fluentform/submission_inserted', 'on_fluentforms', 3 ],
-			'form_wsform'       => [ 'wsf_submit_complete', 'on_wsform', 1 ],
+			'form_wsform'       => [ 'wsf_submit_post_complete', 'on_wsform', 1 ],
 			'form_gravityforms' => [ 'gform_after_submission', 'on_gravityforms', 2 ],
 		];
 	}
@@ -76,9 +81,15 @@ final class FormDetector {
 		$this->fire( FormHandlers::elementor( $record ) );
 	}
 
-	public function on_forminator( int $entry_id, array $form ): void {
-		unset( $entry_id );
-		$this->fire( FormHandlers::forminator( $form ) );
+	/**
+	 * Forminator passes ( $form_id, $response ); the id comes from the
+	 * posted data, so it may be a numeric string (or false).
+	 *
+	 * @param mixed $form_id Form id.
+	 * @return void
+	 */
+	public function on_forminator( $form_id ): void {
+		$this->fire( FormHandlers::forminator( is_numeric( $form_id ) ? (int) $form_id : 0 ) );
 	}
 
 	public function on_formidable( int $entry_id, int $form_id ): void {
@@ -95,8 +106,18 @@ final class FormDetector {
 		$this->fire( FormHandlers::fluentforms( $form ) );
 	}
 
-	public function on_wsform( object $form ): void {
-		$this->fire( FormHandlers::wsform( $form ) );
+	/**
+	 * WS Form fires this for draft saves too; only count real submissions.
+	 *
+	 * @param object $submit WS_Form_Submit instance.
+	 * @return void
+	 */
+	public function on_wsform( object $submit ): void {
+		if ( 'submit' !== ( $submit->post_mode ?? 'submit' ) ) {
+			return;
+		}
+
+		$this->fire( FormHandlers::wsform( $submit ) );
 	}
 
 	public function on_gravityforms( array $entry, array $form ): void {
@@ -107,7 +128,7 @@ final class FormDetector {
 	/**
 	 * Store a Lead event from a normalized form descriptor.
 	 *
-	 * @param array{id: int, name: string, source: string} $form Normalized form data.
+	 * @param array{id: int|string, name: string, source: string} $form Normalized form data.
 	 * @return void
 	 */
 	private function fire( array $form ): void {

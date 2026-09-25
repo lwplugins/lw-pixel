@@ -79,4 +79,37 @@ final class FormDetectorTest extends MonkeyTestCase {
 		$this->assertSame( 'Contact', $pending[0][0]['params']['form_name'] );
 		$this->assertSame( 'cf7', $pending[0][0]['params']['source'] );
 	}
+
+	/**
+	 * WS Form Lite has no `wsf_submit_complete` action; submissions end in
+	 * `wsf_submit_post_complete` (which also fires for draft saves).
+	 */
+	public function test_listens_to_the_ws_form_hook_that_exists(): void {
+		$detector = new FormDetector();
+
+		$this->assertNotFalse( has_action( 'wsf_submit_post_complete', [ $detector, 'on_wsform' ] ) );
+		$this->assertFalse( has_action( 'wsf_submit_complete', [ $detector, 'on_wsform' ] ) );
+	}
+
+	public function test_ws_form_draft_save_is_not_a_lead(): void {
+		$submit            = new \stdClass();
+		$submit->post_mode = 'save';
+		$submit->form_id   = 4;
+
+		( new FormDetector() )->on_wsform( $submit );
+
+		$this->assertSame( [], $this->transients );
+	}
+
+	/**
+	 * Forminator passes the form id from posted data (a numeric string).
+	 */
+	public function test_forminator_numeric_string_form_id_is_accepted(): void {
+		Functions\when( 'get_post_field' )->justReturn( 'Newsletter' );
+
+		( new FormDetector() )->on_forminator( '12', [ 'success' => true ] );
+
+		$pending = array_values( $this->transients );
+		$this->assertSame( '12', $pending[0][0]['params']['form_id'] );
+	}
 }

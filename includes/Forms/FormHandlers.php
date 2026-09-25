@@ -19,7 +19,7 @@ final class FormHandlers {
 	 * Contact Form 7.
 	 *
 	 * @param object $form CF7 form instance.
-	 * @return array{id: int, name: string, source: string}
+	 * @return array{id: int|string, name: string, source: string}
 	 */
 	public static function cf7( object $form ): array {
 		return [
@@ -33,7 +33,7 @@ final class FormHandlers {
 	 * WPForms.
 	 *
 	 * @param array $form_data Form data.
-	 * @return array{id: int, name: string, source: string}
+	 * @return array{id: int|string, name: string, source: string}
 	 */
 	public static function wpforms( array $form_data ): array {
 		return [
@@ -46,14 +46,18 @@ final class FormHandlers {
 	/**
 	 * Elementor Pro Forms.
 	 *
+	 * Form_Record::get_form_settings( $key ) returns a single setting (null
+	 * when unknown); `id` is the widget's element id, a short hex string.
+	 *
 	 * @param object $record Submission record.
-	 * @return array{id: int, name: string, source: string}
+	 * @return array{id: int|string, name: string, source: string}
 	 */
 	public static function elementor( object $record ): array {
-		$settings = method_exists( $record, 'get_form_settings' ) ? (array) $record->get_form_settings( '' ) : [];
+		$has = method_exists( $record, 'get_form_settings' );
+
 		return [
-			'id'     => (int) ( $settings['id'] ?? 0 ),
-			'name'   => (string) ( $settings['form_name'] ?? '' ),
+			'id'     => $has ? (string) $record->get_form_settings( 'id' ) : '',
+			'name'   => $has ? (string) $record->get_form_settings( 'form_name' ) : '',
 			'source' => 'elementor',
 		];
 	}
@@ -61,13 +65,16 @@ final class FormHandlers {
 	/**
 	 * Forminator.
 	 *
-	 * @param array $form Form data.
-	 * @return array{id: int, name: string, source: string}
+	 * The `forminator_form_after_save_entry` hook passes the form id and the
+	 * AJAX response, not the form; forms are `forminator_forms` posts.
+	 *
+	 * @param int $form_id Form id.
+	 * @return array{id: int|string, name: string, source: string}
 	 */
-	public static function forminator( array $form ): array {
+	public static function forminator( int $form_id ): array {
 		return [
-			'id'     => (int) ( $form['form_id'] ?? 0 ),
-			'name'   => (string) ( $form['form_name'] ?? '' ),
+			'id'     => $form_id,
+			'name'   => $form_id > 0 ? (string) get_post_field( 'post_title', $form_id ) : '',
 			'source' => 'forminator',
 		];
 	}
@@ -76,7 +83,7 @@ final class FormHandlers {
 	 * Formidable Forms.
 	 *
 	 * @param int $form_id Form id.
-	 * @return array{id: int, name: string, source: string}
+	 * @return array{id: int|string, name: string, source: string}
 	 */
 	public static function formidable( int $form_id ): array {
 		$name = '';
@@ -95,7 +102,7 @@ final class FormHandlers {
 	 * Ninja Forms.
 	 *
 	 * @param array $form_data Form data.
-	 * @return array{id: int, name: string, source: string}
+	 * @return array{id: int|string, name: string, source: string}
 	 */
 	public static function ninjaforms( array $form_data ): array {
 		return [
@@ -109,7 +116,7 @@ final class FormHandlers {
 	 * Fluent Forms.
 	 *
 	 * @param object $form Form object.
-	 * @return array{id: int, name: string, source: string}
+	 * @return array{id: int|string, name: string, source: string}
 	 */
 	public static function fluentforms( object $form ): array {
 		return [
@@ -122,12 +129,14 @@ final class FormHandlers {
 	/**
 	 * WS Form.
 	 *
-	 * @param object $form Form object.
-	 * @return array{id: int, name: string, source: string}
+	 * @param object $submit WS_Form_Submit instance.
+	 * @return array{id: int|string, name: string, source: string}
 	 */
-	public static function wsform( object $form ): array {
+	public static function wsform( object $submit ): array {
+		$form = isset( $submit->form_object ) && is_object( $submit->form_object ) ? $submit->form_object : null;
+
 		return [
-			'id'     => (int) ( $form->id ?? 0 ),
+			'id'     => (int) ( $submit->form_id ?? 0 ),
 			'name'   => (string) ( $form->label ?? '' ),
 			'source' => 'wsform',
 		];
@@ -137,7 +146,7 @@ final class FormHandlers {
 	 * Gravity Forms.
 	 *
 	 * @param array $form Form data.
-	 * @return array{id: int, name: string, source: string}
+	 * @return array{id: int|string, name: string, source: string}
 	 */
 	public static function gravityforms( array $form ): array {
 		return [
