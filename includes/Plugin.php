@@ -13,6 +13,7 @@ use LightweightPlugins\Pixel\Admin\SettingsPage;
 use LightweightPlugins\Pixel\Compliance\LduMode;
 use LightweightPlugins\Pixel\Compliance\MedicalMode;
 use LightweightPlugins\Pixel\Consent\Manager as ConsentManager;
+use LightweightPlugins\Pixel\CustomEvents\EventCache as CustomEventCache;
 use LightweightPlugins\Pixel\CustomEvents\MetaBoxes as CustomEventMetaBoxes;
 use LightweightPlugins\Pixel\CustomEvents\PostType as CustomEventPostType;
 use LightweightPlugins\Pixel\Events\AutoEvents;
@@ -119,6 +120,7 @@ final class Plugin {
 	public function register_post_types(): void {
 		CustomEventPostType::register();
 		CustomEventMetaBoxes::register();
+		CustomEventCache::register();
 	}
 
 	/**

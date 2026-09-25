@@ -24,6 +24,7 @@ function lw_pixel_uninstall_site(): void {
 
 	delete_option( 'lw_pixel_options' );
 	delete_option( 'lw_pixel_version' );
+	delete_transient( 'lw_pixel_custom_events' );
 
 	$meta_key = '_lw_pixel_capi_context';
 

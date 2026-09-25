@@ -617,7 +617,7 @@
 				fireCustomEvent( cev );
 				return;
 			case 'click':
-				if ( ! cev.selector) { return; }
+				if ( ! cev.selector || ! isValidSelector( cev.selector )) { return; }
 				document.addEventListener(
 					'click',
 					function (e) {
@@ -632,6 +632,21 @@
 			case 'time':
 				setTimeout( function () { fireCustomEvent( cev ); }, Math.max( 1, cev.time_seconds | 0 ) * 1000 );
 				return;
+		}
+	}
+
+	/**
+	 * An invalid selector would make closest() throw on every click.
+	 *
+	 * @param {string} selector CSS selector.
+	 * @return {boolean}
+	 */
+	function isValidSelector(selector) {
+		try {
+			document.createDocumentFragment().querySelector( selector );
+			return true;
+		} catch (e) {
+			return false;
 		}
 	}
 
