@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel;
 
+use LightweightPlugins\Pixel\Admin\CustomEventScreen;
 use LightweightPlugins\Pixel\Admin\SettingsPage;
 use LightweightPlugins\Pixel\Compliance\LduMode;
 use LightweightPlugins\Pixel\Compliance\MedicalMode;
@@ -97,6 +98,7 @@ final class Plugin {
 
 		if ( is_admin() ) {
 			new SettingsPage();
+			CustomEventScreen::register();
 		}
 
 		if ( $this->should_skip_frontend() ) {
