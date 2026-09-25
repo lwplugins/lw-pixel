@@ -23,7 +23,11 @@ final class FacebookCAPI {
 	private const API_URL     = 'https://graph.facebook.com/%s/%s/events';
 
 	/**
-	 * Send a single event.
+	 * Send a single event on behalf of the visitor making the current request.
+	 *
+	 * Merges the current request's IP, user agent, `_fbp`/`_fbc` cookies and
+	 * the logged-in user's advanced-matching data into user_data. Do NOT use
+	 * this for order events — see send_server_event().
 	 *
 	 * @param string               $event_name      Event name (e.g. "Purchase").
 	 * @param array<string, mixed> $custom_data     Custom data block.
@@ -32,6 +36,38 @@ final class FacebookCAPI {
 	 * @return array{ok: bool, body: string}
 	 */
 	public static function send_event( string $event_name, array $custom_data = [], array $user_data = [], ?int $event_timestamp = null ): array {
+		return self::dispatch( $event_name, $custom_data, self::merge_user_data( $user_data ), self::current_url(), $event_timestamp );
+	}
+
+	/**
+	 * Send an event whose user data was captured earlier (e.g. at checkout).
+	 *
+	 * Nothing is read from the current request or the logged-in user: this
+	 * runs from order status changes, which can happen in an admin, cron or
+	 * payment-webhook request that has nothing to do with the customer.
+	 *
+	 * @param string               $event_name      Event name.
+	 * @param array<string, mixed> $custom_data     Custom data block.
+	 * @param array<string, mixed> $user_data       Complete user data block.
+	 * @param string               $source_url      Event source URL.
+	 * @param int|null             $event_timestamp Unix timestamp (defaults to now).
+	 * @return array{ok: bool, body: string}
+	 */
+	public static function send_server_event( string $event_name, array $custom_data, array $user_data, string $source_url, ?int $event_timestamp = null ): array {
+		return self::dispatch( $event_name, $custom_data, array_filter( $user_data ), $source_url, $event_timestamp );
+	}
+
+	/**
+	 * Build the event body and POST it to the Graph API.
+	 *
+	 * @param string               $event_name      Event name.
+	 * @param array<string, mixed> $custom_data     Custom data block.
+	 * @param array<string, mixed> $user_data       Final user data block.
+	 * @param string               $source_url      Event source URL.
+	 * @param int|null             $event_timestamp Unix timestamp (defaults to now).
+	 * @return array{ok: bool, body: string}
+	 */
+	private static function dispatch( string $event_name, array $custom_data, array $user_data, string $source_url, ?int $event_timestamp ): array {
 		$pixel_id = (string) Options::get( 'fb_pixel_id', '' );
 		$token    = (string) Options::get( 'fb_capi_token', '' );
 
@@ -46,11 +82,8 @@ final class FacebookCAPI {
 			'event_name'       => $event_name,
 			'event_time'       => $event_timestamp ?? time(),
 			'action_source'    => 'website',
-			'event_source_url' => self::current_url(),
-			'user_data'        => (array) apply_filters(
-				'lw_pixel_capi_user_data',
-				self::merge_user_data( $user_data )
-			),
+			'event_source_url' => $source_url,
+			'user_data'        => (array) apply_filters( 'lw_pixel_capi_user_data', $user_data ),
 			'custom_data'      => $custom_data,
 		];
 
@@ -93,66 +126,23 @@ final class FacebookCAPI {
 	}
 
 	/**
-	 * Merge default user data (IP, UA, fbp, fbc) with caller-supplied values.
+	 * Merge the current request's user data (IP, UA, fbp, fbc) with caller-supplied values.
 	 *
 	 * @param array<string, mixed> $extra Caller user data (already hashed).
 	 * @return array<string, mixed>
 	 */
 	private static function merge_user_data( array $extra ): array {
 		$base = [
-			'client_ip_address' => self::client_ip(),
-			'client_user_agent' => isset( $_SERVER['HTTP_USER_AGENT'] )
-				? sanitize_text_field( wp_unslash( (string) $_SERVER['HTTP_USER_AGENT'] ) )
-				: '',
+			'client_ip_address' => ClientRequest::ip(),
+			'client_user_agent' => ClientRequest::user_agent(),
+			'fbp'               => ClientRequest::cookie( '_fbp' ),
+			'fbc'               => ClientRequest::cookie( '_fbc' ),
 		];
-
-		if ( ! empty( $_COOKIE['_fbp'] ) ) {
-			$base['fbp'] = sanitize_text_field( wp_unslash( (string) $_COOKIE['_fbp'] ) );
-		}
-
-		if ( ! empty( $_COOKIE['_fbc'] ) ) {
-			$base['fbc'] = sanitize_text_field( wp_unslash( (string) $_COOKIE['_fbc'] ) );
-		}
 
 		// Advanced matching: hashed user-data from logged-in users.
 		$advanced = UserDataBuilder::for_current_request();
 
 		return array_filter( array_merge( $base, $advanced, $extra ) );
-	}
-
-	/**
-	 * Resolve the client IP address.
-	 *
-	 * Defaults to REMOTE_ADDR (which the client cannot forge). Sites behind a
-	 * trusted reverse proxy (Cloudflare, nginx, …) can opt into proxy headers
-	 * with the `lw_pixel_trust_proxy_headers` filter — only enable this when
-	 * the webserver strips inbound forged headers, otherwise an attacker can
-	 * spoof their IP toward the Conversion API.
-	 *
-	 * @return string
-	 */
-	private static function client_ip(): string {
-		$keys = [ 'REMOTE_ADDR' ];
-
-		if ( (bool) apply_filters( 'lw_pixel_trust_proxy_headers', false ) ) {
-			$keys = [ 'HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR' ];
-		}
-
-		foreach ( $keys as $key ) {
-			if ( empty( $_SERVER[ $key ] ) ) {
-				continue;
-			}
-
-			$raw   = sanitize_text_field( wp_unslash( (string) $_SERVER[ $key ] ) );
-			$value = explode( ',', $raw )[0];
-			$ip    = trim( $value );
-
-			if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
-				return $ip;
-			}
-		}
-
-		return '';
 	}
 
 	/**

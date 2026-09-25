@@ -32,6 +32,8 @@ final class OrderEnrich {
 			return;
 		}
 
+		CheckoutContext::register();
+
 		add_action( 'woocommerce_order_status_completed', [ self::class, 'enrich' ] );
 		add_action( 'woocommerce_order_status_processing', [ self::class, 'enrich' ] );
 	}
@@ -47,15 +49,30 @@ final class OrderEnrich {
 			return;
 		}
 
+		$order = function_exists( 'wc_get_order' ) ? wc_get_order( $order_id ) : false;
+		if ( ! $order instanceof \WC_Order ) {
+			return;
+		}
+
+		// Only the context captured during the customer's own checkout is
+		// sent. Without it (order created in wp-admin, via the REST API, or
+		// before this was recorded) there is no customer browser data to
+		// attribute, and the current request belongs to someone else.
+		$context = CheckoutContext::get( $order );
+		if ( [] === $context ) {
+			return;
+		}
+
 		$params = ProductData::for_order( $order_id );
 		if ( [] === $params ) {
 			return;
 		}
 
-		FacebookCAPI::send_event(
+		FacebookCAPI::send_server_event(
 			'Purchase',
 			self::custom_data( $params ),
-			UserDataBuilder::for_order( $order_id )
+			array_merge( UserDataBuilder::for_order( $order_id ), CheckoutContext::to_user_data( $context ) ),
+			$context['url'] ?? ''
 		);
 
 		update_post_meta( $order_id, self::TRACKED_META, '1' );
