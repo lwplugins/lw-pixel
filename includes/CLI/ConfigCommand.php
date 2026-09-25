@@ -61,6 +61,7 @@ final class ConfigCommand {
 
 		$options  = Options::get_all();
 		$defaults = Options::get_defaults();
+		$masked   = Options::mask_secrets( $options );
 		$items    = [];
 
 		foreach ( $options as $key => $value ) {
@@ -72,7 +73,7 @@ final class ConfigCommand {
 
 			$items[] = [
 				'key'        => $key,
-				'value'      => self::stringify( $value ),
+				'value'      => self::stringify( $masked[ $key ] ),
 				'default'    => self::stringify( $default ),
 				'is_default' => ( $value === $default ) ? 'yes' : 'no',
 			];
@@ -106,7 +107,8 @@ final class ConfigCommand {
 			WP_CLI::error( "Unknown setting key: '{$key}'" );
 		}
 
-		WP_CLI::log( self::stringify( Options::get( $key ) ) );
+		// API secrets are never printed (terminal scrollback, CI and agent logs).
+		WP_CLI::log( self::stringify( Options::mask_secrets( Options::get_all() )[ $key ] ?? null ) );
 	}
 
 	/**
@@ -148,7 +150,7 @@ final class ConfigCommand {
 		$sanitized       = SettingsSanitizer::sanitize( $current );
 
 		if ( Options::save( $sanitized ) ) {
-			WP_CLI::success( "Set '{$key}' to '" . self::stringify( $sanitized[ $key ] ?? $value ) . "'." );
+			WP_CLI::success( "Set '{$key}' to '" . self::stringify( Options::mask_secrets( $sanitized )[ $key ] ?? $value ) . "'." );
 		} else {
 			WP_CLI::error( "Failed to update '{$key}'." );
 		}

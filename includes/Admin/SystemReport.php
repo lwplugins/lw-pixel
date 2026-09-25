@@ -99,10 +99,9 @@ final class SystemReport {
 	 * @return array<string, mixed>
 	 */
 	private static function redacted_options(): array {
-		$secrets = [ 'fb_capi_token', 'ga4_mp_api_secret' ];
-		$opts    = Options::get_all();
+		$opts = Options::get_all();
 
-		foreach ( $secrets as $key ) {
+		foreach ( Options::SECRET_KEYS as $key ) {
 			if ( ! empty( $opts[ $key ] ) ) {
 				$opts[ $key ] = '***REDACTED*** (' . strlen( (string) $opts[ $key ] ) . ' chars)';
 			}

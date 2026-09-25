@@ -22,12 +22,15 @@ final class PixelService {
 	/**
 	 * Get all options.
 	 *
+	 * API secrets are masked: ability results end up in AI-agent transcripts
+	 * and MCP/proxy logs.
+	 *
 	 * @return array<string, mixed>
 	 */
 	public static function get_options(): array {
 		return [
 			'success' => true,
-			'options' => Options::get_all(),
+			'options' => Options::mask_secrets( Options::get_all() ),
 		];
 	}
 
@@ -52,8 +55,16 @@ final class PixelService {
 			];
 		}
 
-		$current   = Options::get_all();
-		$known     = array_intersect_key( $updates, Options::get_defaults() );
+		$current = Options::get_all();
+		$known   = array_intersect_key( $updates, Options::get_defaults() );
+
+		// A masked secret sent back from get-options means "keep".
+		foreach ( Options::SECRET_KEYS as $key ) {
+			if ( isset( $known[ $key ] ) && Options::SECRET_MASK === $known[ $key ] ) {
+				unset( $known[ $key ] );
+			}
+		}
+
 		$merged    = array_merge( $current, $known );
 		$sanitized = SettingsSanitizer::sanitize( $merged );
 

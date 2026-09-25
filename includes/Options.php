@@ -17,6 +17,17 @@ final class Options {
 	public const OPTION_NAME = 'lw_pixel_options';
 
 	/**
+	 * Keys holding API secrets: never returned in plaintext by read APIs.
+	 */
+	public const SECRET_KEYS = [ 'fb_capi_token', 'ga4_mp_api_secret' ];
+
+	/**
+	 * Placeholder returned instead of a stored secret. Writing it back
+	 * through set-options keeps the stored value.
+	 */
+	public const SECRET_MASK = '********';
+
+	/**
 	 * Cached options array.
 	 *
 	 * @var array<string, mixed>|null
@@ -86,6 +97,23 @@ final class Options {
 	public static function save( array $options ): bool {
 		self::$options = $options;
 		return update_option( self::OPTION_NAME, $options );
+	}
+
+	/**
+	 * Replace every non-empty secret with SECRET_MASK (empty stays empty,
+	 * so callers can still tell whether a secret is set).
+	 *
+	 * @param array<string, mixed> $options Options.
+	 * @return array<string, mixed>
+	 */
+	public static function mask_secrets( array $options ): array {
+		foreach ( self::SECRET_KEYS as $key ) {
+			if ( ! empty( $options[ $key ] ) ) {
+				$options[ $key ] = self::SECRET_MASK;
+			}
+		}
+
+		return $options;
 	}
 
 	/**

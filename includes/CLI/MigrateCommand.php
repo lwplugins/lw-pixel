@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace LightweightPlugins\Pixel\CLI;
 
 use LightweightPlugins\Pixel\Tools\MigratorRegistry;
+use LightweightPlugins\Pixel\Options;
 use WP_CLI;
 use WP_CLI\Utils;
 
@@ -110,10 +111,13 @@ final class MigrateCommand {
 
 		$items = [];
 		foreach ( $diff as $key => $change ) {
+			$from = Options::mask_secrets( [ $key => $change['from'] ?? null ] );
+			$to   = Options::mask_secrets( [ $key => $change['to'] ?? null ] );
+
 			$items[] = [
 				'key'  => $key,
-				'from' => self::stringify( $change['from'] ?? null ),
-				'to'   => self::stringify( $change['to'] ?? null ),
+				'from' => self::stringify( $from[ $key ] ),
+				'to'   => self::stringify( $to[ $key ] ),
 			];
 		}
 
