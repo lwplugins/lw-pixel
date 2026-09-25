@@ -9,34 +9,44 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Admin;
 
-use LightweightPlugins\Pixel\Admin\Settings\TabInterface;
-use LightweightPlugins\Pixel\Options;
+use LightweightPlugins\Pixel\Rest\Admin\Routes;
+use LightweightPlugins\Pixel\Rest\Admin\Settings\SettingsMeta;
 
 /**
- * Coordinates the lw-pixel admin settings page.
+ * The Pixel screen: a mount point for the React admin (build/index), which
+ * reads and writes through the lw-pixel/v1 REST routes.
  */
 final class SettingsPage {
 
+	/**
+	 * Settings page slug.
+	 */
 	public const SLUG = 'lw-pixel';
 
-	private const SETTINGS_GROUP = 'lw_pixel_settings';
+	/**
+	 * Script and style handle.
+	 */
+	private const HANDLE = 'lw-pixel-admin-app';
 
 	/**
-	 * Settings tabs.
+	 * Hook suffix returned by add_submenu_page().
 	 *
-	 * @var array<int, TabInterface>
+	 * Assets are keyed on it rather than on a hard-coded
+	 * "lw-plugins_page_lw-pixel": WordPress derives that prefix from the
+	 * translated parent menu title, so a locale that translates "LW Plugins"
+	 * would silently stop the screen from loading.
+	 *
+	 * @var string
 	 */
-	private array $tabs;
+	private string $hook_suffix = '';
 
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
-		$this->tabs = TabRegistry::all();
-
 		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
-		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+		add_filter( 'admin_body_class', [ $this, 'body_class' ] );
 	}
 
 	/**
@@ -47,7 +57,7 @@ final class SettingsPage {
 	public function add_menu_page(): void {
 		ParentPage::maybe_register();
 
-		add_submenu_page(
+		$hook = add_submenu_page(
 			ParentPage::SLUG,
 			__( 'Pixel', 'lw-pixel' ),
 			__( 'Pixel', 'lw-pixel' ),
@@ -55,69 +65,60 @@ final class SettingsPage {
 			self::SLUG,
 			[ $this, 'render' ]
 		);
+
+		$this->hook_suffix = is_string( $hook ) ? $hook : '';
 	}
 
 	/**
-	 * Enqueue admin assets on plugin pages.
+	 * Enqueue the React app on the settings screen.
 	 *
-	 * @param string $hook Current admin page hook.
+	 * @param string $hook Current admin page.
 	 * @return void
 	 */
 	public function enqueue_assets( string $hook ): void {
-		$valid_hooks = [
-			'toplevel_page_' . ParentPage::SLUG,
-			ParentPage::SLUG . '_page_' . self::SLUG,
-		];
-
-		if ( ! in_array( $hook, $valid_hooks, true ) ) {
+		if ( '' === $this->hook_suffix || $hook !== $this->hook_suffix ) {
 			return;
 		}
 
-		wp_enqueue_style(
-			'lw-pixel-admin',
-			LW_PIXEL_URL . 'assets/css/admin.css',
-			[],
-			LW_PIXEL_VERSION
-		);
+		if ( ! BuildAssets::enqueue( 'index', self::HANDLE ) ) {
+			return;
+		}
 
-		wp_enqueue_script(
-			'lw-pixel-admin',
-			LW_PIXEL_URL . 'assets/js/admin.js',
-			[],
-			LW_PIXEL_VERSION,
-			true
+		wp_add_inline_script(
+			self::HANDLE,
+			'window.lwPixelAdmin = ' . wp_json_encode(
+				[
+					'version'   => LW_PIXEL_VERSION,
+					'namespace' => Routes::NAMESPACE,
+					'docsUrl'   => SettingsMeta::DOCS_URL,
+				]
+			) . ';',
+			'before'
 		);
 	}
 
 	/**
-	 * Register the settings group + sanitiser.
+	 * Mark the settings screen body for the app's styles.
 	 *
-	 * @return void
+	 * @param string $classes Space-separated body classes.
+	 * @return string
 	 */
-	public function register_settings(): void {
-		register_setting(
-			self::SETTINGS_GROUP,
-			Options::OPTION_NAME,
-			[
-				'type'              => 'array',
-				'sanitize_callback' => [ $this, 'sanitize_settings' ],
-				'default'           => Options::get_defaults(),
-			]
-		);
+	public function body_class( string $classes ): string {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+		if ( '' === $this->hook_suffix || ! $screen || $screen->id !== $this->hook_suffix ) {
+			return $classes;
+		}
+
+		return $classes . ' lw-pixel-screen';
 	}
 
 	/**
-	 * Sanitize submitted settings.
+	 * Render the mount point (or a notice when the build is missing).
 	 *
-	 * @param array<string, mixed> $input Submitted values.
-	 * @return array<string, mixed>
-	 */
-	public function sanitize_settings( array $input ): array {
-		return SettingsSanitizer::sanitize( $input );
-	}
-
-	/**
-	 * Render the settings page.
+	 * The mount point sits outside .wrap so core's .wrap margins and
+	 * NoticeManager's direct-child notice rules never reach the app; the
+	 * missing-build notice carries `lw-notice` so it is not hidden.
 	 *
 	 * @return void
 	 */
@@ -126,6 +127,15 @@ final class SettingsPage {
 			return;
 		}
 
-		( new SettingsRenderer( $this->tabs ) )->render_page( self::SETTINGS_GROUP );
+		if ( ! BuildAssets::exists( 'index' ) ) {
+			printf(
+				'<div class="wrap"><h1>%s</h1><div class="notice notice-error lw-notice"><p>%s</p></div></div>',
+				esc_html__( 'LW Pixel', 'lw-pixel' ),
+				esc_html__( 'The settings screen files are missing. Re-install the plugin from a release ZIP, or run "npm install && npm run build" in the plugin directory.', 'lw-pixel' )
+			);
+			return;
+		}
+
+		echo '<div id="lw-pixel-root" class="lw-pixel-root"></div>';
 	}
 }

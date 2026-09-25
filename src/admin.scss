@@ -1,0 +1,1390 @@
+@use "sass:color";
+
+// LW Pixel admin styles. Colors, spacing and radii come from the core WPDS
+// tokens (wp-theme stylesheet, a dependency of wp-components); the fallbacks
+// only matter on WordPress versions without it.
+
+$surface: var(--wpds-color-background-surface-neutral-strong, #fff);
+$page: var(--wpds-color-background-surface-neutral, #fcfcfc);
+$stroke: var(--wpds-color-stroke-surface-neutral, #ddd);
+$stroke-weak: var(--wpds-color-stroke-surface-neutral-weak, #f0f0f0);
+$text: var(--wpds-color-foreground-content-neutral, #1e1e1e);
+$muted: var(--wpds-color-foreground-content-neutral-weak, #707070);
+$brand: var(--wp-admin-theme-color, #3858e9);
+$success: var(--wpds-color-foreground-content-success, #007f30);
+$success-bg: var(--wpds-color-background-surface-success-weak, #eff9f1);
+$warning: var(--wpds-color-foreground-content-warning, #926300);
+$warning-bg: var(--wpds-color-background-surface-warning-weak, #fef8ee);
+$error: var(--wpds-color-foreground-content-error, #cc1818);
+$error-bg: var(--wpds-color-background-surface-error-weak, #fcf0f1);
+$track: var(--wpds-color-background-track-neutral-weak, #f0f0f0);
+$radius: var(--wpds-border-radius-md, 4px);
+$radius-lg: var(--wpds-border-radius-lg, 8px);
+$gap-sm: var(--wpds-dimension-gap-sm, 8px);
+$gap-md: var(--wpds-dimension-gap-md, 12px);
+$gap-lg: var(--wpds-dimension-gap-lg, 16px);
+$gap-xl: var(--wpds-dimension-gap-xl, 24px);
+$mono: var(--wpds-typography-font-family-mono, monospace);
+
+// Brand color ----------------------------------------------------------------
+// ONE variable: the admin theme color and the logo share it. Every
+// @wordpress/components control reads --wp-admin-theme-color, so toggles,
+// focus rings, selected states and links all follow. Set on body (not only
+// the root) so portaled modals and popovers inherit it too. The darker
+// shades are derived from it (core uses -5% / -10% lightness).
+//
+// LW Pixel blue (the registry colour and the logo colour,
+// assets/img/title-icon.svg) -- the one token to swap for a new accent.
+// WCAG 2.x contrast (computed): white on #2b65f6 = 4.89:1 (AA normal text
+// needs 4.5:1); the darker hover/active shades below only raise it.
+$lw-brand: #2b65f6;
+$lw-brand-darker-10: color.adjust($lw-brand, $lightness: -5%);
+$lw-brand-darker-20: color.adjust($lw-brand, $lightness: -10%);
+
+@function rgb-list($c) {
+	@return color.channel($c, "red", $space: rgb), color.channel($c, "green", $space: rgb), color.channel($c, "blue", $space: rgb);
+}
+
+body.lw-pixel-screen,
+.lw-pixel-root {
+	--wp-admin-theme-color: #{$lw-brand};
+	--wp-admin-theme-color--rgb: #{rgb-list($lw-brand)};
+	--wp-admin-theme-color-darker-10: #{$lw-brand-darker-10};
+	--wp-admin-theme-color-darker-10--rgb: #{rgb-list($lw-brand-darker-10)};
+	--wp-admin-theme-color-darker-20: #{$lw-brand-darker-20};
+	--wp-admin-theme-color-darker-20--rgb: #{rgb-list($lw-brand-darker-20)};
+	--wpds-color-stroke-focus: #{$lw-brand};
+}
+
+// Focus rings: only for keyboard users. Core components draw the ring on
+// :focus, so it also stayed after every mouse click. :focus-visible is the
+// browser's own "keyboard or text field" signal — clicking hides the ring,
+// Tab still shows it (WCAG 2.4.7). Scoped to this screen, incl. modals.
+body.lw-pixel-screen {
+	:is(button, a, [role="button"], [role="radio"], [role="tab"], [tabindex]):focus:not(:focus-visible) {
+		outline: none;
+		box-shadow: none;
+	}
+
+	// Secondary buttons draw their border with box-shadow: keep it.
+	.components-button.is-secondary:focus:not(:focus-visible) {
+		box-shadow: inset 0 0 0 1px var(--wp-admin-theme-color);
+	}
+
+	.components-form-toggle__input:focus:not(:focus-visible) + .components-form-toggle__track {
+		box-shadow: none;
+	}
+}
+
+// Full-bleed app screen inside the classic admin frame.
+.lw-pixel-screen {
+	#wpcontent {
+		padding-left: 0;
+	}
+
+	#wpbody-content {
+		padding-bottom: 0;
+	}
+
+	#wpfooter {
+		display: none;
+	}
+}
+
+.lw-pixel-root {
+	height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
+	background: $page;
+	color: $text;
+
+	// Zero specificity: any component rule (e.g. the white wordmark bolt) wins.
+	:where(svg:not(.lw-admin-mark)) {
+		fill: currentColor;
+	}
+}
+
+// App shell ----------------------------------------------------------------
+// Full-height sidebar | main column (top bar + scrolling content).
+
+$bar-height: 64px;
+$foot-height: 56px;
+$canvas: var(--wpds-color-background-surface-neutral-weak, #f6f7f7);
+
+.lw-admin-shell {
+	display: grid;
+	grid-template-columns: 264px minmax(0, 1fr);
+	height: 100%;
+}
+
+.lw-admin-sidebar {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	background: $surface;
+	border-right: 1px solid $stroke-weak;
+
+	&__head {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex-shrink: 0;
+		height: $bar-height;
+		padding: 0 $gap-xl;
+		border-bottom: 1px solid $stroke-weak;
+		box-sizing: border-box;
+
+		svg {
+			width: 26px;
+			height: 26px;
+		}
+
+		strong {
+			font-size: 15px;
+		}
+	}
+
+	&__home {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		border-radius: $radius;
+		color: $text;
+		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			color: $text;
+			box-shadow: none;
+		}
+
+		&:focus-visible {
+			outline: 2px solid $brand;
+			outline-offset: 4px;
+		}
+	}
+
+	&__foot {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		height: $foot-height;
+		padding: 0 $gap-md;
+		border-top: 1px solid $stroke-weak;
+		box-sizing: border-box;
+
+		.lw-admin-sidenav__item {
+			color: $muted;
+
+			&:hover {
+				color: $text;
+			}
+		}
+	}
+}
+
+.lw-admin-sidenav {
+	flex: 1;
+	overflow-y: auto;
+	padding: $gap-lg $gap-md;
+
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li {
+		margin: 0;
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		min-height: 38px;
+		padding: 0 $gap-md;
+		border-radius: $radius-lg;
+		color: $text;
+		font-weight: 500;
+		text-decoration: none;
+		transition: background-color 0.1s;
+
+		svg {
+			flex-shrink: 0;
+			color: $muted;
+		}
+
+		&:hover {
+			background: $canvas;
+			color: $text;
+		}
+
+		&:focus {
+			box-shadow: none;
+		}
+
+		&:focus-visible {
+			outline: 2px solid $brand;
+			outline-offset: -2px;
+		}
+
+		&[aria-current="page"] {
+			background: $canvas;
+			font-weight: 600;
+
+			svg {
+				color: $text;
+			}
+		}
+	}
+
+	&__label {
+		flex: 1;
+	}
+
+	&__meta {
+		color: $muted;
+		font-size: 12px;
+		font-variant-numeric: tabular-nums;
+	}
+
+	&__dot {
+		display: block;
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+
+		&.is-ok {
+			background: $success;
+		}
+
+		&.is-error {
+			background: $error;
+		}
+	}
+}
+
+.lw-admin-main {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 0;
+	background: $canvas;
+}
+
+.lw-admin-topbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: $gap-lg;
+	flex-shrink: 0;
+	height: $bar-height;
+	padding: 0 $gap-xl 0 32px;
+	background: $surface;
+	border-bottom: 1px solid $stroke-weak;
+	box-sizing: border-box;
+
+	&__title {
+		margin: 0;
+		padding: 0;
+		font-size: 18px;
+		font-weight: 600;
+		line-height: 1.3;
+	}
+
+	&__actions {
+		display: flex;
+		align-items: center;
+		gap: $gap-sm;
+	}
+
+	&__dirty {
+		color: $muted;
+		font-size: 12px;
+	}
+}
+
+.lw-admin-save {
+	gap: $gap-sm;
+
+	&__short {
+		display: none;
+	}
+
+	kbd {
+		padding: 1px 5px;
+		border-radius: 3px;
+		background: rgba(255, 255, 255, 0.2);
+		color: inherit;
+		font-family: inherit;
+		font-size: 11px;
+	}
+}
+
+.lw-admin-scroll {
+	flex: 1;
+	overflow-y: auto;
+	padding: $gap-xl 32px;
+}
+
+.lw-admin-content {
+	display: flex;
+	flex-direction: column;
+	gap: $gap-lg;
+	// Fluid: fills the main column, capped only on ultra-wide screens so
+	// label/control rows stay scannable.
+	width: 100%;
+	max-width: 1440px;
+	margin: 0 auto;
+	padding-bottom: 48px;
+}
+
+.lw-admin-footer {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: flex-end;
+	height: $foot-height;
+	padding: 0 32px;
+	border-top: 1px solid $stroke-weak;
+	background: $surface;
+	box-sizing: border-box;
+
+	a {
+		display: inline-flex;
+		border-radius: 2px;
+		text-decoration: none;
+		transition: opacity 0.15s;
+
+		&:hover {
+			opacity: 0.8;
+		}
+
+		&:focus-visible {
+			outline: 2px solid $brand;
+			outline-offset: 4px;
+		}
+	}
+}
+
+// LW Plugins wordmark (lwplugins.com light theme colors, no rounded corners).
+.lw-wordmark {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+
+	&__mark {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		background: #0b62bf;
+
+		svg {
+			fill: #fff;
+		}
+	}
+
+	&__text {
+		color: #16181c;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+		font-size: 13px;
+		font-weight: 800;
+		letter-spacing: 0.02em;
+
+		span {
+			color: #767d86;
+		}
+	}
+}
+
+// Settings rows ------------------------------------------------------------
+
+.lw-admin-row {
+	display: grid;
+	grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr);
+	gap: $gap-xl;
+	align-items: start;
+
+	& + & {
+		padding-top: $gap-lg;
+		border-top: 1px solid $stroke-weak;
+	}
+
+	&.is-stacked {
+		grid-template-columns: 1fr;
+		gap: $gap-md;
+	}
+
+	&__text {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	&__title {
+		color: $text;
+		font-weight: 600;
+	}
+
+	&__help {
+		margin: 0;
+		color: $muted;
+		font-size: 12px;
+		line-height: 1.5;
+	}
+
+	&__control {
+		display: flex;
+		flex-direction: column;
+		gap: $gap-md;
+		min-width: 0;
+	}
+}
+
+.lw-admin-switch {
+	display: flex;
+	align-items: center;
+	gap: $gap-sm;
+	min-height: 32px;
+
+	&__state {
+		color: $muted;
+	}
+}
+
+.lw-admin-callout {
+	display: flex;
+	gap: $gap-sm;
+	padding: 10px $gap-md;
+	border-radius: $radius-lg;
+	background: $canvas;
+	font-size: 13px;
+	line-height: 1.5;
+
+	> svg {
+		flex-shrink: 0;
+		margin-top: 1px;
+		color: $muted;
+	}
+
+	&.is-warning {
+		background: $warning-bg;
+
+		> svg {
+			color: $warning;
+		}
+	}
+}
+
+// Sidebar toggle only exists on mobile.
+.lw-admin-sidebar__toggle {
+	display: none;
+}
+
+// Mobile (WP admin breakpoint): no inner scroll containers — the page scrolls
+// naturally, the sidebar becomes a header with a section dropdown, and the
+// top bar sticks under the admin bar.
+@media (max-width: 782px) {
+	.lw-pixel-root {
+		height: auto;
+		min-height: calc(100vh - var(--wp-admin--admin-bar--height, 46px));
+		// clip (not hidden) keeps position: sticky working.
+		overflow-x: clip;
+	}
+
+
+	.lw-admin-shell {
+		display: block;
+		height: auto;
+	}
+
+	.lw-admin-sidebar {
+		position: relative;
+		border-right: 0;
+		border-bottom: 1px solid $stroke-weak;
+
+		&__head {
+			height: 52px;
+			padding: 0 $gap-lg;
+			border-bottom: 0;
+		}
+
+		&__toggle {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			width: calc(100% - 32px);
+			min-height: 44px;
+			margin: 0 $gap-lg $gap-md;
+			padding: 0 $gap-md;
+			border: 1px solid $stroke;
+			border-radius: $radius-lg;
+			background: $surface;
+			color: $text;
+			font: inherit;
+			font-weight: 600;
+			cursor: pointer;
+
+			span {
+				flex: 1;
+				text-align: left;
+			}
+
+			svg:last-child {
+				transition: transform 0.15s;
+			}
+
+			&:focus-visible {
+				outline: 2px solid $brand;
+				outline-offset: 2px;
+			}
+		}
+
+		&.is-open &__toggle svg:last-child {
+			transform: rotate(180deg);
+		}
+
+		&__foot {
+			display: none;
+		}
+	}
+
+	.lw-admin-sidenav {
+		display: none;
+		position: absolute;
+		top: 100%;
+		right: $gap-lg;
+		left: $gap-lg;
+		z-index: 20;
+		margin-top: -$gap-sm;
+		padding: 6px;
+		border: 1px solid $stroke-weak;
+		border-radius: $radius-lg;
+		background: $surface;
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+		.is-open & {
+			display: block;
+		}
+
+		&__item {
+			min-height: 44px;
+		}
+	}
+
+	.lw-admin-main {
+		display: block;
+	}
+
+	.lw-admin-topbar {
+		position: sticky;
+		top: var(--wp-admin--admin-bar--height, 46px);
+		z-index: 10;
+		height: auto;
+		min-height: 56px;
+		padding: 6px $gap-lg;
+		gap: $gap-md;
+
+		// Long titles wrap to two lines instead of pushing Save off screen.
+		&__title {
+			display: -webkit-box;
+			flex: 1 1 auto;
+			min-width: 0;
+			overflow: hidden;
+			font-size: 15px;
+			line-height: 1.25;
+			overflow-wrap: anywhere;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+		}
+
+		&__actions {
+			flex: none;
+		}
+
+		&__dirty {
+			display: none;
+		}
+	}
+
+	.lw-admin-save kbd {
+		display: none;
+	}
+
+	.lw-admin-scroll {
+		overflow: visible;
+		padding: $gap-lg;
+	}
+
+	.lw-admin-footer {
+		padding: 10px $gap-lg;
+	}
+
+	.lw-admin-row {
+		grid-template-columns: 1fr;
+		gap: $gap-sm;
+	}
+
+
+}
+
+// Below 600px the admin bar scrolls away, so the top bar sticks to the top.
+@media (max-width: 600px) {
+	.lw-admin-topbar {
+		top: 0;
+	}
+
+	// Short "Save" so the section title keeps room next to Discard.
+	.lw-admin-save__full {
+		display: none;
+	}
+
+	.lw-admin-save__short {
+		display: inline;
+	}
+}
+
+// Misc ---------------------------------------------------------------------
+
+.lw-admin-snackbars {
+	position: fixed;
+	right: 24px;
+	bottom: 24px;
+	z-index: 100000;
+	width: auto;
+	max-width: min(480px, calc(100vw - 48px));
+}
+
+// Skeletons ----------------------------------------------------------------
+// Shapes come from the WPDS <Skeleton>; these rules only size and lay them out.
+
+.lw-skel {
+	border-radius: $radius;
+
+	&.is-round {
+		border-radius: 999px;
+	}
+
+	&--text {
+		max-width: 100%;
+		height: 12px;
+
+		&.is-sm {
+			height: 10px;
+		}
+
+		&.is-lg {
+			height: 16px;
+		}
+
+		&.is-xl {
+			height: 28px;
+		}
+	}
+}
+
+.lw-skel-lines,
+.lw-skel-stack {
+	display: flex;
+	flex-direction: column;
+	gap: $gap-sm;
+	width: 100%;
+}
+
+.lw-skel-stack.is-loose {
+	gap: $gap-lg;
+}
+
+.lw-skel-tab {
+	display: flex;
+	flex-direction: column;
+	gap: $gap-lg;
+}
+
+.lw-skel-rows {
+	display: flex;
+	flex-direction: column;
+}
+
+.lw-skel-row {
+	display: grid;
+	grid-template-columns: minmax(140px, 30%) minmax(0, 1fr) auto;
+	align-items: center;
+	gap: $gap-md;
+	padding: 14px 0;
+	border-bottom: 1px solid $stroke-weak;
+
+	&:last-child {
+		border-bottom: 0;
+	}
+}
+
+.lw-skel-toolbar {
+	display: flex;
+	gap: $gap-sm;
+	margin-bottom: $gap-md;
+}
+
+.lw-skel-spacer {
+	flex: 1;
+}
+
+.lw-skel-nav {
+	padding: $gap-lg $gap-xl;
+	gap: 22px;
+}
+
+// Plugin mark (solid dot): the fill follows `color`.
+.lw-pixel-root .lw-admin-mark {
+	color: $lw-brand;
+}
+
+// Segmented control (variant B, "soft segmented") -----------------------------
+// Restyles core ToggleGroupControl: grey track, raised white thumb. The thumb
+// is the group's ::before, positioned by core through --selected-* (unitless
+// px); core offsets it for a 1px border, which this track does not have.
+
+body.lw-pixel-screen {
+	.components-toggle-group-control {
+		min-height: 40px;
+		padding: 3px;
+		border: 0;
+		border-radius: 9px;
+		background: $track;
+		box-sizing: border-box;
+
+		// No focus-within ring on the group, at all (explicit decision).
+		&:focus-within {
+			outline: none;
+		}
+
+		&::before {
+			top: calc(var(--selected-top) * 1px);
+			left: 0;
+			width: calc(var(--selected-width) * 1px);
+			height: calc(var(--selected-height) * 1px);
+			border: 0;
+			border-radius: 7px;
+			background: $surface;
+			box-shadow: 0 1px 2px rgba(16, 24, 32, 0.12), 0 1px 1px rgba(16, 24, 32, 0.06);
+		}
+	}
+
+	.components-toggle-group-control-option-base {
+		border-radius: 7px;
+		color: $muted;
+		font-weight: 500;
+
+		&:hover {
+			color: $text;
+		}
+
+		&[aria-checked="true"] {
+			color: $text;
+			font-weight: 600;
+		}
+	}
+}
+
+// Shared helpers -------------------------------------------------------------
+
+.lw-admin-inline {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: $gap-sm;
+}
+
+.lw-admin-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.lw-admin-muted {
+	margin: 0;
+	color: $muted;
+}
+
+.lw-admin-code {
+	padding: 0;
+	background: none;
+	font-family: $mono;
+	font-size: 12px;
+	word-break: break-all;
+}
+
+.lw-admin-label {
+	color: $muted;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.lw-admin-hint {
+	color: $muted;
+	font-size: 12px;
+}
+
+// Field helpers -------------------------------------------------------------
+
+.lw-admin-number .components-base-control {
+	width: 120px;
+}
+
+.lw-admin-nowrap {
+	white-space: nowrap;
+}
+
+// Field states ---------------------------------------------------------------
+
+// "Set in wp-config.php" hint under a pinned (disabled) field.
+.lw-admin-locked {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+	color: $muted;
+	font-size: 12px;
+
+	svg {
+		flex-shrink: 0;
+	}
+
+	code {
+		padding: 1px 4px;
+		font-size: 11px;
+	}
+}
+
+// Server validation messages (data.fields) next to the field.
+.lw-admin-fielderror {
+	margin: 0;
+	padding: 8px $gap-md;
+	border-left: 3px solid $error;
+	border-radius: 0 $radius $radius 0;
+	background: $error-bg;
+	color: $error;
+	font-size: 12px;
+	list-style: none;
+
+	li {
+		margin: 0;
+		line-height: 1.5;
+
+		& + li {
+			margin-top: 2px;
+		}
+	}
+}
+
+.lw-admin-row.has-error {
+	.components-text-control__input,
+	.components-textarea-control__input,
+	.components-select-control__input {
+		border-color: $error;
+	}
+}
+
+// Nav flag on a tab that holds a rejected field.
+.lw-admin-navflag {
+	display: inline-flex;
+	color: $error;
+
+	svg {
+		color: $error !important;
+	}
+}
+
+// Grouped side nav --------------------------------------------------------------
+
+.lw-admin-sidenav {
+	&__group {
+		margin-top: $gap-lg;
+	}
+
+	&__heading {
+		margin: 0 0 4px;
+		padding: 0 $gap-md;
+		color: $muted;
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		line-height: 1.6;
+		text-transform: uppercase;
+	}
+}
+
+// Tiles and key/value rows --------------------------------------------------------
+
+.lw-admin-tiles {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: $gap-md;
+}
+
+.lw-admin-tile {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+	padding: $gap-lg;
+	border: 1px solid $stroke-weak;
+	border-radius: $radius-lg;
+	background: $surface;
+
+	&__label {
+		color: $muted;
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	&__value {
+		font-size: 22px;
+		font-weight: 600;
+		line-height: 1.25;
+		overflow-wrap: anywhere;
+	}
+
+	&__detail {
+		color: $muted;
+		font-size: 12px;
+	}
+}
+
+// Switch lists ----------------------------------------------------------------------
+// Each switch leads its own full-width row: never a lone switch in the right
+// column of a two-column row.
+
+.lw-px-switches {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lw-px-switch {
+	display: flex;
+	align-items: flex-start;
+	gap: $gap-md;
+	margin: 0;
+	padding: $gap-md $gap-sm;
+	border-radius: $radius;
+
+	& + & {
+		border-top: 1px solid $stroke-weak;
+	}
+
+	.components-form-toggle {
+		flex: none;
+		margin-top: 2px;
+	}
+
+	&__body {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 4px;
+		min-width: 0;
+	}
+
+	&__head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: $gap-sm;
+	}
+
+	&__title {
+		color: $text;
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	&__help {
+		margin: 0;
+		color: $muted;
+		font-size: 12px;
+		line-height: 1.5;
+	}
+
+	&__nested {
+		max-width: 560px;
+		margin-top: $gap-sm;
+
+		.components-base-control__help {
+			margin-top: 4px;
+		}
+	}
+
+	// Unsaved change: a brand bar on the left edge.
+	&.is-changed {
+		box-shadow: inset 3px 0 0 $brand;
+	}
+}
+
+// Cards with a card-level switch -------------------------------------------------------
+
+.lw-px-card {
+	&__header {
+		flex-wrap: wrap;
+		gap: $gap-md;
+	}
+
+	&__lead {
+		display: flex;
+		flex: 1 1 320px;
+		align-items: flex-start;
+		gap: $gap-md;
+		min-width: 0;
+	}
+
+	&__icon {
+		display: grid;
+		flex: none;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 10px;
+		background: $brand;
+		color: #fff;
+	}
+
+	&__title {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: $gap-sm;
+	}
+
+	&__switch {
+		flex: none;
+		margin: 0;
+	}
+
+	&.is-off &__icon {
+		background: $track;
+		color: $muted;
+	}
+}
+
+// State bar (connection test) ----------------------------------------------------------
+
+.lw-px-statebar {
+	&__bar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: $gap-lg;
+		padding: 18px 20px;
+	}
+
+	&__icon {
+		display: grid;
+		flex: none;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 10px;
+		background: $canvas;
+		color: $text;
+	}
+
+	&__text {
+		display: flex;
+		flex: 1 1 280px;
+		flex-direction: column;
+		gap: 2px;
+
+		span {
+			color: $muted;
+			font-size: 13px;
+		}
+	}
+}
+
+.lw-px-result {
+	display: flex;
+	gap: $gap-md;
+	margin: 0 20px 18px;
+	padding: $gap-md;
+	border-radius: $radius-lg;
+
+	p {
+		margin: 2px 0 0;
+	}
+
+	&.is-ok {
+		background: $success-bg;
+		color: $success;
+	}
+
+	&.is-error {
+		background: $error-bg;
+		color: $error;
+	}
+
+	svg {
+		flex: none;
+	}
+}
+
+.lw-pixel-status-icon {
+	display: block;
+	flex: none;
+}
+
+// Values -------------------------------------------------------------------------------
+
+.lw-px-yesno {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+
+	&.is-ok svg {
+		color: $success;
+	}
+
+	&.is-idle {
+		color: $muted;
+	}
+}
+
+.lw-px-mono input,
+.lw-px-mono textarea {
+	font-family: $mono;
+}
+
+.lw-px-code textarea {
+	min-height: 120px;
+	font-size: 12px;
+	line-height: 1.5;
+
+	&[readonly] {
+		background: $canvas;
+		color: $muted;
+	}
+}
+
+.lw-px-number {
+	max-width: 140px;
+}
+
+.lw-px-value {
+	flex-wrap: nowrap;
+
+	> .components-base-control:first-child {
+		flex: 1 1 auto;
+		max-width: 200px;
+	}
+}
+
+.lw-px-currency {
+	width: 88px;
+
+	input {
+		text-transform: uppercase;
+	}
+}
+
+// Secret rows.
+.lw-px-keyrow {
+	flex-wrap: nowrap;
+
+	> .components-base-control {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+}
+
+.lw-px-keyline {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 8px;
+	margin: 0;
+	color: $muted;
+
+	strong {
+		color: $text;
+	}
+}
+
+// Overview -----------------------------------------------------------------------------
+
+.lw-px-pixels {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	&__row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto 96px;
+		align-items: center;
+		gap: $gap-md;
+		margin: 0;
+		padding: 10px 0;
+
+		& + & {
+			border-top: 1px solid $stroke-weak;
+		}
+
+		> a {
+			justify-self: end;
+		}
+	}
+
+	&__name {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: $gap-sm;
+		font-weight: 600;
+	}
+}
+
+.lw-px-plugins {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: $gap-sm $gap-lg;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		margin: 0;
+	}
+}
+
+// Tables (import preview, pixel status) --------------------------------------------------
+
+.lw-px-table-wrap {
+	overflow-x: auto;
+}
+
+.lw-px-table {
+	width: 100%;
+	border-collapse: collapse;
+
+	th,
+	td {
+		padding: 10px $gap-md 10px 0;
+		border-bottom: 1px solid $stroke-weak;
+		text-align: left;
+		vertical-align: middle;
+	}
+
+	thead th {
+		color: $muted;
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	tbody th {
+		font-weight: 600;
+	}
+
+	tbody tr:last-child > * {
+		border-bottom: 0;
+	}
+}
+
+.lw-px-report {
+	max-height: 360px;
+	margin: 0;
+	padding: $gap-md;
+	overflow: auto;
+	border-radius: $radius-lg;
+	background: $canvas;
+	font-family: $mono;
+	font-size: 12px;
+	line-height: 1.5;
+	white-space: pre;
+
+	&:focus-visible {
+		outline: 2px solid $brand;
+		outline-offset: 2px;
+	}
+}
+
+// Custom events ----------------------------------------------------------------------------
+
+.lw-px-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: $gap-sm;
+}
+
+.lw-px-events {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	&__row {
+		display: flex;
+		align-items: center;
+		gap: $gap-md;
+		margin: 0;
+		padding: $gap-md $gap-sm;
+
+		& + & {
+			border-top: 1px solid $stroke-weak;
+		}
+	}
+
+	&__main {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+		overflow-wrap: anywhere;
+	}
+
+	&__name {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: $gap-sm;
+	}
+
+	&__actions {
+		display: flex;
+		flex: none;
+		gap: 4px;
+	}
+}
+
+@media (max-width: 782px) {
+	.lw-px-pixels__row {
+		grid-template-columns: minmax(0, 1fr) auto;
+
+		> a {
+			grid-column: 1 / -1;
+			justify-self: start;
+		}
+	}
+
+	.lw-px-events__row {
+		flex-wrap: wrap;
+	}
+
+	.lw-px-events__actions {
+		width: 100%;
+		padding-left: 48px;
+	}
+
+	.lw-px-keyrow {
+		flex-wrap: wrap;
+	}
+}
