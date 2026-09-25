@@ -46,6 +46,14 @@ final class Hasher {
 	public static function build_user_data( array $raw ): array {
 		$out = [];
 
+		// Meta: "Use only the first 5 digits for U.S. zip codes" (ZIP+4).
+		if ( isset( $raw['zp'] ) && 'us' === self::lowercase( trim( (string) ( $raw['country'] ?? '' ) ) ) ) {
+			$digits = (string) preg_replace( '/\D+/', '', (string) $raw['zp'] );
+			if ( strlen( $digits ) >= 5 ) {
+				$raw['zp'] = substr( $digits, 0, 5 );
+			}
+		}
+
 		foreach ( $raw as $field => $value ) {
 			$hashed = self::hash( (string) $field, (string) $value );
 			if ( null !== $hashed ) {
@@ -96,7 +104,8 @@ final class Hasher {
 			case 'st':
 				return preg_replace( '/[^a-z]/', '', $value ) ?? '';
 			case 'zp':
-				return preg_replace( '/\s+/', '', $value ) ?? '';
+				// Meta: "lowercase with no spaces and no dash".
+				return preg_replace( '/[\s-]+/', '', $value ) ?? '';
 			case 'country':
 				return substr( $value, 0, 2 );
 			case 'ge':
