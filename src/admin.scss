@@ -1395,3 +1395,59 @@ body.lw-pixel-screen {
 		flex-wrap: wrap;
 	}
 }
+
+// Forms tab: form plugins not installed here sit in a collapsed group -------------
+
+.lw-px-forms__empty {
+	margin: 0;
+	padding: $gap-md $gap-sm;
+	color: $muted;
+}
+
+.lw-px-forms__missing {
+	margin-top: $gap-sm;
+	border-top: 1px solid $stroke-weak;
+	padding-top: $gap-sm;
+
+	.lw-px-switch {
+		opacity: 0.72;
+	}
+}
+
+.lw-px-forms__toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: $gap-sm;
+	border: 0;
+	border-radius: $radius;
+	background: none;
+	color: $muted;
+	font: inherit;
+	font-weight: 500;
+	cursor: pointer;
+
+	svg {
+		fill: currentColor;
+	}
+
+	&:hover {
+		color: $text;
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	&:focus-visible {
+		outline: 2px solid $brand;
+		outline-offset: 1px;
+	}
+}
+
+.lw-px-forms__note {
+	margin: 0;
+	padding: 0 $gap-sm $gap-sm;
+	color: $muted;
+	font-size: 13px;
+}

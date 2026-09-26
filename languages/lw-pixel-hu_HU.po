@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LW Pixel\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
-"POT-Creation-Date: 2026-09-25T23:33:13+00:00\n"
+"POT-Creation-Date: 2026-09-26T04:18:58+00:00\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,8 +48,7 @@ msgid "Lightweight plugins for WordPress - minimal footprint, maximum impact."
 msgstr ""
 "Könnyűsúlyú WordPress-bővítmények – minimális terhelés, maximális hatás."
 
-#: includes/Admin/ParentPage.php:181 build/index.js:1 build/index.js:11
-#: build/index.js:15
+#: includes/Admin/ParentPage.php:181 build/index.js:1 build/index.js:12
 msgid "Active"
 msgstr "Aktív"
 
@@ -62,7 +61,7 @@ msgid "Get Plugin"
 msgstr "Bővítmény letöltése"
 
 #: includes/Admin/SettingsPage.php:62 includes/Admin/SettingsPage.php:63
-#: build/index.js:13
+#: build/index.js:14
 msgid "Pixel"
 msgstr "Pixel"
 
@@ -155,7 +154,7 @@ msgid "Click element (CSS selector)"
 msgstr "Elemre kattintás (CSS-szelektor)"
 
 #: includes/CustomEvents/MetaBoxRenderer.php:99 build/index.js:7
-#: build/index.js:14
+#: build/index.js:15
 msgid "Time on page"
 msgstr "Oldalon töltött idő"
 
@@ -199,11 +198,11 @@ msgstr "Nincs egyéni esemény."
 msgid "No custom events in trash."
 msgstr "Nincs egyéni esemény a lomtárban."
 
-#: includes/Pixels/BingPixel.php:38 build/index.js:14
+#: includes/Pixels/BingPixel.php:38 build/index.js:15
 msgid "Microsoft Bing UET"
 msgstr "Microsoft Bing UET"
 
-#: includes/Pixels/ChatGptPixel.php:27 build/index.js:1 build/index.js:13
+#: includes/Pixels/ChatGptPixel.php:27 build/index.js:1 build/index.js:14
 msgid "ChatGPT Ads"
 msgstr "ChatGPT Ads"
 
@@ -211,35 +210,35 @@ msgstr "ChatGPT Ads"
 msgid "Meta (Facebook) Pixel"
 msgstr "Meta (Facebook) Pixel"
 
-#: includes/Pixels/GoogleAds.php:22 build/index.js:14
+#: includes/Pixels/GoogleAds.php:22 build/index.js:15
 msgid "Google Ads"
 msgstr "Google Ads"
 
-#: includes/Pixels/GoogleAnalytics4.php:42 build/index.js:14
+#: includes/Pixels/GoogleAnalytics4.php:42 build/index.js:15
 msgid "Google Analytics 4"
 msgstr "Google Analytics 4"
 
-#: includes/Pixels/GoogleTagManager.php:22 build/index.js:14
+#: includes/Pixels/GoogleTagManager.php:22 build/index.js:15
 msgid "Google Tag Manager"
 msgstr "Google Tag Manager"
 
-#: includes/Pixels/PinterestPixel.php:39 build/index.js:14
+#: includes/Pixels/PinterestPixel.php:39 build/index.js:15
 msgid "Pinterest Tag"
 msgstr "Pinterest Tag"
 
-#: includes/Pixels/RedditPixel.php:39 build/index.js:14
+#: includes/Pixels/RedditPixel.php:39 build/index.js:15
 msgid "Reddit Pixel"
 msgstr "Reddit Pixel"
 
-#: includes/Pixels/SnapchatPixel.php:39 build/index.js:14
+#: includes/Pixels/SnapchatPixel.php:39 build/index.js:15
 msgid "Snapchat Pixel"
 msgstr "Snapchat Pixel"
 
-#: includes/Pixels/TikTokPixel.php:39 build/index.js:14
+#: includes/Pixels/TikTokPixel.php:39 build/index.js:15
 msgid "TikTok Pixel"
 msgstr "TikTok Pixel"
 
-#: includes/Pixels/XPixel.php:40 build/index.js:14
+#: includes/Pixels/XPixel.php:40 build/index.js:15
 msgid "X (Twitter) Pixel"
 msgstr "X (Twitter) Pixel"
 
@@ -561,7 +560,7 @@ msgstr "Egyéni esemény törölve."
 msgid "LW Plugins (opens in a new tab)"
 msgstr "LW Plugins (új lapon nyílik meg)"
 
-#: build/index.js:1 build/index.js:14
+#: build/index.js:1 build/index.js:15
 msgid "Pixels"
 msgstr "Pixelek"
 
@@ -577,7 +576,7 @@ msgstr "Adatvédelem"
 msgid "Overview"
 msgstr "Áttekintés"
 
-#: build/index.js:1 build/index.js:13
+#: build/index.js:1 build/index.js:14
 msgid "Meta"
 msgstr "Meta"
 
@@ -613,7 +612,7 @@ msgstr "Események"
 msgid "Forms"
 msgstr "Űrlapok"
 
-#: build/index.js:1 build/index.js:14
+#: build/index.js:1 build/index.js:15
 msgid "Form integrations"
 msgstr "Űrlap-integrációk"
 
@@ -621,11 +620,11 @@ msgstr "Űrlap-integrációk"
 msgid "WooCommerce"
 msgstr "WooCommerce"
 
-#: build/index.js:1 build/index.js:7 build/index.js:13
+#: build/index.js:1 build/index.js:7 build/index.js:14
 msgid "Custom events"
 msgstr "Egyéni események"
 
-#: build/index.js:1 build/index.js:13
+#: build/index.js:1 build/index.js:14
 msgid "Consent"
 msgstr "Hozzájárulás"
 
@@ -641,7 +640,7 @@ msgstr "Haladó"
 msgid "Tools"
 msgstr "Eszközök"
 
-#: build/index.js:1 build/index.js:14
+#: build/index.js:1 build/index.js:15
 msgid "New"
 msgstr "Új"
 
@@ -689,12 +688,12 @@ msgstr "Mentés"
 msgid "Set in wp-config.php"
 msgstr "A wp-config.php-ban van megadva"
 
-#: build/index.js:1 build/index.js:7 build/index.js:11
+#: build/index.js:1 build/index.js:7 build/index.js:12
 msgid "On"
 msgstr "Be"
 
-#: build/index.js:1 build/index.js:7 build/index.js:9 build/index.js:11
-#: build/index.js:13 build/index.js:15
+#: build/index.js:1 build/index.js:7 build/index.js:9 build/index.js:12
+#: build/index.js:14 build/index.js:16
 msgid "Off"
 msgstr "Ki"
 
@@ -888,102 +887,111 @@ msgstr "%s törlése"
 msgid "Delete the custom event \"%s\"?"
 msgstr "Törlöd a(z) „%s” egyéni eseményt?"
 
-#: build/index.js:11
+#. translators: %s: form plugin name.
+#: build/index.js:12
+msgid "Track %s submissions"
+msgstr "%s beküldések követése"
+
+#: build/index.js:12
+msgid "Not installed"
+msgstr "Nincs telepítve"
+
+#: build/index.js:12
 msgid "Yes"
 msgstr "Igen"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "No"
 msgstr "Nem"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "(active)"
 msgstr "(aktív)"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "(not active)"
 msgstr "(nem aktív)"
 
-#: build/index.js:11 build/index.js:14
+#: build/index.js:12 build/index.js:15
 msgid "ID missing"
 msgstr "Hiányzik az azonosító"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "Set (hidden)"
 msgstr "Megadva (rejtve)"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "Not set"
 msgstr "Nincs megadva"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "empty"
 msgstr "üres"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "Detected"
 msgstr "Észlelve"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "Not detected"
 msgstr "Nem észlelhető"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid ""
 "Save or discard your changes first: the import writes the saved settings."
 msgstr ""
 "Előbb mentsd vagy vesd el a módosításaidat: az importálás a mentett "
 "beállításokat írja."
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "This will overwrite matching LW Pixel options. Continue?"
 msgstr "Ez felülírja a megfelelő LW Pixel beállításokat. Folytatod?"
 
-#: build/index.js:11
+#: build/index.js:12
 msgid "Import"
 msgstr "Importálás"
 
 #. translators: %d: number of imported settings.
-#: build/index.js:12
+#: build/index.js:13
 msgid "Import finished: %d setting updated."
 msgid_plural "Import finished: %d settings updated."
 msgstr[0] "Importálás kész: %d beállítás frissítve."
 msgstr[1] "Importálás kész: %d beállítás frissítve."
 
 #. translators: %d: number of settings.
-#: build/index.js:13
+#: build/index.js:14
 msgid "Import %d setting"
 msgid_plural "Import %d settings"
 msgstr[0] "%d beállítás importálása"
 msgstr[1] "%d beállítás importálása"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid ""
 "Source plugin is not active and no legacy data was found in the database."
 msgstr ""
 "A forrásbővítmény nem aktív, és régi adat sem található az adatbázisban."
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Nothing to migrate — no matching settings were found."
 msgstr "Nincs mit átvinni – nem található megfelelő beállítás."
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "LW Pixel option"
 msgstr "LW Pixel beállítás"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Current value"
 msgstr "Jelenlegi érték"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Will become"
 msgstr "Új érték"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Import settings from another plugin"
 msgstr "Beállítások importálása másik bővítményből"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid ""
 "Bring your existing pixel configuration over to LW Pixel without retyping "
 "every ID."
@@ -991,15 +999,15 @@ msgstr ""
 "Hozd át a meglévő pixelbeállításaidat az LW Pixelbe anélkül, hogy minden "
 "azonosítót újra be kellene írnod."
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Report copied."
 msgstr "Jelentés vágólapra másolva."
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "System report"
 msgstr "Rendszerjelentés"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid ""
 "Attach it to a support request. Secrets and custom code are left out (only "
 "their length is shown)."
@@ -1007,174 +1015,174 @@ msgstr ""
 "Csatold egy támogatási kéréshez. A titkos kulcsok és az egyéni kód kimarad "
 "(csak a hosszuk látszik)."
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Copy"
 msgstr "Másolás"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Download"
 msgstr "Letöltés"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Pixel status"
 msgstr "Pixelek állapota"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Enabled"
 msgstr "Bekapcsolva"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Configured"
 msgstr "Beállítva"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "System report (JSON)"
 msgstr "Rendszerjelentés (JSON)"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "GA4"
 msgstr "GA4"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid ""
 "This overview shows the saved settings. Save your changes to see them here."
 msgstr ""
 "Ez az áttekintés a mentett beállításokat mutatja. Mentsd a módosításaidat, "
 "hogy itt is lásd őket."
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Active pixels"
 msgstr "Aktív pixelek"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Switched on and configured"
 msgstr "Bekapcsolva és beállítva"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Server-side"
 msgstr "Szerveroldali"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Conversions sent from your server"
 msgstr "A szerveredről küldött konverziók"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "LW Cookie"
 msgstr "LW Cookie"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Not managed"
 msgstr "Nincs kezelve"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Pixels wait for consent"
 msgstr "A pixelek megvárják a hozzájárulást"
 
-#: build/index.js:13
+#: build/index.js:14
 msgid "Every pixel fires"
 msgstr "Minden pixel lefut"
 
 #. translators: %d: number of enabled custom events.
-#: build/index.js:14
+#: build/index.js:15
 msgid "%d event switched on"
 msgid_plural "%d events switched on"
 msgstr[0] "%d esemény bekapcsolva"
 msgstr[1] "%d esemény bekapcsolva"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Every ad and analytics platform LW Pixel can send your events to."
 msgstr ""
 "Minden hirdetési és analitikai platform, ahová az LW Pixel eseményeket tud "
 "küldeni."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Configure"
 msgstr "Beállítás"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Detected plugins"
 msgstr "Észlelt bővítmények"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Meta Pixel"
 msgstr "Meta Pixel"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Pixel ID missing"
 msgstr "Hiányzik a pixelazonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Loads the Meta (Facebook, Instagram) pixel and sends your events to it."
 msgstr ""
 "Betölti a Meta (Facebook, Instagram) pixelt, és elküldi neki az eseményeidet."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Pixel ID"
 msgstr "Pixelazonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your Meta Pixel ID (numeric)."
 msgstr "A Meta Pixel azonosítód (szám)."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Enable advanced matching for logged-in users"
 msgstr "Speciális egyeztetés bejelentkezett felhasználóknál"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Sends hashed email/phone to improve match rate."
 msgstr "Hashelt e-mail-címet/telefonszámot küld a jobb egyezési arányért."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Conversion API (server-side)"
 msgstr "Conversion API (szerveroldali)"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Token or pixel ID missing"
 msgstr "Hiányzik a token vagy a pixelazonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Send events server-side via Conversion API"
 msgstr "Események küldése szerveroldalról a Conversion API-n keresztül"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Access Token"
 msgstr "Hozzáférési token"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Generate in Events Manager → Settings → Conversion API."
 msgstr "Az Eseménykezelőben hozhatod létre: Beállítások → Conversion API."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Test event code"
 msgstr "Teszteseménykód"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Optional. Use to test events in Events Manager → Test Events."
 msgstr ""
 "Nem kötelező. Az Eseménykezelő → Teszteseményeknél ellenőrizheted vele az "
 "eseményeket."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Send external_id (logged-in user ID, hashed) for better matching"
 msgstr ""
 "external_id küldése (bejelentkezett felhasználó azonosítója, hashelve) a "
 "jobb egyeztetésért"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Re-send Purchase to CAPI when WooCommerce order completes/processes"
 msgstr ""
 "Vásárlás újraküldése a CAPI-nak, amikor a WooCommerce-rendelés feldolgozás "
 "alatt/teljesítve állapotba kerül"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Captures the final order value after payment confirmation."
 msgstr "A fizetés visszaigazolása utáni végleges rendelési értéket rögzíti."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "WooCommerce is not active, so there are no orders to re-send."
 msgstr "A WooCommerce nem aktív, így nincs újraküldhető rendelés."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "The Conversion API needs the Pixel ID above too, even when the browser pixel "
 "is off."
@@ -1182,39 +1190,39 @@ msgstr ""
 "A Conversion API-hoz a fenti pixelazonosító is kell, akkor is, ha a "
 "böngészős pixel ki van kapcsolva."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Measurement ID missing"
 msgstr "Hiányzik a mérési azonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Enable Google Analytics 4"
 msgstr "Google Analytics 4 bekapcsolása"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Measurement ID"
 msgstr "Mérési azonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your GA4 Measurement ID (starts with G-)."
 msgstr "A GA4 mérési azonosítód (G- kezdetű)."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Anonymize IP addresses"
 msgstr "IP-címek anonimizálása"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Debug Mode"
 msgstr "Hibakereső mód"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Enable debug mode (use Realtime + DebugView)"
 msgstr "Hibakereső mód bekapcsolása (Valós idejű + DebugView)"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Measurement Protocol"
 msgstr "Measurement Protocol"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "Send server-side events via the GA4 Measurement Protocol. Only used when GA4 "
 "is loaded outside LW Pixel (e.g. through Tag Manager): with the GA4 tag "
@@ -1226,70 +1234,70 @@ msgstr ""
 "keresztül): ha a fenti GA4 tag be van kapcsolva, minden eseményt – a "
 "vásárlást is – a böngésző küld, így semmi sem duplázódik."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "MP API Secret"
 msgstr "MP API-titok"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "Generate in GA4 Admin → Data Streams → Measurement Protocol API secrets."
 msgstr ""
 "A GA4 Adminban hozhatod létre: Adatfolyamok → Measurement Protocol API-"
 "titkok."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Conversion ID missing"
 msgstr "Hiányzik a konverziós azonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Enable Google Ads conversion tracking"
 msgstr "Google Ads konverziókövetés bekapcsolása"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Conversion ID"
 msgstr "Konverziós azonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your Google Ads Conversion ID (starts with AW-)."
 msgstr "A Google Ads konverziós azonosítód (AW- kezdetű)."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Conversion label"
 msgstr "Konverziós címke"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Used for the Purchase event conversion."
 msgstr "A Vásárlás esemény konverziójához használatos."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Container ID missing"
 msgstr "Hiányzik a tárolóazonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Enable Google Tag Manager"
 msgstr "Google Tag Manager bekapcsolása"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Container ID"
 msgstr "Tárolóazonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your GTM container ID (starts with GTM-)."
 msgstr "A GTM-tárolód azonosítója (GTM- kezdetű)."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Push to dataLayer only (do not load the GTM script)"
 msgstr "Csak a dataLayerbe küldés (a GTM-szkript ne töltődjön be)"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Useful when the GTM script is loaded by another plugin."
 msgstr "Hasznos, ha a GTM-szkriptet egy másik bővítmény tölti be."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "ChatGPT Ads pixel"
 msgstr "ChatGPT Ads pixel"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "Measure the purchases, sign-ups and leads your ChatGPT ads bring. Loads the "
 "ChatGPT Ads measurement pixel in the browser (marketing consent)."
@@ -1298,15 +1306,15 @@ msgstr ""
 "érdeklődőket. Betölti a ChatGPT Ads mérőpixelt a böngészőben (marketing-"
 "hozzájárulással)."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your ChatGPT Ads pixel ID from the Ads Manager."
 msgstr "A ChatGPT Ads pixelazonosítód az Ads Managerből."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Advanced matching"
 msgstr "Speciális egyeztetés"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "Sends SHA-256 hashed email, phone, name and user ID (logged-in users in the "
 "browser, the customer’s billing data with server-side purchases) to improve "
@@ -1316,11 +1324,11 @@ msgstr ""
 "azonosítót küld (a böngészőben a bejelentkezett felhasználóét, szerveroldali "
 "vásárlásnál a vevő számlázási adatait) a pontosabb hozzárendelésért."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Debug mode"
 msgstr "Hibakereső mód"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "Logs every pixel call in the browser console (test mode). Turn off on a live "
 "site."
@@ -1328,15 +1336,15 @@ msgstr ""
 "Minden pixelhívást kiír a böngésző konzoljára (tesztmód). Éles oldalon "
 "kapcsold ki."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Conversions API (server-side)"
 msgstr "Conversions API (szerveroldali)"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "API key or pixel ID missing"
 msgstr "Hiányzik az API-kulcs vagy a pixelazonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "Also sends conversions from your server, deduplicated with the browser "
 "events."
@@ -1344,11 +1352,11 @@ msgstr ""
 "A konverziókat a szerveredről is elküldi, a böngészős eseményekkel "
 "duplikáció nélkül."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Conversions API key"
 msgstr "Conversions API-kulcs"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "Create it in the Ads Manager. Stored in the database; you can instead define "
 "LW_PIXEL_CHATGPT_API_KEY in wp-config.php (takes precedence)."
@@ -1357,7 +1365,7 @@ msgstr ""
 "megadhatod az LW_PIXEL_CHATGPT_API_KEY konstanst is a wp-config.php-ban (az "
 "élvez elsőbbséget)."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "Browser and server-side events respect the marketing consent category of LW "
 "Cookie. Without a consent plugin they are sent to every visitor."
@@ -1366,194 +1374,194 @@ msgstr ""
 "marketing hozzájárulási kategóriáját. Hozzájáruláskezelő bővítmény nélkül "
 "minden látogatónál elküldődnek."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your TikTok Pixel ID (from Events Manager)."
 msgstr "A TikTok pixelazonosítód (az Eseménykezelőből)."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Tag ID"
 msgstr "Címkeazonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your Pinterest Tag ID."
 msgstr "A Pinterest Tag azonosítód."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "UET Tag ID"
 msgstr "UET-címkeazonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your Bing UET Tag ID."
 msgstr "A Bing UET-címkeazonosítód."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Advertiser ID"
 msgstr "Hirdetőazonosító"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your Reddit Advertiser ID."
 msgstr "A Reddit hirdetőazonosítód."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your Snapchat Pixel ID (UUID format)."
 msgstr "A Snapchat pixelazonosítód (UUID formátum)."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Your X Universal Pixel ID."
 msgstr "Az X Universal Pixel azonosítód."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Standard events"
 msgstr "Alapesemények"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Sent to every active pixel, each in its own event format."
 msgstr "Minden aktív pixel megkapja, mindegyik a saját eseményformátumában."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "PageView"
 msgstr "PageView"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire PageView on every page"
 msgstr "PageView futtatása minden oldalon"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "ViewContent"
 msgstr "ViewContent"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire ViewContent on singular templates (posts, pages, CPTs)"
 msgstr ""
 "ViewContent futtatása egyedi sablonokon (bejegyzések, oldalak, egyéni "
 "tartalomtípusok)"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Search"
 msgstr "Search"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire Search on the search results page"
 msgstr "Search futtatása a keresési találatok oldalán"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Lead"
 msgstr "Lead"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "Fire Lead on form submissions. Choose the form plugins on the Forms screen."
 msgstr ""
 "Lead futtatása űrlapküldéskor. Az űrlapbővítményeket az Űrlapok képernyőn "
 "választhatod ki."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Auto-tracked events"
 msgstr "Automatikusan követett események"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Visitor behaviour tracked without any code."
 msgstr "A látogatói viselkedés követése kód nélkül."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Scroll depth"
 msgstr "Görgetési mélység"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire Scroll events at percentage thresholds"
 msgstr "Scroll események futtatása százalékos küszöböknél"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Thresholds (%)"
 msgstr "Küszöbök (%)"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Comma-separated percentages (1–100)."
 msgstr "Vesszővel elválasztott százalékok (1–100)."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire TimeOnPage events at second thresholds"
 msgstr "TimeOnPage események futtatása másodperces küszöböknél"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Thresholds (seconds)"
 msgstr "Küszöbök (másodperc)"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Comma-separated seconds."
 msgstr "Vesszővel elválasztott másodpercek."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Downloads"
 msgstr "Letöltések"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire Download events on file links"
 msgstr "Download események futtatása fájlhivatkozásokon"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "File extensions"
 msgstr "Fájlkiterjesztések"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Comma-separated file extensions to track."
 msgstr "A követendő fájlkiterjesztések vesszővel elválasztva."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Login"
 msgstr "Bejelentkezés"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire Login event when a user logs in"
 msgstr "Login esemény futtatása, amikor egy felhasználó bejelentkezik"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Sign-up"
 msgstr "Regisztráció"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire CompleteRegistration event on user signup"
 msgstr "CompleteRegistration esemény futtatása felhasználói regisztrációkor"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Comment"
 msgstr "Hozzászólás"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire Comment event on new comment submission"
 msgstr "Comment esemény futtatása új hozzászólás beküldésekor"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Phone clicks"
 msgstr "Telefonszám-kattintások"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire a Contact event when a visitor clicks a tel: link"
 msgstr "Contact esemény futtatása, ha a látogató egy tel: hivatkozásra kattint"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Email clicks"
 msgstr "E-mail-kattintások"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire a Contact event when a visitor clicks a mailto: link"
 msgstr ""
 "Contact esemény futtatása, ha a látogató egy mailto: hivatkozásra kattint"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Thank-you pages"
 msgstr "Köszönőoldalak"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Fire a Lead event when the URL matches one of the fragments below"
 msgstr ""
 "Lead esemény futtatása, ha az URL tartalmazza az alábbi részletek egyikét"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "URL fragments"
 msgstr "URL-részletek"
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "One URL fragment per line, e.g. koszonjuk. Matched case-insensitively "
 "against the page address, including any query string."
@@ -1561,7 +1569,7 @@ msgstr ""
 "Soronként egy URL-részlet, pl. koszonjuk. Kis- és nagybetűtől függetlenül "
 "vetjük össze az oldal címével, a lekérdezési paramétereket is beleértve."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "A successful submission fires a Lead event, also when the form is sent "
 "without reloading the page."
@@ -1569,7 +1577,7 @@ msgstr ""
 "A sikeres beküldés Lead eseményt futtat, akkor is, ha az űrlap oldal-"
 "újratöltés nélkül küldődik el."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid ""
 "The Lead event is switched off on the Events screen, so form submissions are "
 "not tracked."
@@ -1577,20 +1585,30 @@ msgstr ""
 "A Lead esemény ki van kapcsolva az Események képernyőn, így az "
 "űrlapküldéseket nem követjük."
 
-#: build/index.js:14
+#: build/index.js:15
 msgid "Open Events"
 msgstr "Események megnyitása"
 
-#. translators: %s: form plugin name.
 #: build/index.js:15
-msgid "Track %s submissions"
-msgstr "%s beküldések követése"
+msgid "None of the supported form plugins is installed on this site."
+msgstr "Egyik támogatott űrlap-bővítmény sincs telepítve ezen az oldalon."
 
-#: build/index.js:15
-msgid "Not installed"
-msgstr "Nincs telepítve"
+#. translators: %d: number of form plugins.
+#: build/index.js:16
+msgid "Not installed (%d)"
+msgid_plural "Not installed (%d)"
+msgstr[0] "Nem telepített (%d)"
+msgstr[1] "Nem telepített (%d)"
 
-#: build/index.js:15
+#: build/index.js:16
+msgid ""
+"Tracking starts automatically once you install one of these, while its "
+"switch is on."
+msgstr ""
+"Ha telepíted valamelyiket, a követés automatikusan elindul, amíg a "
+"kapcsolója be van kapcsolva."
+
+#: build/index.js:16
 msgid ""
 "WooCommerce is not active. Activate it to enable ecommerce events. Your "
 "settings here are kept until then."
@@ -1598,103 +1616,103 @@ msgstr ""
 "A WooCommerce nem aktív. Kapcsold be a webáruházas eseményekhez. Az itteni "
 "beállításaid addig is megmaradnak."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Ecommerce events"
 msgstr "Webáruházas események"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "View Product"
 msgstr "Termék megtekintése"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Fire ViewContent on product pages"
 msgstr "ViewContent futtatása a termékoldalakon"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "View Category"
 msgstr "Kategória megtekintése"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Fire ViewCategory on category archives"
 msgstr "ViewCategory futtatása a kategóriaarchívumokon"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "View Cart"
 msgstr "Kosár megtekintése"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Fire ViewCart on the cart page"
 msgstr "ViewCart futtatása a kosár oldalon"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Add to Cart"
 msgstr "Kosárba helyezés"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Fire AddToCart when products are added"
 msgstr "AddToCart futtatása, amikor termék kerül a kosárba"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Initiate Checkout"
 msgstr "Pénztár indítása"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Fire InitiateCheckout on the checkout page"
 msgstr "InitiateCheckout futtatása a pénztár oldalon"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Add Payment Info"
 msgstr "Fizetési adatok megadása"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Fire AddPaymentInfo when payment method is selected"
 msgstr "AddPaymentInfo futtatása a fizetési mód kiválasztásakor"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Purchase"
 msgstr "Vásárlás"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Fire Purchase on the order-received page"
 msgstr "Purchase futtatása a rendelés visszaigazoló oldalán"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Product data"
 msgstr "Termékadatok"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Use SKU"
 msgstr "Cikkszám használata"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Use product SKU as content_id (instead of post ID)"
 msgstr "A termék cikkszáma legyen a content_id (a bejegyzésazonosító helyett)"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Include tax in event value"
 msgstr "Az eseményérték tartalmazza az adót"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Content ID prefix"
 msgstr "Content ID előtag"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Optional prefix for content_id (e.g. \"wc_post_id_\")."
 msgstr "Nem kötelező előtag a content_id elé (pl. „wc_post_id_”)."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Marketing"
 msgstr "Marketing"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Analytics"
 msgstr "Statisztika"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Functional"
 msgstr "Funkcionális"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid ""
 "LW Cookie is active: every pixel waits until the visitor accepts its "
 "category, also on cached pages."
@@ -1702,7 +1720,7 @@ msgstr ""
 "Az LW Cookie aktív: minden pixel megvárja, hogy a látogató elfogadja a "
 "kategóriáját, gyorsítótárazott oldalakon is."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid ""
 "No consent plugin detected. Without LW Cookie (or a consent plugin that uses "
 "the lw_pixel_is_category_allowed filter) every pixel fires for every visitor."
@@ -1711,11 +1729,11 @@ msgstr ""
 "lw_pixel_is_category_allowed szűrőt használó hozzájáruláskezelő) nélkül "
 "minden pixel minden látogatónál lefut."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Consent categories"
 msgstr "Hozzájárulási kategóriák"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid ""
 "Choose the cookie category each pixel belongs to. A pixel fires only after "
 "the visitor accepts that category."
@@ -1723,23 +1741,23 @@ msgstr ""
 "Válaszd ki, melyik sütikategóriába tartozzon az egyes pixel. A pixel csak "
 "akkor fut le, ha a látogató elfogadta azt a kategóriát."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Not gated (always fires)"
 msgstr "Nincs korlátozva (mindig lefut)"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Auto (Meta resolves geo)"
 msgstr "Automatikus (a Meta határozza meg a helyet)"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Force California"
 msgstr "Mindig Kalifornia"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Medical traffic mode"
 msgstr "Egészségügyi forgalom mód"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid ""
 "Strips identifiable parameters (IP, UA, advanced matching, page URL params) "
 "from event payloads. Recommended for healthcare / medical sites."
@@ -1748,15 +1766,15 @@ msgstr ""
 "speciális egyeztetés, URL-paraméterek) az eseményekből. Egészségügyi "
 "oldalakhoz ajánlott."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Treat this site as medical / health traffic"
 msgstr "Az oldal forgalmának kezelése egészségügyi forgalomként"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Limited Data Use (LDU)"
 msgstr "Korlátozott adathasználat (LDU)"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid ""
 "Adds the Meta data_processing_options block to CAPI events for California "
 "(CCPA) compliance."
@@ -1764,15 +1782,15 @@ msgstr ""
 "Hozzáadja a Meta data_processing_options blokkját a CAPI eseményekhez a "
 "kaliforniai (CCPA) megfelelőségért."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Mark events with LDU"
 msgstr "Események megjelölése LDU-val"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "LDU mode"
 msgstr "LDU mód"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid ""
 "\"Auto\" lets Meta resolve geo. \"Force California\" sets country=1, "
 "state=1000."
@@ -1780,7 +1798,7 @@ msgstr ""
 "Az „Automatikus” esetén a Meta határozza meg a helyet. A „Mindig Kalifornia” "
 "beállítja: country=1, state=1000."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid ""
 "LDU applies to Meta Conversion API events, which are switched off on the "
 "Meta screen."
@@ -1788,26 +1806,26 @@ msgstr ""
 "Az LDU a Meta Conversion API eseményeire vonatkozik, ezek viszont ki vannak "
 "kapcsolva a Meta képernyőn."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "General"
 msgstr "Általános"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Do not load pixels for users with manage_options capability"
 msgstr ""
 "A pixelek ne töltődjenek be manage_options jogosultságú felhasználóknál"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Recommended. Prevents your own admin sessions from polluting reports."
 msgstr ""
 "Ajánlott. Így a saját adminisztrátori munkameneteid nem torzítják a "
 "jelentéseket."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Custom code"
 msgstr "Egyéni kód"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid ""
 "Raw HTML/JS injected on every page. No sanitization is performed — make sure "
 "your code is trusted."
@@ -1815,7 +1833,7 @@ msgstr ""
 "Minden oldalra beillesztett nyers HTML/JS. Nincs szűrés – csak megbízható "
 "kódot használj."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid ""
 "Read only: your account may not post unfiltered HTML (on multisite only "
 "super admins can), so you cannot change custom code here."
@@ -1823,14 +1841,14 @@ msgstr ""
 "Csak olvasható: a fiókod nem tehet közzé szűretlen HTML-t (multisite-on csak "
 "a szuperadminisztrátor teheti), ezért itt nem módosíthatod az egyéni kódot."
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "<head> code"
 msgstr "<head> kód"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "After <body>"
 msgstr "A <body> után"
 
-#: build/index.js:15
+#: build/index.js:16
 msgid "Before </body>"
 msgstr "A </body> előtt"
