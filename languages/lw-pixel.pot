@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-26T04:26:57+00:00\n"
+"POT-Creation-Date: 2026-09-26T13:54:34+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: lw-pixel\n"
@@ -32,9 +32,10 @@ msgstr ""
 
 #. Author of the plugin
 #: lw-pixel.php
-#: includes/Admin/ParentPage.php:97
-#: includes/Admin/ParentPage.php:98
-#: includes/Admin/ParentPage.php:119
+#: includes/Admin/Hub/Page.php:59
+#: includes/Admin/Hub/Page.php:60
+#: includes/Admin/Hub/Page.php:134
+#: assets/hub/index.js:5
 msgid "LW Plugins"
 msgstr ""
 
@@ -43,23 +44,68 @@ msgstr ""
 msgid "https://lwplugins.com"
 msgstr ""
 
-#: includes/Admin/ParentPage.php:120
-msgid "Lightweight plugins for WordPress - minimal footprint, maximum impact."
+#: includes/Admin/Hub/Activator.php:48
+msgid "This is not an LW plugin."
 msgstr ""
 
-#: includes/Admin/ParentPage.php:181
-#: build/index.js:1
-#: build/index.js:11
-msgid "Active"
+#: includes/Admin/Hub/Activator.php:54
+msgid "This plugin is not installed."
 msgstr ""
 
-#: includes/Admin/ParentPage.php:188
-#: build/index.js:1
-msgid "Settings"
+#: includes/Admin/Hub/Activator.php:62
+msgid "You are not allowed to activate this plugin."
 msgstr ""
 
-#: includes/Admin/ParentPage.php:192
-msgid "Get Plugin"
+#: includes/Admin/Hub/Page.php:135
+msgid "The LW Plugins page files are missing. Re-install the plugin from a release ZIP."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:32
+msgid "GDPR-compliant cookie consent banner."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:41
+msgid "Disable WordPress features like comments."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:50
+msgid "Enable WordPress features: SVG uploads and more."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:59
+msgid "Rate limiting, bot blocking, IP bans and security headers."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:68
+msgid "Lightweight image optimization — auto-convert uploads to WebP via HelloImg."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:77
+msgid "Headless LMS backend: courses, lessons, access, progress and quizzes over a REST API."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:86
+msgid "Tracking pixels: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:95
+msgid "Malware scanner for files, the database and vulnerable software."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:104
+msgid "Essential SEO features without the bloat."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:113
+msgid "Site maintenance via AI/REST using Abilities API."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:122
+msgid "Manage WordPress translations from community repositories."
+msgstr ""
+
+#: includes/Admin/Hub/RegistryFallback.php:131
+msgid "Clean up your admin — notices sidebar & widget manager."
 msgstr ""
 
 #: includes/Admin/SettingsPage.php:62
@@ -509,16 +555,169 @@ msgstr ""
 msgid "Autoloader not found. Please run \"composer install\" in the plugin directory, or re-install the plugin from a release ZIP."
 msgstr ""
 
-#: build/index.js:1
-msgid "Loading…"
+#: assets/hub/index.js:1
+msgid "All LW plugins on GitHub"
 msgstr ""
 
+#: assets/hub/index.js:1
+#: build/index.js:1
+msgid "(opens in a new tab)"
+msgstr ""
+
+#: assets/hub/index.js:1
+#: build/index.js:1
+msgid "LW Plugins (opens in a new tab)"
+msgstr ""
+
+#: assets/hub/index.js:1
 #: build/index.js:1
 msgid "Try again"
 msgstr ""
 
+#. translators: %s: plugin name.
+#: assets/hub/index.js:2
+#, js-format
+msgid "%s settings"
+msgstr ""
+
+#: assets/hub/index.js:2
+#: build/index.js:1
+msgid "Settings"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: assets/hub/index.js:3
+#, js-format
+msgid "Activate %s"
+msgstr ""
+
+#: assets/hub/index.js:3
+msgid "Activating…"
+msgstr ""
+
+#: assets/hub/index.js:3
+msgid "Activate"
+msgstr ""
+
+#: assets/hub/index.js:3
+msgid "GitHub"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: assets/hub/index.js:4
+#, js-format
+msgid "%s on GitHub (opens in a new tab)"
+msgstr ""
+
+#: assets/hub/index.js:4
+msgid "All"
+msgstr ""
+
+#: assets/hub/index.js:4
+#: build/index.js:1
+#: build/index.js:11
+msgid "Active"
+msgstr ""
+
+#: assets/hub/index.js:4
+#: build/index.js:1
+msgid "Inactive"
+msgstr ""
+
+#: assets/hub/index.js:4
+msgid "Not installed"
+msgstr ""
+
+#: assets/hub/index.js:4
+msgid "Plugin"
+msgstr ""
+
+#: assets/hub/index.js:4
+msgid "Status"
+msgstr ""
+
+#: assets/hub/index.js:4
+msgid "Version"
+msgstr ""
+
+#: assets/hub/index.js:4
+msgid "Action"
+msgstr ""
+
+#: assets/hub/index.js:4
+msgid "Beta"
+msgstr ""
+
+#: assets/hub/index.js:4
+msgid "No version"
+msgstr ""
+
+#. translators: %s: search text.
+#: assets/hub/index.js:5
+#, js-format
+msgid "No plugins match “%s”."
+msgstr ""
+
+#: assets/hub/index.js:5
+msgid "No plugins in this group."
+msgstr ""
+
+#: assets/hub/index.js:5
+msgid "Show all plugins"
+msgstr ""
+
+#: assets/hub/index.js:5
+#: build/index.js:1
+msgid "Loading…"
+msgstr ""
+
+#: assets/hub/index.js:5
+msgid "Search plugins"
+msgstr ""
+
+#: assets/hub/index.js:5
+msgid "Filter by status"
+msgstr ""
+
+#: assets/hub/index.js:5
+msgid "active"
+msgid_plural "active"
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/hub/index.js:5
+msgid "inactive"
+msgid_plural "inactive"
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/hub/index.js:5
+msgid "not installed"
+msgid_plural "not installed"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of LW plugins listed.
+#: assets/hub/index.js:6
+#, js-format
+msgid "%d LW plugin listed."
+msgid_plural "%d LW plugins listed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/hub/index.js:6
 #: build/index.js:1
 msgid "That did not work. Please reload the page and try again."
+msgstr ""
+
+#. translators: %s: plugin name.
+#: assets/hub/index.js:7
+#, js-format
+msgid "%s is active."
+msgstr ""
+
+#: assets/hub/index.js:7
+msgid "Reload page"
 msgstr ""
 
 #: build/index.js:1
@@ -543,10 +742,6 @@ msgstr ""
 
 #: build/index.js:1
 msgid "Custom event deleted."
-msgstr ""
-
-#: build/index.js:1
-msgid "LW Plugins (opens in a new tab)"
 msgstr ""
 
 #: build/index.js:1
@@ -641,10 +836,6 @@ msgid "New"
 msgstr ""
 
 #: build/index.js:1
-msgid "Inactive"
-msgstr ""
-
-#: build/index.js:1
 msgid "Has invalid settings"
 msgstr ""
 
@@ -658,10 +849,6 @@ msgstr ""
 
 #: build/index.js:1
 msgid "Documentation"
-msgstr ""
-
-#: build/index.js:1
-msgid "(opens in a new tab)"
 msgstr ""
 
 #: build/index.js:1

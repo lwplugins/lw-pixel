@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel;
 
+use LightweightPlugins\Pixel\Admin\Hub\Hub;
 use LightweightPlugins\Pixel\Admin\CustomEventScreen;
 use LightweightPlugins\Pixel\Admin\SettingsPage;
 use LightweightPlugins\Pixel\Compliance\LduMode;
@@ -65,6 +66,7 @@ final class Plugin {
 		$this->event_manager   = new EventManager( $this->pixel_manager, $this->consent_manager );
 
 		$this->init_hooks();
+		Hub::init( LW_PIXEL_FILE );
 		$this->init_components();
 	}
 
