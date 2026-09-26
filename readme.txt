@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,9 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.3.1 =
+* Change: the LW Plugins overview page is now a searchable table showing each LW plugin's status and version, with one-click activation for installed plugins; it always uses the newest version shipped by any active LW plugin.
 
 = 1.3.0 =
 * New: ChatGPT Ads conversion tracking. The ChatGPT Ads measurement pixel in the browser and the Conversions API from the server, deduplicated with a shared event ID: product views, add to cart, checkout started, orders (once per order), form leads, signups, page views and custom events. Consent-gated, optional hashed advanced matching, debug mode and a connection test. The API key can also be set as LW_PIXEL_CHATGPT_API_KEY in wp-config.php.
