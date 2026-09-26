@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LW Pixel\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
-"POT-Creation-Date: 2026-09-26T04:23:58+00:00\n"
+"POT-Creation-Date: 2026-09-26T04:26:57+00:00\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1093,6 +1093,14 @@ msgstr "Beállítás"
 #: build/index.js:14
 msgid "Detected plugins"
 msgstr "Észlelt bővítmények"
+
+#: build/index.js:14
+msgid ""
+"No supported plugin (WooCommerce, LW Cookie or a form plugin) is active on "
+"this site."
+msgstr ""
+"Egyik támogatott bővítmény (WooCommerce, LW Cookie vagy űrlap-bővítmény) "
+"sem aktív ezen az oldalon."
 
 #: build/index.js:14
 msgid "Meta Pixel"

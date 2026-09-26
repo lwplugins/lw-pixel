@@ -76,6 +76,7 @@ function pixelBadge( pixel ) {
  */
 export default function OverviewTab( { store, events } ) {
 	const { meta } = store.data;
+	const detected = PLUGINS.filter( ( [ key ] ) => meta.integrations[ key ] );
 	const saved = store.saved;
 	const active = meta.pixels.filter( ( pixel ) => pixel.configured ).length;
 	const server = [
@@ -181,16 +182,22 @@ export default function OverviewTab( { store, events } ) {
 				</ul>
 			</Section>
 			<Section title={ __( 'Detected plugins', 'lw-pixel' ) }>
-				<ul className="lw-px-plugins">
-					{ PLUGINS.map( ( [ key, label ] ) => (
-						<li key={ key }>
-							<YesNo
-								value={ !! meta.integrations[ key ] }
-								label={ label }
-							/>
-						</li>
-					) ) }
-				</ul>
+				{ detected.length > 0 ? (
+					<ul className="lw-px-plugins">
+						{ detected.map( ( [ key, label ] ) => (
+							<li key={ key }>
+								<YesNo value label={ label } />
+							</li>
+						) ) }
+					</ul>
+				) : (
+					<p className="lw-px-forms__empty">
+						{ __(
+							'No supported plugin (WooCommerce, LW Cookie or a form plugin) is active on this site.',
+							'lw-pixel'
+						) }
+					</p>
+				) }
 			</Section>
 		</>
 	);
