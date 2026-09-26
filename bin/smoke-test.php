@@ -67,8 +67,8 @@ lw_assert( '25,50,75,100' === $defaults['event_scroll_thresholds'], 'event_scrol
 
 echo "\n== Pixel manager ==\n";
 $manager = new PixelManager();
-lw_assert( count( $manager->all() ) === 10, 'PixelManager registers 10 default providers' );
-$expected_pixels = [ 'fb', 'ga4', 'gads', 'gtm', 'tiktok', 'pinterest', 'bing', 'reddit', 'snapchat', 'x' ];
+lw_assert( count( $manager->all() ) === 11, 'PixelManager registers 11 default providers' );
+$expected_pixels = [ 'fb', 'ga4', 'gads', 'gtm', 'tiktok', 'pinterest', 'bing', 'reddit', 'snapchat', 'x', 'chatgpt' ];
 foreach ( $expected_pixels as $id ) {
 	lw_assert( null !== $manager->get( $id ), "Pixel '{$id}' is registered" );
 }
