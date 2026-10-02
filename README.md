@@ -36,7 +36,7 @@ Loads tracking pixels from the major ad networks and dispatches the standard eco
 - **Reddit Pixel** — `rdt`
 - **Snapchat Pixel** — `snaptr`
 - **X (Twitter) Pixel** — `twq`
-- **Barion Pixel** — `bp` (WooCommerce events in Barion's format; the fraud-prevention base pixel can load before consent, the shop events wait for marketing consent, the banner answer is sent as `grantConsent` / `rejectConsent`)
+- **Barion Pixel** — `bp` (WooCommerce events in Barion's format; the fraud-prevention base pixel can load before consent, the shop events wait for marketing consent, the banner answer is sent as `grantConsent` / `rejectConsent`; the Barion Payment Gateway's own pixel is switched off)
 
 ## Supported events
 

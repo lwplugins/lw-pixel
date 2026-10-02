@@ -13,6 +13,7 @@ use LightweightPlugins\Pixel\Admin\Hub\Hub;
 use LightweightPlugins\Pixel\Admin\CustomEventScreen;
 use LightweightPlugins\Pixel\Admin\SettingsPage;
 use LightweightPlugins\Pixel\Compliance\LduMode;
+use LightweightPlugins\Pixel\Barion\GatewayPixel as BarionGatewayPixel;
 use LightweightPlugins\Pixel\Compliance\MedicalMode;
 use LightweightPlugins\Pixel\Consent\Manager as ConsentManager;
 use LightweightPlugins\Pixel\CustomEvents\EventCache as CustomEventCache;
@@ -93,6 +94,7 @@ final class Plugin {
 		DispatchQueue::register();
 		MedicalMode::register();
 		LduMode::register();
+		BarionGatewayPixel::register( $this->pixel_manager );
 		// REST requests are not is_admin(): register the admin routes always.
 		AdminRoutes::register();
 

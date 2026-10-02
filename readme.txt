@@ -90,7 +90,7 @@ The browser and the server copy of an event share one event ID, so each platform
 == Changelog ==
 
 = 1.4.0 =
-* New: Barion Pixel. Loads bp.js and sends the WooCommerce shop events Barion asks for (contentView, addToCart, initiateCheckout, purchase with the order number, categorySelection, search) in the exact shape bp.js validates, plus the SHA-1 hash of the billing email on purchase (switchable). The base pixel can load without consent, as Barion uses it for fraud prevention (switchable); the shop events wait for marketing consent, and the visitor's answer in LW Cookie is passed to Barion as grantConsent / rejectConsent. If another plugin or Tag Manager already loads bp.js, it is not loaded twice.
+* New: Barion Pixel. Loads bp.js and sends the WooCommerce shop events Barion asks for (contentView, addToCart, initiateCheckout, purchase with the order number, categorySelection, search) in the exact shape bp.js validates, plus the SHA-1 hash of the billing email on purchase (switchable). The base pixel can load without consent, as Barion uses it for fraud prevention (switchable); the shop events wait for marketing consent, and the visitor's answer in LW Cookie is passed to Barion as grantConsent / rejectConsent. If another plugin or Tag Manager already loads bp.js, it is not loaded twice. The Barion Payment Gateway plugin's own base pixel (printed without consent when its Pixel ID field is filled) is switched off while this one is configured.
 * New: pixel providers can load a consent-free base script while their events still wait for consent (`BaseWithoutConsentInterface`).
 * New: `lw_pixel_barion_email_hash` filter. Medical mode sends no email hash to Barion.
 

@@ -365,6 +365,13 @@
 				if (typeof window.bp !== 'undefined') {
 					return;
 				}
+				// bp.js names its iframe after this global (or a short inline
+				// script holding the ID) and ignores the init call for that:
+				// without it the iframe reports "Base code implementaion not
+				// found" and no event is sent. bp.js builds the iframe on the
+				// window load event, so a pixel first loaded after that event
+				// (consent given without a reload) starts on the next page.
+				window.barion_pixel_id = config.pixelId;
 				/* eslint-disable */
 				(function (b, a, r, i, o, n, p) {
 					b['BarionAnalyticsObject'] = o;
