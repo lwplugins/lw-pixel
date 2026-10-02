@@ -7,6 +7,7 @@ import {
 	commentAuthorAvatar,
 	media,
 	mobile,
+	payment,
 	pin,
 	search,
 } from '@wordpress/icons';
@@ -16,6 +17,7 @@ import {
  */
 import { TextRow } from '../components/Fields';
 import ProviderCard, { stateBadge } from '../components/ProviderCard';
+import { OptionSwitch, SwitchList } from '../components/Switches';
 
 /**
  * The single-ID networks, in the classic order.
@@ -77,6 +79,36 @@ const networks = () => [
 		help: __( 'Your X Universal Pixel ID.', 'lw-pixel' ),
 		placeholder: 'oXXXX',
 	},
+	{
+		prefix: 'barion',
+		idKey: 'barion_pixel_id',
+		title: __( 'Barion Pixel', 'lw-pixel' ),
+		icon: payment,
+		idTitle: __( 'Pixel ID', 'lw-pixel' ),
+		help: __(
+			'Your Barion Pixel ID, from your Barion wallet. An ID starting with BPT is not a Pixel ID.',
+			'lw-pixel'
+		),
+		placeholder: 'BP-XXXXXXXXXX-XX',
+		switches: [
+			{
+				name: 'barion_base_without_consent',
+				title: __( 'Base pixel without consent', 'lw-pixel' ),
+				help: __(
+					'Loads bp.js (page view) for every visitor, as Barion asks for fraud prevention. Shop events wait for marketing consent, and the visitor’s answer is passed to Barion (grantConsent / rejectConsent). Off: the whole pixel waits for consent. Do not block pixel.barion.com in your cookie banner while this is on.',
+					'lw-pixel'
+				),
+			},
+			{
+				name: 'barion_encrypted_email',
+				title: __( 'Hashed billing email on purchase', 'lw-pixel' ),
+				help: __(
+					'Sends the SHA-1 hash of the order’s billing email (setEncryptedEmail) with the purchase.',
+					'lw-pixel'
+				),
+			},
+		],
+	},
 ];
 
 /**
@@ -112,6 +144,19 @@ export default function NetworksTab( { store } ) {
 					placeholder={ net.placeholder }
 					mono
 				/>
+				{ net.switches && (
+					<SwitchList>
+						{ net.switches.map( ( sw ) => (
+							<OptionSwitch
+								key={ sw.name }
+								store={ store }
+								name={ sw.name }
+								title={ sw.title }
+								help={ sw.help }
+							/>
+						) ) }
+					</SwitchList>
+				) }
 			</ProviderCard>
 		);
 	} );

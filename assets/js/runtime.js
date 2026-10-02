@@ -11,20 +11,27 @@
 	var LATE_NODE_ID = 'lw-pixel-late';
 	var payload      = null;
 	var initialized  = {};
+	var active       = {};
+	var lastAllowed  = {};
 
 	/**
 	 * Read the visitor's consent categories from the lw-cookie cookie.
 	 * Cache-safe: this runs per-visitor in the browser, so full-page caching
 	 * cannot bake one visitor's consent into the HTML served to another.
 	 */
+	function readConsentCookie() {
+		var match = document.cookie.match( /(?:^|;\s*)lw_cookie_consent=([^;]+)/ );
+		return match ? match[1] : null;
+	}
+
 	function getConsentCategories() {
 		try {
-			var match = document.cookie.match( /(?:^|;\s*)lw_cookie_consent=([^;]+)/ );
+			var match = readConsentCookie();
 			if ( ! match) {
 				return { necessary: true };
 			}
 			// lw-cookie stores base64( JSON ) — consent.js btoa(), Consent\Storage base64_encode().
-			var data = JSON.parse( window.atob( decodeURIComponent( match[1] ) ) );
+			var data = JSON.parse( window.atob( decodeURIComponent( match ) ) );
 			return (data && data.categories) ? data.categories : { necessary: true };
 		} catch (e) {
 			return { necessary: true };
@@ -46,6 +53,16 @@
 			return true;
 		}
 		return getConsentCategories()[category] === true;
+	}
+
+	/**
+	 * Whether a pixel's base script may load: consent for its category, or a
+	 * base that needs none (Barion's fraud-prevention pixel). Its events
+	 * still wait for pixelAllowed().
+	 */
+	function pixelLoadable(id) {
+		var config = payload.pixels[id] || {};
+		return pixelAllowed( id ) || config.baseWithoutConsent === true;
 	}
 
 	function readJson(id) {
@@ -335,6 +352,51 @@
 			}
 		},
 
+		barion: {
+			loaded: false,
+			init: function (config) {
+				if ( ! config.pixelId || this.loaded) {
+					return;
+				}
+				this.loaded = true;
+				// Another source (the theme, a Tag Manager tag, a payment
+				// gateway) already set the pixel up: two copies of bp.js stop
+				// events from reaching Barion, and a second init double counts.
+				if (typeof window.bp !== 'undefined') {
+					return;
+				}
+				/* eslint-disable */
+				(function (b, a, r, i, o, n, p) {
+					b['BarionAnalyticsObject'] = o;
+					b[o] = b[o] || function () { (b[o].q = b[o].q || []).push( arguments ); };
+					n = a.createElement( r ); p = a.getElementsByTagName( r )[0];
+					n.async = 1; n.src = i; p.parentNode.insertBefore( n, p );
+				})( window, document, 'script', 'https://pixel.barion.com/bp.js', 'bp' );
+				/* eslint-enable */
+				window.bp( 'init', 'addBarionPixelId', config.pixelId );
+			},
+			/**
+			 * `mapped` is {name, data, email}: the Barion event, its data in
+			 * the strict shape bp.js validates (built server-side, so runtime
+			 * params are not merged) and, on purchase, the SHA-1 email hash.
+			 */
+			fire: function (mapped) {
+				if ( ! window.bp || ! mapped) {
+					return;
+				}
+				if (mapped.email) {
+					window.bp( 'identity', 'setEncryptedEmail', mapped.email );
+				}
+				// bp.js deletes keys it does not know from the object it gets.
+				window.bp( 'track', mapped.name, JSON.parse( JSON.stringify( mapped.data || {} ) ) );
+			},
+			consent: function (granted) {
+				if (window.bp) {
+					window.bp( 'consent', granted ? 'grantConsent' : 'rejectConsent' );
+				}
+			}
+		},
+
 		chatgpt: {
 			loaded: false,
 			init: function (config) {
@@ -398,31 +460,59 @@
 	};
 
 	/**
-	 * Initialise every configured pixel the visitor currently allows and has
-	 * not been initialised yet. Returns the ids initialised on this pass so the
-	 * caller can fire their base/pending events.
+	 * Initialise every configured pixel the visitor currently allows (or whose
+	 * base needs no consent) and has not been initialised yet, then activate
+	 * events for the allowed ones. Returns the ids activated on this pass so
+	 * the caller can fire their base/pending events.
 	 */
 	function initAllowedPixels() {
 		var newly = [];
 
 		Object.keys( payload.pixels ).forEach(
 			function (id) {
-				if (initialized[id] || ! pixelAllowed( id )) {
-					return;
-				}
 				var provider = providers[id];
 				if ( ! provider) {
 					return;
 				}
-				try {
-					provider.init( payload.pixels[id] );
-					initialized[id] = true;
+				if ( ! initialized[id] && pixelLoadable( id )) {
+					try {
+						provider.init( payload.pixels[id] );
+						initialized[id] = true;
+					} catch (e) { /* noop */ }
+				}
+				if (initialized[id] && ! active[id] && pixelAllowed( id )) {
+					active[id] = true;
 					newly.push( id );
-				} catch (e) { /* noop */ }
+				}
 			}
 		);
 
 		return newly;
+	}
+
+	/**
+	 * Tell providers with their own consent API (Barion) about the visitor's
+	 * answer. Only on a banner answer, never on page load: an answer given on
+	 * an earlier visit is already stored by the provider. Sent when the
+	 * visitor answers for the first time or changes the answer.
+	 *
+	 * @param {boolean} hadAnswer Whether a consent cookie existed before.
+	 */
+	function signalConsent(hadAnswer) {
+		Object.keys( payload.pixels ).forEach(
+			function (id) {
+				var provider = providers[id];
+				if ( ! initialized[id] || ! provider || typeof provider.consent !== 'function') {
+					return;
+				}
+				var allowed = pixelAllowed( id );
+				if (hadAnswer && lastAllowed[id] === allowed) {
+					return;
+				}
+				lastAllowed[id] = allowed;
+				try { provider.consent( allowed ); } catch (e) { /* noop */ }
+			}
+		);
 	}
 
 	/**
@@ -467,6 +557,9 @@
 
 		fireQueuedEventsFor( initAllowedPixels() );
 
+		var hadAnswer = readConsentCookie() !== null;
+		Object.keys( payload.pixels ).forEach( function (id) { lastAllowed[id] = pixelAllowed( id ); } );
+
 		(payload.custom_events || []).forEach(
 			function (cev) {
 				scheduleCustomEvent( cev );
@@ -481,13 +574,18 @@
 		setupAutoContactClick( auto.email, 'mailto:', 'email' );
 
 		// Re-evaluate on a consent change (lw-cookie fires this): initialise any
-		// newly-allowed pixel and fire its base/pending events. Auto-event
-		// listeners below gate on `initialized` at fire time, so they start
+		// newly-allowed pixel, pass the answer to providers with a consent API,
+		// then fire the base/pending events of the newly active pixels.
+		// Auto-event listeners gate on `active` at fire time, so they start
 		// working for the pixel automatically.
 		window.addEventListener(
 			'lwCookieConsent',
 			function () {
 				var newly = initAllowedPixels();
+				if (payload.consentClient) {
+					signalConsent( hadAnswer );
+					hadAnswer = true;
+				}
 				if (newly.length) {
 					fireQueuedEventsFor( newly );
 				}
@@ -499,7 +597,7 @@
 		var eventId = newEventId();
 		Object.keys( mapped || {} ).forEach(
 			function (pixelId) {
-				if ( ! initialized[pixelId]) { return; }
+				if ( ! active[pixelId]) { return; }
 				var provider = providers[pixelId];
 				if ( ! provider || typeof provider.fire !== 'function') { return; }
 				try { provider.fire( mapped[pixelId], params || {}, eventId ); } catch (e) { /* noop */ }
@@ -583,7 +681,7 @@
 		var eventId = newEventId();
 		Object.keys( cev.mapped || {} ).forEach(
 			function (pixelId) {
-				if ( ! initialized[pixelId]) { return; }
+				if ( ! active[pixelId]) { return; }
 				var provider = providers[pixelId];
 				if ( ! provider || typeof provider.fire !== 'function') {
 					return;

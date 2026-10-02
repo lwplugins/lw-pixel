@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0] - 2026-10-02
+
+### Added
+- Barion Pixel. Loads bp.js and sends the WooCommerce shop events Barion asks for (contentView, addToCart, initiateCheckout, purchase with the order number, categorySelection, search) in the exact shape bp.js validates, plus the SHA-1 hash of the billing email on purchase (switchable). The base pixel can load without consent, as Barion uses it for fraud prevention (switchable); the shop events wait for marketing consent, and the visitor's answer in LW Cookie is passed to Barion as grantConsent / rejectConsent. If another plugin or Tag Manager already loads bp.js, it is not loaded twice.
+- Pixel providers can load a consent-free base script while their events still wait for consent (`BaseWithoutConsentInterface`).
+- `lw_pixel_barion_email_hash` filter. Medical mode sends no email hash to Barion.
+
 ## [1.3.1] - 2026-09-26
 
 ### Changed

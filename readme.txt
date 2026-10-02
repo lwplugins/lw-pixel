@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,7 @@ Measure the results of your ChatGPT Ads campaigns with the official measurement 
 
 **Features:**
 
-* 11 pixel providers — ChatGPT Ads, Meta (Facebook), Google Analytics 4, Google Ads, Google Tag Manager, TikTok, Pinterest, Microsoft Bing UET, Reddit, Snapchat, X (Twitter)
+* 12 pixel providers — ChatGPT Ads, Meta (Facebook), Google Analytics 4, Google Ads, Google Tag Manager, TikTok, Pinterest, Microsoft Bing UET, Reddit, Snapchat, X (Twitter), Barion
 * Server-side events — ChatGPT Ads Conversions API, Meta Conversion API for every standard event, GA4 Measurement Protocol; browser and server copies share one event ID so they are counted once
 * WooCommerce integration — ViewProduct, ViewCategory, ViewCart, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase (sent once per order, from the browser and the server)
 * 9 form integrations — Contact Form 7, WPForms, Elementor Pro, Forminator, Formidable, Ninja Forms, Fluent Forms, WS Form, Gravity Forms
@@ -59,6 +59,10 @@ Most pixel plugins are bloated with upsells, premium features, and tracking. LW 
 
 The pixel is in the marketing consent category: with LW Cookie it loads only after the visitor accepts marketing cookies. If your site sends a Content Security Policy, allow `https://bzrcdn.openai.com` (script-src, connect-src) and `https://bzr.openai.com` (connect-src, img-src).
 
+= How does the Barion Pixel handle consent? =
+
+Barion uses its base pixel (bp.js and the page view) for payment fraud prevention, so by default it loads for every visitor. The shop events (product view, add to cart, checkout, purchase) wait for marketing consent, and the visitor's answer in the LW Cookie banner is passed to Barion (grantConsent / rejectConsent) when they answer. Turn off "Base pixel without consent" to make the whole pixel wait for consent. While it is on, do not block `pixel.barion.com` in your cookie banner. Find the Pixel ID in your Barion wallet; an ID that starts with `BPT` is not a Pixel ID.
+
 = Does this work with WooCommerce? =
 
 Yes. LW Pixel auto-detects WooCommerce and fires ecommerce events.
@@ -84,6 +88,11 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.4.0 =
+* New: Barion Pixel. Loads bp.js and sends the WooCommerce shop events Barion asks for (contentView, addToCart, initiateCheckout, purchase with the order number, categorySelection, search) in the exact shape bp.js validates, plus the SHA-1 hash of the billing email on purchase (switchable). The base pixel can load without consent, as Barion uses it for fraud prevention (switchable); the shop events wait for marketing consent, and the visitor's answer in LW Cookie is passed to Barion as grantConsent / rejectConsent. If another plugin or Tag Manager already loads bp.js, it is not loaded twice.
+* New: pixel providers can load a consent-free base script while their events still wait for consent (`BaseWithoutConsentInterface`).
+* New: `lw_pixel_barion_email_hash` filter. Medical mode sends no email hash to Barion.
 
 = 1.3.1 =
 * Change: the LW Plugins overview page is now a searchable table showing each LW plugin's status and version, with one-click activation for installed plugins; it always uses the newest version shipped by any active LW plugin.

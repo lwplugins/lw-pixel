@@ -11,6 +11,7 @@ namespace LightweightPlugins\Pixel\Events;
 
 use LightweightPlugins\Pixel\Consent\Manager as ConsentManager;
 use LightweightPlugins\Pixel\CustomEvents\EventResolver as CustomEventResolver;
+use LightweightPlugins\Pixel\Pixels\BaseWithoutConsentInterface;
 use LightweightPlugins\Pixel\Pixels\PixelInterface;
 use LightweightPlugins\Pixel\Pixels\PixelManager;
 
@@ -58,7 +59,7 @@ final class PayloadBuilder {
 		$client_gating = $this->consent_manager->has_client_gating();
 
 		$pixels     = $this->pixels( $client_gating );
-		$active_ids = array_keys( $pixels );
+		$active_ids = $this->event_pixel_ids( $client_gating );
 
 		return [
 			'pixels'        => $pixels,
@@ -78,7 +79,7 @@ final class PayloadBuilder {
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function build_events( array $queue ): array {
-		$active_ids = array_keys( $this->pixels( $this->consent_manager->has_client_gating() ) );
+		$active_ids = $this->event_pixel_ids( $this->consent_manager->has_client_gating() );
 
 		return $this->resolve_events( $queue, $active_ids );
 	}
@@ -89,14 +90,17 @@ final class PayloadBuilder {
 	 * @param bool $client_gating When true, consent is applied client-side, so
 	 *                            every configured pixel is emitted (cache-safe).
 	 *                            When false, the server-side consent filter is
-	 *                            kept (no client-readable consent source).
+	 *                            kept (no client-readable consent source),
+	 *                            except for a base script that needs no consent.
 	 * @return array<string, array<string, mixed>>
 	 */
 	private function pixels( bool $client_gating ): array {
 		$pixels = [];
 
 		foreach ( $this->pixel_manager->get_configured() as $pixel ) {
-			if ( ! $client_gating && ! $this->consent_manager->is_pixel_allowed( $pixel->get_id() ) ) {
+			$base_only = $pixel instanceof BaseWithoutConsentInterface && $pixel->loads_base_without_consent();
+
+			if ( ! $base_only && ! $this->events_allowed( $pixel, $client_gating ) ) {
 				continue;
 			}
 
@@ -104,6 +108,36 @@ final class PayloadBuilder {
 		}
 
 		return $pixels;
+	}
+
+	/**
+	 * Ids of the pixels events are mapped for. Without client-side gating a
+	 * pixel loaded only for its consent-free base script gets no events.
+	 *
+	 * @param bool $client_gating Whether consent is applied client-side.
+	 * @return array<int, string>
+	 */
+	private function event_pixel_ids( bool $client_gating ): array {
+		$ids = [];
+
+		foreach ( $this->pixel_manager->get_configured() as $pixel ) {
+			if ( $this->events_allowed( $pixel, $client_gating ) ) {
+				$ids[] = $pixel->get_id();
+			}
+		}
+
+		return $ids;
+	}
+
+	/**
+	 * Whether a pixel's events may be printed for this request.
+	 *
+	 * @param PixelInterface $pixel         Pixel.
+	 * @param bool           $client_gating Whether consent is applied client-side.
+	 * @return bool
+	 */
+	private function events_allowed( PixelInterface $pixel, bool $client_gating ): bool {
+		return $client_gating || $this->consent_manager->is_pixel_allowed( $pixel->get_id() );
 	}
 
 	/**

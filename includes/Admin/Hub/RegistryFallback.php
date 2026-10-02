@@ -83,7 +83,7 @@ final class RegistryFallback {
 			),
 			'lw-pixel'        => array(
 				'name'          => 'LW Pixel',
-				'description'   => __( 'Tracking pixels: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X.', 'lw-pixel' ),
+				'description'   => __( 'Tracking pixels: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X, Barion.', 'lw-pixel' ),
 				'icon_color'    => '#2b65f6',
 				'constant'      => 'LW_PIXEL_VERSION',
 				'settings_page' => 'lw-pixel',

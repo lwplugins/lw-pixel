@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LW Pixel\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
-"POT-Creation-Date: 2026-09-26T13:54:34+00:00\n"
+"POT-Creation-Date: 2026-10-02T09:57:22+00:00\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,12 +25,9 @@ msgstr "https://github.com/lwplugins/lw-pixel"
 #: lw-pixel.php
 msgid ""
 "Lightweight tracking pixel manager — ChatGPT Ads, Meta, Google Analytics 4, "
-"Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat and X, with "
-"server-side conversions."
-msgstr ""
-"Könnyűsúlyú követőpixel-kezelő – ChatGPT Ads, Meta, Google Analytics 4, "
-"Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat és X, "
-"szerveroldali konverziókkal."
+"Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X and Barion, "
+"with server-side conversions."
+msgstr "Könnyűsúlyú követőpixel-kezelő – ChatGPT Ads, Meta, Google Analytics 4, Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X és Barion, szerveroldali konverziókkal."
 
 #. Author of the plugin
 #: lw-pixel.php includes/Admin/Hub/Page.php:59 includes/Admin/Hub/Page.php:60
@@ -97,10 +94,8 @@ msgstr ""
 #: includes/Admin/Hub/RegistryFallback.php:86
 msgid ""
 "Tracking pixels: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, "
-"Snapchat, X."
-msgstr ""
-"Követőpixelek: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, "
-"Snapchat, X."
+"Snapchat, X, Barion."
+msgstr "Követőpixelek: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X, Barion."
 
 #: includes/Admin/Hub/RegistryFallback.php:95
 msgid "Malware scanner for files, the database and vulnerable software."
@@ -260,6 +255,10 @@ msgstr "Nincs egyéni esemény."
 #: includes/CustomEvents/PostType.php:93
 msgid "No custom events in trash."
 msgstr "Nincs egyéni esemény a lomtárban."
+
+#: includes/Pixels/BarionPixel.php:26 build/index.js:14
+msgid "Barion Pixel"
+msgstr "Barion Pixel"
 
 #: includes/Pixels/BingPixel.php:38 build/index.js:14
 msgid "Microsoft Bing UET"
@@ -531,33 +530,33 @@ msgstr "Követőpixelek"
 msgid "Tracking pixel management abilities."
 msgstr "Követőpixelek kezelésére szolgáló képességek."
 
-#: includes/SiteManager/PixelAbilities.php:42
+#: includes/SiteManager/PixelAbilities.php:53
 msgid "Get Pixel Options"
 msgstr "Pixelbeállítások lekérése"
 
-#: includes/SiteManager/PixelAbilities.php:43
+#: includes/SiteManager/PixelAbilities.php:54
 msgid "Get LW Pixel settings (pixel ids, event toggles, advanced)."
 msgstr ""
 "LW Pixel beállításainak lekérése (pixelazonosítók, eseménykapcsolók, haladó "
 "beállítások)."
 
-#: includes/SiteManager/PixelAbilities.php:59
+#: includes/SiteManager/PixelAbilities.php:70
 msgid "Set Pixel Options"
 msgstr "Pixelbeállítások módosítása"
 
-#: includes/SiteManager/PixelAbilities.php:60
+#: includes/SiteManager/PixelAbilities.php:71
 msgid "Update LW Pixel settings."
 msgstr "LW Pixel beállításainak frissítése."
 
-#: includes/SiteManager/PixelAbilities.php:70
+#: includes/SiteManager/PixelAbilities.php:81
 msgid "Key-value pairs of settings to update."
 msgstr "A frissítendő beállítások kulcs–érték párjai."
 
-#: includes/SiteManager/PixelAbilities.php:95
+#: includes/SiteManager/PixelAbilities.php:106
 msgid "List Pixels"
 msgstr "Pixelek listázása"
 
-#: includes/SiteManager/PixelAbilities.php:96
+#: includes/SiteManager/PixelAbilities.php:107
 msgid "List all pixel providers with their configuration status."
 msgstr "Az összes pixelszolgáltató listája a beállítási állapotukkal."
 
@@ -1599,6 +1598,33 @@ msgid "Your X Universal Pixel ID."
 msgstr "Az X Universal Pixel azonosítód."
 
 #: build/index.js:14
+msgid "Your Barion Pixel ID, from your Barion wallet. An ID starting with BPT is not a Pixel ID."
+msgstr "A Barion Pixel azonosítód a Barion-tárcádból. A BPT-vel kezdődő azonosító nem Pixel-azonosító."
+
+#: build/index.js:14
+msgid "Base pixel without consent"
+msgstr "Alap-pixel hozzájárulás nélkül"
+
+#: build/index.js:14
+msgid ""
+"Loads bp.js (page view) for every visitor, as Barion asks for fraud "
+"prevention. Shop events wait for marketing consent, and the visitor’s answer "
+"is passed to Barion (grantConsent / rejectConsent). Off: the whole pixel "
+"waits for consent. Do not block pixel.barion.com in your cookie banner while "
+"this is on."
+msgstr "A bp.js (oldalmegtekintés) minden látogatónál betöltődik, ahogy a Barion a csalásmegelőzéshez kéri. A webshop-események a marketing-hozzájárulásra várnak, a látogató döntését pedig megkapja a Barion (grantConsent / rejectConsent). Kikapcsolva a teljes pixel a hozzájárulásra vár. Amíg be van kapcsolva, ne blokkold a pixel.barion.com-ot a cookie-bannerben."
+
+#: build/index.js:14
+msgid "Hashed billing email on purchase"
+msgstr "Hashelt számlázási e-mail vásárláskor"
+
+#: build/index.js:14
+msgid ""
+"Sends the SHA-1 hash of the order’s billing email (setEncryptedEmail) with "
+"the purchase."
+msgstr "A vásárlással együtt elküldi a rendelés számlázási e-mail-címének SHA-1 hash-ét (setEncryptedEmail)."
+
+#: build/index.js:14
 msgid "Standard events"
 msgstr "Alapesemények"
 
@@ -2039,3 +2065,19 @@ msgstr "A <body> után"
 #: build/index.js:16
 msgid "Before </body>"
 msgstr "A </body> előtt"
+
+#~ msgid ""
+#~ "Lightweight tracking pixel manager — ChatGPT Ads, Meta, Google Analytics "
+#~ "4, Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat and X, with "
+#~ "server-side conversions."
+#~ msgstr ""
+#~ "Könnyűsúlyú követőpixel-kezelő – ChatGPT Ads, Meta, Google Analytics 4, "
+#~ "Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat és X, "
+#~ "szerveroldali konverziókkal."
+
+#~ msgid ""
+#~ "Tracking pixels: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, "
+#~ "Snapchat, X."
+#~ msgstr ""
+#~ "Követőpixelek: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, "
+#~ "Snapchat, X."

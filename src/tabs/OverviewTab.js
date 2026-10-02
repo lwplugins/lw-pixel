@@ -25,6 +25,7 @@ const PIXEL_TABS = {
 	reddit: 'networks',
 	snapchat: 'networks',
 	x: 'networks',
+	barion: 'networks',
 };
 
 // Integration keys shown under "Detected plugins" (product names).

@@ -68,6 +68,7 @@ Validation per key (`Settings/FieldSchema` + `Settings/ValueParser`):
 | `fb_pixel_id` | `^\d{5,20}$` |
 | `ga4_measurement_id` / `gads_conversion_id` / `gtm_container_id` | upper-cased, then `^G-[A-Z0-9]{4,20}$` / `^AW-\d{5,15}$` / `^GTM-[A-Z0-9]{4,12}$` |
 | `snapchat_pixel_id` | lower-cased UUID |
+| `barion_pixel_id` | `^BP-[A-Za-z0-9]{4,32}-[A-Za-z0-9]{1,8}$` |
 | other IDs (`tiktok_`, `pinterest_`, `bing_`, `reddit_`, `x_`, `chatgpt_pixel_id`, `fb_test_event_code`, `gads_conversion_label`) | `^[A-Za-z0-9_-]{1,64}$` |
 | Any ID | `""` clears it. |
 | `event_scroll_thresholds` | comma list of integers from 1 to 100 (max. 20), stored sorted and unique: `"25,50,75,100"` |

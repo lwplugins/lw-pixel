@@ -1,6 +1,6 @@
 {
     "name": "lwplugins/lw-pixel",
-    "description": "Lightweight tracking pixel manager for WordPress: ChatGPT Ads, Meta, GA4, Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat and X, with server-side conversions.",
+    "description": "Lightweight tracking pixel manager for WordPress: ChatGPT Ads, Meta, GA4, Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X and Barion, with server-side conversions.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "authors": [

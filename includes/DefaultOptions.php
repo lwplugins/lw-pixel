@@ -23,6 +23,7 @@ final class DefaultOptions {
 		return array_merge(
 			self::pixels(),
 			self::chatgpt(),
+			self::barion(),
 			self::events(),
 			self::woocommerce(),
 			self::forms(),
@@ -71,6 +72,20 @@ final class DefaultOptions {
 			'snapchat_pixel_id'     => '',
 			'x_enabled'             => false,
 			'x_pixel_id'            => '',
+		];
+	}
+
+	/**
+	 * Barion Pixel defaults.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private static function barion(): array {
+		return [
+			'barion_enabled'              => false,
+			'barion_pixel_id'             => '',
+			'barion_base_without_consent' => true,
+			'barion_encrypted_email'      => true,
 		];
 	}
 
@@ -163,7 +178,7 @@ final class DefaultOptions {
 	 */
 	private static function consent(): array {
 		return [
-			'consent_marketing_pixels'    => [ 'fb', 'tiktok', 'pinterest', 'gads', 'reddit', 'snapchat', 'x', 'chatgpt' ],
+			'consent_marketing_pixels'    => [ 'fb', 'tiktok', 'pinterest', 'gads', 'reddit', 'snapchat', 'x', 'chatgpt', 'barion' ],
 			'consent_analytics_pixels'    => [ 'ga4', 'bing' ],
 			'consent_unclassified_pixels' => [ 'gtm' ],
 		];

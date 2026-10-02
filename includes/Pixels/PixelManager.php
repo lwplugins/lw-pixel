@@ -46,6 +46,7 @@ final class PixelManager {
 			new SnapchatPixel(),
 			new XPixel(),
 			new ChatGptPixel(),
+			new BarionPixel(),
 		];
 
 		foreach ( $defaults as $pixel ) {

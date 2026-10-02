@@ -36,6 +36,7 @@ final class MedicalMode {
 		add_filter( 'lw_pixel_chatgpt_capi_event', [ self::class, 'strip_chatgpt_event' ], 100 );
 		add_filter( 'lw_pixel_ga4_mp_event', [ self::class, 'strip_ga4_event' ], 100 );
 		add_filter( 'lw_pixel_chatgpt_browser_user', '__return_empty_array', 100 );
+		add_filter( 'lw_pixel_barion_email_hash', '__return_empty_string', 100 );
 	}
 
 	/**

@@ -84,6 +84,7 @@ export const TABS = [
 			'reddit_',
 			'snapchat_',
 			'x_',
+			'barion_',
 		],
 	},
 	{
@@ -176,6 +177,7 @@ export const ALIASES = {
 	reddit: 'networks',
 	snapchat: 'networks',
 	x: 'networks',
+	barion: 'networks',
 	'system-report': 'tools',
 };
 

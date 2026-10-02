@@ -49,6 +49,7 @@ final class FieldSchema {
 			'snapchat_pixel_id'           => self::id( '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', false, true ),
 			'x_pixel_id'                  => self::id( self::SAFE_ID ),
 			'chatgpt_pixel_id'            => self::id( self::SAFE_ID ),
+			'barion_pixel_id'             => self::id( '/^BP-[A-Za-z0-9]{4,32}-[A-Za-z0-9]{1,8}$/' ),
 			'event_scroll_thresholds'     => [
 				'type' => 'int_list',
 				'min'  => 1,
