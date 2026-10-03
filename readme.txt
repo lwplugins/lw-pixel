@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,9 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.4.1 =
+* Fix: The admin Docs link now opens the plugin's page on docs.lwplugins.com, in Hungarian for Hungarian admin users.
 
 = 1.4.0 =
 * New: Barion Pixel. Loads bp.js and sends the WooCommerce shop events Barion asks for (contentView, addToCart, initiateCheckout, purchase with the order number, categorySelection, search) in the exact shape bp.js validates, plus the SHA-1 hash of the billing email on purchase (switchable). The base pixel can load without consent, as Barion uses it for fraud prevention (switchable); the shop events wait for marketing consent, and the visitor's answer in LW Cookie is passed to Barion as grantConsent / rejectConsent. If another plugin or Tag Manager already loads bp.js, it is not loaded twice. The Barion Payment Gateway plugin's own base pixel (printed without consent when its Pixel ID field is filled) is switched off while this one is configured.

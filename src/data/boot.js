@@ -6,4 +6,4 @@ const boot = window.lwPixelAdmin || {};
 export const VERSION = boot.version || '';
 export const NAMESPACE = boot.namespace || 'lw-pixel/v1';
 export const DOCS_URL =
-	boot.docsUrl || 'https://github.com/lwplugins/lw-pixel#readme';
+	boot.docsUrl || 'https://docs.lwplugins.com/en/plugins/lw-pixel';

@@ -90,7 +90,7 @@ final class SettingsPage {
 				[
 					'version'   => LW_PIXEL_VERSION,
 					'namespace' => Routes::NAMESPACE,
-					'docsUrl'   => SettingsMeta::DOCS_URL,
+					'docsUrl'   => SettingsMeta::docs_url(),
 				]
 			) . ';',
 			'before'

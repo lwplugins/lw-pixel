@@ -22,9 +22,15 @@ use function LightweightPlugins\Pixel\lw_pixel;
 final class SettingsMeta {
 
 	/**
-	 * Plugin documentation.
+	 * Plugin page on docs.lwplugins.com, in the admin user's language.
+	 *
+	 * @return string
 	 */
-	public const DOCS_URL = 'https://github.com/lwplugins/lw-pixel#readme';
+	public static function docs_url(): string {
+		$lang = str_starts_with( get_user_locale(), 'hu' ) ? 'hu' : 'en';
+
+		return 'https://docs.lwplugins.com/' . $lang . '/plugins/lw-pixel';
+	}
 
 	/**
 	 * Build the meta block.
@@ -49,7 +55,7 @@ final class SettingsMeta {
 			],
 			'consent_categories'  => array_values( FieldSchema::consent_lists() ),
 			'max_code_bytes'      => FieldSchema::MAX_CODE_BYTES,
-			'docs_url'            => self::DOCS_URL,
+			'docs_url'            => self::docs_url(),
 		];
 	}
 
