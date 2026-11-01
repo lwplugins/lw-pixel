@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,9 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.4.3 =
+* New: Google Tag Manager: "Purchase item prices with tax" option under the GA4 ecommerce dataLayer. When on, the purchase items carry the tax-inclusive unit price after discounts (matching a Merchant Center feed with gross prices); the purchase value stays net, without tax and shipping, the same as the GA4 purchase. Off by default; the GA4 tag and the Measurement Protocol keep net prices.
 
 = 1.4.2 =
 * New: Google Tag Manager: GA4 ecommerce dataLayer option. When on, the WooCommerce events go to the dataLayer in the GA4 ecommerce format (`ecommerce: null`, then `event` + `ecommerce`): view_item, add_to_cart, begin_checkout and purchase, the purchase once per order with the order number as transaction_id and the same net value and items as the GA4 purchase. GA4 and Google Ads tags in GTM can read it with "Send ecommerce data". Off by default; other events stay flat.

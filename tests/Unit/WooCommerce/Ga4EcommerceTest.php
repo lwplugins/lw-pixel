@@ -11,6 +11,7 @@ namespace LightweightPlugins\Pixel\Tests\Unit\WooCommerce;
 
 use Brain\Monkey\Functions;
 use LightweightPlugins\Pixel\Options;
+use LightweightPlugins\Pixel\Pixels\GoogleAnalytics4;
 use LightweightPlugins\Pixel\Pixels\GoogleTagManager;
 use LightweightPlugins\Pixel\Tests\Unit\MonkeyTestCase;
 use LightweightPlugins\Pixel\WooCommerce\Ga4Ecommerce;
@@ -61,6 +62,25 @@ final class Ga4EcommerceTest extends MonkeyTestCase {
 		$this->assertSame( 'HUF', $out['ecommerce']['currency'] );
 		$this->assertSame( 100.0, $out['ecommerce']['value'] );
 		$this->assertSame( [ [ 'item_id' => '7', 'item_name' => 'Hat', 'price' => 50.0, 'quantity' => 2 ] ], $out['ecommerce']['items'] );
+	}
+
+	public function test_gross_prices_put_tax_on_the_items_but_keep_the_value_net(): void {
+		$this->options( [ 'gtm_ga4_gross_prices' => true ] );
+		$this->order( 'R-1001' );
+
+		$out = Ga4Ecommerce::for_event( 'Purchase', self::PURCHASE );
+
+		$this->assertSame( 63.5, $out['ecommerce']['items'][0]['price'] );
+		$this->assertSame( 100.0, $out['ecommerce']['value'] );
+	}
+
+	public function test_the_ga4_tag_purchase_keeps_net_prices_with_the_gtm_option_on(): void {
+		$this->options( [ 'gtm_ga4_gross_prices' => true ] );
+		$this->order( 'R-1001' );
+
+		$mapped = ( new GoogleAnalytics4() )->map_event( 'Purchase', self::PURCHASE );
+
+		$this->assertSame( 50.0, $mapped['params']['items'][0]['price'] );
 	}
 
 	public function test_a_purchase_without_an_order_id_is_not_ecommerce(): void {
@@ -164,7 +184,7 @@ final class Ga4EcommerceTest extends MonkeyTestCase {
 	}
 
 	/**
-	 * An order with one product line (qty 2) at a net unit price of 50.
+	 * An order with one product line (qty 2) at a net unit price of 50 (63.5 with tax).
 	 *
 	 * @param string $number Order number shown to the customer.
 	 * @return void
@@ -182,6 +202,7 @@ final class Ga4EcommerceTest extends MonkeyTestCase {
 		$order = Mockery::mock( 'WC_Order' );
 		$order->shouldReceive( 'get_items' )->andReturn( [ $item ] );
 		$order->shouldReceive( 'get_item_total' )->with( $item, false, false )->andReturn( 50.0 );
+		$order->shouldReceive( 'get_item_total' )->with( $item, true, false )->andReturn( 63.5 );
 		$order->shouldReceive( 'get_order_number' )->andReturn( $number );
 
 		Functions\when( 'wc_get_order' )->justReturn( $order );

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LW Pixel\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
-"POT-Creation-Date: 2026-11-01T08:06:31+00:00\n"
+"POT-Creation-Date: 2026-11-01T08:38:26+00:00\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1498,6 +1498,20 @@ msgstr ""
 "A WooCommerce-események GA4 ecommerce formátumban kerülnek a dataLayerbe "
 "(view_item, add_to_cart, begin_checkout, purchase), a GTM-ben futó GA4- és "
 "Google Ads-címkékhez."
+
+#: build/index.js:14
+msgid "Purchase item prices with tax"
+msgstr "Vásárlási tételárak ÁFÁ-val"
+
+#: build/index.js:14
+msgid ""
+"Item prices in the purchase include tax, matching a Merchant Center feed "
+"with gross prices. The purchase value stays without tax and shipping, the "
+"same as the GA4 purchase."
+msgstr ""
+"A vásárlás tételárai ÁFÁ-val mennek, egyezve a bruttó árakat tartalmazó "
+"Merchant Center-feeddel. A vásárlás értéke ÁFA és szállítás nélkül marad, "
+"mint a GA4-vásárlásnál."
 
 #: build/index.js:14
 msgid "ChatGPT Ads pixel"

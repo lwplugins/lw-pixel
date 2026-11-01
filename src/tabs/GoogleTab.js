@@ -166,7 +166,20 @@ export default function GoogleTab( { store } ) {
 							'WooCommerce events go to the dataLayer in the GA4 ecommerce format (view_item, add_to_cart, begin_checkout, purchase), for GA4 and Google Ads tags in GTM.',
 							'lw-pixel'
 						) }
-					/>
+					>
+						<OptionSwitch
+							store={ store }
+							name="gtm_ga4_gross_prices"
+							title={ __(
+								'Purchase item prices with tax',
+								'lw-pixel'
+							) }
+							help={ __(
+								'Item prices in the purchase include tax, matching a Merchant Center feed with gross prices. The purchase value stays without tax and shipping, the same as the GA4 purchase.',
+								'lw-pixel'
+							) }
+						/>
+					</OptionSwitch>
 				</SwitchList>
 			</ProviderCard>
 		</>

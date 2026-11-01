@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\WooCommerce;
 
+use LightweightPlugins\Pixel\Options;
 use WC_Order;
 
 /**
@@ -17,6 +18,8 @@ use WC_Order;
  * read with "Send ecommerce data". The purchase reuses Ga4Purchase, so it
  * carries the same value and items as the gtag and Measurement Protocol
  * copies; only its transaction_id is the order number shown to the customer.
+ * The gross prices option puts the tax-inclusive unit price on the purchase
+ * items (Merchant Center feeds list gross prices); the value stays net.
  */
 final class Ga4Ecommerce {
 
@@ -79,7 +82,7 @@ final class Ga4Ecommerce {
 	 * @return array<string, mixed>
 	 */
 	private static function purchase( array $params ): array {
-		$ecommerce = Ga4Purchase::params( $params );
+		$ecommerce = Ga4Purchase::params( $params, (bool) Options::get( 'gtm_ga4_gross_prices' ) );
 		$order     = function_exists( 'wc_get_order' ) ? wc_get_order( (int) $params['order_id'] ) : false;
 
 		if ( $order instanceof WC_Order ) {

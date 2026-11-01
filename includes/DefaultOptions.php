@@ -61,6 +61,7 @@ final class DefaultOptions {
 			'gtm_container_id'      => '',
 			'gtm_data_layer_only'   => false,
 			'gtm_ga4_ecommerce'     => false,
+			'gtm_ga4_gross_prices'  => false,
 			'tiktok_enabled'        => false,
 			'tiktok_pixel_id'       => '',
 			'pinterest_enabled'     => false,

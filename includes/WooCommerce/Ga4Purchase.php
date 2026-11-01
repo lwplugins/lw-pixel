@@ -28,14 +28,15 @@ final class Ga4Purchase {
 	/**
 	 * GA4 purchase params (transaction_id, value, currency, items).
 	 *
-	 * @param array<string, mixed> $params Generic Purchase params (ProductData::for_order()).
+	 * @param array<string, mixed> $params       Generic Purchase params (ProductData::for_order()).
+	 * @param bool                 $gross_prices Item prices with tax (the value stays net).
 	 * @return array<string, mixed>
 	 */
-	public static function params( array $params ): array {
+	public static function params( array $params, bool $gross_prices = false ): array {
 		$order_id = (string) ( $params['order_id'] ?? '' );
 		$order    = '' !== $order_id && function_exists( 'wc_get_order' ) ? wc_get_order( (int) $order_id ) : false;
 
-		$out = $order instanceof WC_Order ? self::from_order( $order ) : self::from_params( $params );
+		$out = $order instanceof WC_Order ? self::from_order( $order, $gross_prices ) : self::from_params( $params );
 
 		if ( '' !== $order_id ) {
 			$out['transaction_id'] = $order_id;
@@ -51,11 +52,13 @@ final class Ga4Purchase {
 
 	/**
 	 * Items and value from the order's line totals (after discounts, before tax).
+	 * With gross prices only the items carry the tax-inclusive unit price.
 	 *
-	 * @param WC_Order $order Order.
+	 * @param WC_Order $order        Order.
+	 * @param bool     $gross_prices Item prices with tax.
 	 * @return array<string, mixed>
 	 */
-	private static function from_order( WC_Order $order ): array {
+	private static function from_order( WC_Order $order, bool $gross_prices = false ): array {
 		$items = [];
 		$value = 0.0;
 
@@ -72,7 +75,8 @@ final class Ga4Purchase {
 			$quantity = max( 1, (int) $item->get_quantity() );
 			$price    = round( (float) $order->get_item_total( $item, false, false ), 2 );
 			$value   += $price * $quantity;
-			$items[]  = self::item( ProductData::content_id( $product ), $product->get_name(), $price, $quantity );
+			$shown    = $gross_prices ? round( (float) $order->get_item_total( $item, true, false ), 2 ) : $price;
+			$items[]  = self::item( ProductData::content_id( $product ), $product->get_name(), $shown, $quantity );
 		}
 
 		return [

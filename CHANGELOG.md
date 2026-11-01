@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.3] - 2026-11-01
+
+### Added
+- Google Tag Manager: "Purchase item prices with tax" option under the GA4 ecommerce dataLayer. When on, the purchase items carry the tax-inclusive unit price after discounts (matching a Merchant Center feed with gross prices); the purchase value stays net, without tax and shipping, the same as the GA4 purchase. Off by default; the GA4 tag and the Measurement Protocol keep net prices.
+
 ## [1.4.2] - 2026-11-01
 
 ### Added
