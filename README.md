@@ -35,7 +35,7 @@ A React settings screen with a side navigation; the **Quick search** field at th
 - **Google Ads** — conversion tracking
 - **Google Tag Manager** — container + `dataLayer`, optionally in the GA4 ecommerce format (view_item, add_to_cart, begin_checkout, purchase)
 - **TikTok Pixel** — `ttq`
-- **Pinterest Tag** — `pintrk`
+- **Pinterest Tag** — `pintrk` + Conversions API server-side
 - **Microsoft Bing UET** — `uetq`
 - **Reddit Pixel** — `rdt`
 - **Snapchat Pixel** — `snaptr`
@@ -58,8 +58,9 @@ A React settings screen with a side navigation; the **Quick search** field at th
 
 - **Meta Conversion API** — every standard event (PageView, ViewContent, Search, Lead, Contact, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase, CompleteRegistration)
 - **ChatGPT Ads Conversions API** — the same events as the ChatGPT Ads pixel
+- **Pinterest Conversions API** — purchase (`checkout`, once per order), add to cart, page visit, category view, lead, search and signup; ad account ID + conversion access token (or `LW_PIXEL_PINTEREST_TOKEN` in `wp-config.php`), the `_epik` click ID, optional hashed advanced matching, test mode (`?test=true`) and a connection test. InitiateCheckout stays browser-only.
 - **GA4 Measurement Protocol** — the purchase; all events when GA4 is loaded by something else (e.g. Tag Manager), since GA4 does not deduplicate against `gtag.js`
-- **Deduplication** — the browser and server copies share one event ID (Meta `eventID`, GA4 `event_id` parameter, ChatGPT Ads `event_id`); a purchase uses an order-based ID and is sent once per order and provider
+- **Deduplication** — the browser and server copies share one event ID (Meta `eventID`, GA4 `event_id` parameter, ChatGPT Ads and Pinterest `event_id`); a purchase uses an order-based ID and is sent once per order and provider
 - **Consent** — each provider's server copy follows the visitor's consent for that pixel
 - **Non-blocking** — sent after the response is flushed, or in the background via Action Scheduler; nothing sent is logged
 - **Cache-safe** — page-level events go server-side only on pages that a page cache cannot share between visitors
@@ -88,8 +89,8 @@ Lead events fire automatically when any of these forms are submitted:
 
 ## Compliance
 
-- **Medical traffic mode** — strips PII from event payloads and from server-side user data (Meta CAPI, ChatGPT Ads, GA4 MP) (HIPAA-friendly)
-- **Limited Data Use (LDU)** — adds Meta data_processing_options for California / CCPA (auto-resolve or force California)
+- **Medical traffic mode** — strips PII from event payloads and from server-side user data (Meta CAPI, ChatGPT Ads, Pinterest, GA4 MP) (HIPAA-friendly)
+- **Limited Data Use (LDU)** — adds Meta data_processing_options for California / CCPA (auto-resolve or force California) and marks Pinterest Conversions API events with `opt_out_type: LDP`
 
 ## Migration
 

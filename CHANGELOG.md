@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.0] - 2026-11-01
+
+### Added
+- Pinterest Conversions API: purchases, add-to-carts, page visits, leads, searches and sign-ups are also sent server-side, deduplicated with the Pinterest Tag through a shared event ID, with consent, medical-traffic and limited-data-processing handling like the other server-side providers.
+
+### Fixed
+- Browser events now report the visitor's own URL as `page_location`. On full-page-cached sites the page carried the URL of the request that built the cache entry, so later visitors reported someone else's click ID and campaign parameters (#11).
+- The Pinterest Tag now sends the event ID with its events, so Pinterest can deduplicate them against the server-side copies.
+
 ## [1.4.3] - 2026-11-01
 
 ### Added

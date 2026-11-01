@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.4.3
+Stable tag: 1.5.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,12 +29,12 @@ Measure the results of your ChatGPT Ads campaigns with the official measurement 
 * Admin quick search (Cmd/Ctrl+K) across all sections and settings
 * Google Tag Manager: optional GA4 ecommerce dataLayer (view_item, add_to_cart, begin_checkout, purchase) for GA4 and Google Ads tags in GTM
 * 12 pixel providers — ChatGPT Ads, Meta (Facebook), Google Analytics 4, Google Ads, Google Tag Manager, TikTok, Pinterest, Microsoft Bing UET, Reddit, Snapchat, X (Twitter), Barion
-* Server-side events — ChatGPT Ads Conversions API, Meta Conversion API for every standard event, GA4 Measurement Protocol; browser and server copies share one event ID so they are counted once
+* Server-side events — ChatGPT Ads Conversions API, Meta Conversion API for every standard event, Pinterest Conversions API, GA4 Measurement Protocol; browser and server copies share one event ID so they are counted once
 * WooCommerce integration — ViewProduct, ViewCategory, ViewCart, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase (sent once per order, from the browser and the server)
 * 9 form integrations — Contact Form 7, WPForms, Elementor Pro, Forminator, Formidable, Ninja Forms, Fluent Forms, WS Form, Gravity Forms
 * Custom Event editor — page_load / click / scroll / time triggers, URL patterns, fire-once-per-session
 * Auto-tracked events — scroll depth, time on page, file download, login, signup, comment, phone clicks, email clicks, thank-you pages
-* Advanced Matching (SHA-256 hashed) for Meta and ChatGPT Ads, External ID, Order Enrich
+* Advanced Matching (SHA-256 hashed) for Meta, ChatGPT Ads and Pinterest, External ID, Order Enrich
 * Compliance — Medical traffic + LDU (California / CCPA)
 * GDPR-compliant — works with LW Cookie out of the box, for browser and server-side events
 * Settings importer from a previous pixel plugin, with a preview before anything changes
@@ -79,6 +79,7 @@ Yes. Turn on the server-side option of a provider:
 
 * Meta Conversion API — every standard event (PageView, ViewContent, Search, Lead, Contact, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase, CompleteRegistration).
 * ChatGPT Ads Conversions API — the same events as the ChatGPT Ads pixel.
+* Pinterest Conversions API — purchases (once per order), add-to-carts, page visits, category views, leads, searches and sign-ups. Needs the ad account ID and a conversion access token (or `LW_PIXEL_PINTEREST_TOKEN` in `wp-config.php`); has a test mode and a connection test.
 * GA4 Measurement Protocol — the purchase; other events too when GA4 is loaded by something else (for example Tag Manager), because GA4 would otherwise count them twice.
 
 The browser and the server copy of an event share one event ID, so each platform counts it once. Requests are sent after the page was delivered (or in the background through Action Scheduler) and never slow down the visitor. Page views are sent server-side only on pages that a page cache cannot serve to other visitors (for example for logged-in users); cart, checkout, form, signup and purchase events are always sent.
@@ -90,6 +91,11 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.5.0 =
+* New: Pinterest Conversions API: purchases, add-to-carts, page visits, leads, searches and sign-ups are also sent server-side, deduplicated with the Pinterest Tag through a shared event ID, with consent, medical-traffic and limited-data-processing handling like the other server-side providers.
+* Fix: Browser events now report the visitor's own URL as `page_location`. On full-page-cached sites the page carried the URL of the request that built the cache entry, so later visitors reported someone else's click ID and campaign parameters (#11).
+* Fix: The Pinterest Tag now sends the event ID with its events, so Pinterest can deduplicate them against the server-side copies.
 
 = 1.4.3 =
 * New: Admin quick search: a search field at the top of the sidebar (also Cmd/Ctrl+K) finds sections, cards and settings by name or help text, accent-insensitive, and opens the match: it switches to the tab, scrolls to the setting and highlights it. Recently opened results are listed first.
