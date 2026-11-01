@@ -10,12 +10,18 @@ import { createRoot, flushSync } from '@wordpress/element';
  */
 const CARD = '.components-card';
 const CARD_TITLE = '.components-card__header h3';
-const ROW = '.lw-admin-row, .lw-px-switch, .components-base-control';
+// Each LW admin prefixes its own switch list (lw-px-switch, lw-lms-switch…);
+// core ToggleControl rows carry their label in a BaseControl.
+const ROW =
+	'.lw-admin-row, [class*="-switch"]:not([class*="-switch__"]), .components-base-control';
 const ROW_TITLE =
-	'.lw-admin-row__title, .lw-px-switch__title, .components-base-control__label';
+	'.lw-admin-row__title, [class*="-switch__title"], .components-base-control__label, .components-toggle-control__label';
 const ROW_HELP =
-	'.lw-admin-row__help, .lw-px-switch__help, .components-base-control__help';
-const SKIP = '.components-card__header, .components-visually-hidden';
+	'.lw-admin-row__help, [class*="-switch__help"], .components-base-control__help';
+// A row's own control (a toggle's On/Off, a hidden input label) repeats or
+// contradicts the row title; the title is what people search for.
+const SKIP =
+	'.components-card__header, .components-visually-hidden, .lw-admin-row__control';
 
 const text = ( node ) =>
 	( node?.textContent || '' ).replace( /\s+/g, ' ' ).trim();
