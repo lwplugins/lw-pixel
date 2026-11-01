@@ -50,12 +50,13 @@ function NavItem( { tab, isCurrent, meta } ) {
  * Full-height sidebar: plugin header, grouped section links, docs link. On
  * mobile the list collapses behind a "current section" toggle.
  *
- * @param {Object} props
- * @param {Array}  props.tabs    Tab registry.
- * @param {Array}  props.groups  Nav groups ({ id, label }).
- * @param {string} props.current Active tab id.
- * @param {Object} props.meta    Optional node per tab id, after the label.
- * @param {string} props.docsUrl Documentation URL (server meta wins).
+ * @param {Object}  props
+ * @param {Array}   props.tabs    Tab registry.
+ * @param {Array}   props.groups  Nav groups ({ id, label }).
+ * @param {string}  props.current Active tab id.
+ * @param {Object}  props.meta    Optional node per tab id, after the label.
+ * @param {string}  props.docsUrl Documentation URL (server meta wins).
+ * @param {Element} props.search  Quick search, under the plugin header.
  */
 export default function SideNav( {
 	tabs,
@@ -63,6 +64,7 @@ export default function SideNav( {
 	current,
 	meta = {},
 	docsUrl,
+	search,
 } ) {
 	const [ isOpen, setIsOpen ] = useState( false );
 	const navId = useInstanceId( SideNav, 'lw-admin-sidenav' );
@@ -91,6 +93,9 @@ export default function SideNav( {
 				</a>
 				<Badge intent="informational">{ `v${ VERSION }` }</Badge>
 			</div>
+			{ search && (
+				<div className="lw-admin-sidebar__search">{ search }</div>
+			) }
 			<button
 				type="button"
 				className="lw-admin-sidebar__toggle"

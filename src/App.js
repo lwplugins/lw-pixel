@@ -1,4 +1,9 @@
 /**
+ * WordPress dependencies
+ */
+import { useCallback } from '@wordpress/element';
+
+/**
  * Internal dependencies
  */
 import FormSkeleton from './components/FormSkeleton';
@@ -14,6 +19,7 @@ import { GROUPS, TABS } from './shell/tabs';
 import useSaveShortcut from './shell/useSaveShortcut';
 import useTab from './shell/useTab';
 import useUnsavedWarning from './shell/useUnsavedWarning';
+import QuickSearch from './quick-search';
 import AdvancedTab from './tabs/AdvancedTab';
 import ChatGptTab from './tabs/ChatGptTab';
 import ComplianceTab from './tabs/ComplianceTab';
@@ -89,6 +95,25 @@ export default function App() {
 		!! target
 	);
 
+	// The quick search indexes the settings tabs (read-only renders of the
+	// loaded options; Tools and Overview fetch or only report, so they are
+	// found by name only).
+	const searchPages = useCallback(
+		() =>
+			settings.data
+				? TABS.filter( ( t ) => t.save === true ).map( ( t ) => {
+						const Tab = SETTINGS_TABS[ t.id ];
+						return {
+							tab: t,
+							element: (
+								<Tab store={ settings } events={ events } />
+							),
+						};
+					} )
+				: null,
+		[ settings, events ]
+	);
+
 	let content;
 	if ( current.id === 'custom-events' ) {
 		content = <CustomEventsTab events={ events } />;
@@ -115,6 +140,13 @@ export default function App() {
 						meta: settings.data?.meta || null,
 					} ) }
 					docsUrl={ settings.data?.meta.docsUrl }
+					search={
+						<QuickSearch
+							tabs={ TABS }
+							pages={ searchPages }
+							storageKey="lw-pixel-quick-search"
+						/>
+					}
 				/>
 				<div className="lw-admin-main">
 					<TopBar title={ current.title } store={ target } />
