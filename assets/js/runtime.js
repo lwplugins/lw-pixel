@@ -88,7 +88,26 @@
 		if (data && late && late.events && late.events.length) {
 			data.events = (data.events || []).concat( late.events );
 		}
+		if (data) {
+			[ data.events || [], (data.auto_events || {}).pending || [] ].forEach( useCurrentLocation );
+		}
 		return data;
+	}
+
+	/**
+	 * The page may come from a full-page cache, so a server-resolved
+	 * page_location can be another visitor's URL (with their click ids).
+	 * Replace it with the URL this visitor loaded. Only an existing key is
+	 * replaced: when a compliance mode stripped it, it stays out.
+	 */
+	function useCurrentLocation(list) {
+		list.forEach(
+			function (entry) {
+				if (entry && entry.params && Object.prototype.hasOwnProperty.call( entry.params, 'page_location' )) {
+					entry.params.page_location = window.location.href;
+				}
+			}
+		);
 	}
 
 	/**
