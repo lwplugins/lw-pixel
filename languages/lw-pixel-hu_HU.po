@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LW Pixel\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
-"POT-Creation-Date: 2026-10-02T09:57:22+00:00\n"
+"POT-Creation-Date: 2026-11-01T08:06:31+00:00\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +27,10 @@ msgid ""
 "Lightweight tracking pixel manager — ChatGPT Ads, Meta, Google Analytics 4, "
 "Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X and Barion, "
 "with server-side conversions."
-msgstr "Könnyűsúlyú követőpixel-kezelő – ChatGPT Ads, Meta, Google Analytics 4, Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X és Barion, szerveroldali konverziókkal."
+msgstr ""
+"Könnyűsúlyú követőpixel-kezelő – ChatGPT Ads, Meta, Google Analytics 4, "
+"Google Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X és Barion, "
+"szerveroldali konverziókkal."
 
 #. Author of the plugin
 #: lw-pixel.php includes/Admin/Hub/Page.php:59 includes/Admin/Hub/Page.php:60
@@ -95,7 +98,9 @@ msgstr ""
 msgid ""
 "Tracking pixels: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, "
 "Snapchat, X, Barion."
-msgstr "Követőpixelek: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, Snapchat, X, Barion."
+msgstr ""
+"Követőpixelek: Meta, GA4, Ads, GTM, TikTok, Pinterest, Bing, Reddit, "
+"Snapchat, X, Barion."
 
 #: includes/Admin/Hub/RegistryFallback.php:95
 msgid "Malware scanner for files, the database and vulnerable software."
@@ -280,7 +285,7 @@ msgstr "Google Ads"
 msgid "Google Analytics 4"
 msgstr "Google Analytics 4"
 
-#: includes/Pixels/GoogleTagManager.php:22 build/index.js:14
+#: includes/Pixels/GoogleTagManager.php:24 build/index.js:14
 msgid "Google Tag Manager"
 msgstr "Google Tag Manager"
 
@@ -1481,6 +1486,20 @@ msgid "Useful when the GTM script is loaded by another plugin."
 msgstr "Hasznos, ha a GTM-szkriptet egy másik bővítmény tölti be."
 
 #: build/index.js:14
+msgid "GA4 ecommerce dataLayer"
+msgstr "GA4 ecommerce adatréteg"
+
+#: build/index.js:14
+msgid ""
+"WooCommerce events go to the dataLayer in the GA4 ecommerce format "
+"(view_item, add_to_cart, begin_checkout, purchase), for GA4 and Google Ads "
+"tags in GTM."
+msgstr ""
+"A WooCommerce-események GA4 ecommerce formátumban kerülnek a dataLayerbe "
+"(view_item, add_to_cart, begin_checkout, purchase), a GTM-ben futó GA4- és "
+"Google Ads-címkékhez."
+
+#: build/index.js:14
 msgid "ChatGPT Ads pixel"
 msgstr "ChatGPT Ads pixel"
 
@@ -1598,8 +1617,12 @@ msgid "Your X Universal Pixel ID."
 msgstr "Az X Universal Pixel azonosítód."
 
 #: build/index.js:14
-msgid "Your Barion Pixel ID, from your Barion wallet. An ID starting with BPT is not a Pixel ID."
-msgstr "A Barion Pixel azonosítód a Barion-tárcádból. A BPT-vel kezdődő azonosító nem Pixel-azonosító."
+msgid ""
+"Your Barion Pixel ID, from your Barion wallet. An ID starting with BPT is "
+"not a Pixel ID."
+msgstr ""
+"A Barion Pixel azonosítód a Barion-tárcádból. A BPT-vel kezdődő azonosító "
+"nem Pixel-azonosító."
 
 #: build/index.js:14
 msgid "Base pixel without consent"
@@ -1612,7 +1635,12 @@ msgid ""
 "is passed to Barion (grantConsent / rejectConsent). Off: the whole pixel "
 "waits for consent. Do not block pixel.barion.com in your cookie banner while "
 "this is on."
-msgstr "A bp.js (oldalmegtekintés) minden látogatónál betöltődik, ahogy a Barion a csalásmegelőzéshez kéri. A webshop-események a marketing-hozzájárulásra várnak, a látogató döntését pedig megkapja a Barion (grantConsent / rejectConsent). Kikapcsolva a teljes pixel a hozzájárulásra vár. Amíg be van kapcsolva, ne blokkold a pixel.barion.com-ot a cookie-bannerben."
+msgstr ""
+"A bp.js (oldalmegtekintés) minden látogatónál betöltődik, ahogy a Barion a "
+"csalásmegelőzéshez kéri. A webshop-események a marketing-hozzájárulásra "
+"várnak, a látogató döntését pedig megkapja a Barion (grantConsent / "
+"rejectConsent). Kikapcsolva a teljes pixel a hozzájárulásra vár. Amíg be van "
+"kapcsolva, ne blokkold a pixel.barion.com-ot a cookie-bannerben."
 
 #: build/index.js:14
 msgid "Hashed billing email on purchase"
@@ -1622,7 +1650,9 @@ msgstr "Hashelt számlázási e-mail vásárláskor"
 msgid ""
 "Sends the SHA-1 hash of the order’s billing email (setEncryptedEmail) with "
 "the purchase."
-msgstr "A vásárlással együtt elküldi a rendelés számlázási e-mail-címének SHA-1 hash-ét (setEncryptedEmail)."
+msgstr ""
+"A vásárlással együtt elküldi a rendelés számlázási e-mail-címének SHA-1 hash-"
+"ét (setEncryptedEmail)."
 
 #: build/index.js:14
 msgid "Standard events"

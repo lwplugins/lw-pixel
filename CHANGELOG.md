@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.2] - 2026-11-01
+
+### Added
+- Google Tag Manager: GA4 ecommerce dataLayer option. When on, the WooCommerce events go to the dataLayer in the GA4 ecommerce format (`ecommerce: null`, then `event` + `ecommerce`): view_item, add_to_cart, begin_checkout and purchase, the purchase once per order with the order number as transaction_id and the same net value and items as the GA4 purchase. GA4 and Google Ads tags in GTM can read it with "Send ecommerce data". Off by default; other events stay flat.
+
 ## [1.4.1] - 2026-10-03
 
 ### Fixed

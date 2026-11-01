@@ -240,6 +240,13 @@
 			},
 			fire: function (mapped, params) {
 				window.dataLayer = window.dataLayer || [];
+				// GA4 ecommerce: clear the previous ecommerce object first, as
+				// Google's GTM ecommerce guide asks, then push the server-built one.
+				if (mapped.ecommerce) {
+					window.dataLayer.push( { ecommerce: null } );
+					window.dataLayer.push( { event: mapped.event, ecommerce: mapped.ecommerce } );
+					return;
+				}
 				window.dataLayer.push( Object.assign( { event: mapped.event }, params || {} ) );
 			}
 		},

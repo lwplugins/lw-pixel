@@ -29,7 +29,7 @@ Loads tracking pixels from the major ad networks and dispatches the standard eco
 - **Meta (Facebook) Pixel** — `fbq` browser pixel + Conversion API server-side (Advanced Matching, External ID, Order Enrich)
 - **Google Analytics 4** — `gtag.js` + Measurement Protocol server-side
 - **Google Ads** — conversion tracking
-- **Google Tag Manager** — container + `dataLayer`
+- **Google Tag Manager** — container + `dataLayer`, optionally in the GA4 ecommerce format (view_item, add_to_cart, begin_checkout, purchase)
 - **TikTok Pixel** — `ttq`
 - **Pinterest Tag** — `pintrk`
 - **Microsoft Bing UET** — `uetq`

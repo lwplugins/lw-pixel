@@ -60,6 +60,7 @@ final class DefaultOptions {
 			'gtm_enabled'           => false,
 			'gtm_container_id'      => '',
 			'gtm_data_layer_only'   => false,
+			'gtm_ga4_ecommerce'     => false,
 			'tiktok_enabled'        => false,
 			'tiktok_pixel_id'       => '',
 			'pinterest_enabled'     => false,

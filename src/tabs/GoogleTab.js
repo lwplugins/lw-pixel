@@ -158,6 +158,15 @@ export default function GoogleTab( { store } ) {
 							'lw-pixel'
 						) }
 					/>
+					<OptionSwitch
+						store={ store }
+						name="gtm_ga4_ecommerce"
+						title={ __( 'GA4 ecommerce dataLayer', 'lw-pixel' ) }
+						help={ __(
+							'WooCommerce events go to the dataLayer in the GA4 ecommerce format (view_item, add_to_cart, begin_checkout, purchase), for GA4 and Google Ads tags in GTM.',
+							'lw-pixel'
+						) }
+					/>
 				</SwitchList>
 			</ProviderCard>
 		</>

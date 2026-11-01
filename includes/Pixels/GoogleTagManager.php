@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Pixels;
 
+use LightweightPlugins\Pixel\WooCommerce\Ga4Ecommerce;
+
 /**
  * Outputs the GTM container snippet and pushes events to dataLayer.
  */
@@ -38,6 +40,14 @@ final class GoogleTagManager extends AbstractPixel {
 	}
 
 	public function map_event( string $event_name, array $params ): array {
+		// With the GA4 ecommerce option the WooCommerce events go out as
+		// `event` + `ecommerce` (view_item, add_to_cart, begin_checkout,
+		// purchase), the shape GTM's GA4 and Google Ads tags read.
+		$ecommerce = $this->get_option( 'ga4_ecommerce' ) ? Ga4Ecommerce::for_event( $event_name, $params ) : null;
+		if ( null !== $ecommerce ) {
+			return $ecommerce;
+		}
+
 		// GTM consumes events through the dataLayer; the provider name is enough.
 		return [
 			'event'  => $event_name,

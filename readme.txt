@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,7 @@ Measure the results of your ChatGPT Ads campaigns with the official measurement 
 
 **Features:**
 
+* Google Tag Manager: optional GA4 ecommerce dataLayer (view_item, add_to_cart, begin_checkout, purchase) for GA4 and Google Ads tags in GTM
 * 12 pixel providers — ChatGPT Ads, Meta (Facebook), Google Analytics 4, Google Ads, Google Tag Manager, TikTok, Pinterest, Microsoft Bing UET, Reddit, Snapchat, X (Twitter), Barion
 * Server-side events — ChatGPT Ads Conversions API, Meta Conversion API for every standard event, GA4 Measurement Protocol; browser and server copies share one event ID so they are counted once
 * WooCommerce integration — ViewProduct, ViewCategory, ViewCart, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase (sent once per order, from the browser and the server)
@@ -88,6 +89,9 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.4.2 =
+* New: Google Tag Manager: GA4 ecommerce dataLayer option. When on, the WooCommerce events go to the dataLayer in the GA4 ecommerce format (`ecommerce: null`, then `event` + `ecommerce`): view_item, add_to_cart, begin_checkout and purchase, the purchase once per order with the order number as transaction_id and the same net value and items as the GA4 purchase. GA4 and Google Ads tags in GTM can read it with "Send ecommerce data". Off by default; other events stay flat.
 
 = 1.4.1 =
 * Fix: The admin Docs link now opens the plugin's page on docs.lwplugins.com, in Hungarian for Hungarian admin users.

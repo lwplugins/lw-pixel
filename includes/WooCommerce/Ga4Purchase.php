@@ -110,6 +110,7 @@ final class Ga4Purchase {
 
 	/**
 	 * One GA4 item. Medical mode leaves the product name out.
+	 * Ga4Ecommerce builds the GTM dataLayer items with it too.
 	 *
 	 * @param string $id       Item id.
 	 * @param string $name     Product name.
@@ -117,7 +118,7 @@ final class Ga4Purchase {
 	 * @param int    $quantity Quantity.
 	 * @return array<string, mixed>
 	 */
-	private static function item( string $id, string $name, float $price, int $quantity ): array {
+	public static function item( string $id, string $name, float $price, int $quantity ): array {
 		$item = [
 			'item_id'   => $id,
 			'item_name' => $name,
