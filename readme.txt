@@ -26,6 +26,7 @@ Measure the results of your ChatGPT Ads campaigns with the official measurement 
 
 **Features:**
 
+* Admin quick search (Cmd/Ctrl+K) across all sections and settings
 * Google Tag Manager: optional GA4 ecommerce dataLayer (view_item, add_to_cart, begin_checkout, purchase) for GA4 and Google Ads tags in GTM
 * 12 pixel providers — ChatGPT Ads, Meta (Facebook), Google Analytics 4, Google Ads, Google Tag Manager, TikTok, Pinterest, Microsoft Bing UET, Reddit, Snapchat, X (Twitter), Barion
 * Server-side events — ChatGPT Ads Conversions API, Meta Conversion API for every standard event, GA4 Measurement Protocol; browser and server copies share one event ID so they are counted once
@@ -91,6 +92,7 @@ The browser and the server copy of an event share one event ID, so each platform
 == Changelog ==
 
 = 1.4.3 =
+* New: Admin quick search: a search field at the top of the sidebar (also Cmd/Ctrl+K) finds sections, cards and settings by name or help text, accent-insensitive, and opens the match: it switches to the tab, scrolls to the setting and highlights it. Recently opened results are listed first.
 * New: Google Tag Manager: "Purchase item prices with tax" option under the GA4 ecommerce dataLayer. When on, the purchase items carry the tax-inclusive unit price after discounts (matching a Merchant Center feed with gross prices); the purchase value stays net, without tax and shipping, the same as the GA4 purchase. Off by default; the GA4 tag and the Measurement Protocol keep net prices.
 
 = 1.4.2 =

@@ -23,6 +23,10 @@ Loads tracking pixels from the major ad networks and dispatches the standard eco
 - Optional SHA-256 hashed advanced matching, debug mode, `validate_only` connection test
 - The API key can live in `wp-config.php`: `define( 'LW_PIXEL_CHATGPT_API_KEY', '...' );`
 
+## Admin
+
+A React settings screen with a side navigation; the **Quick search** field at the top of the sidebar (Cmd/Ctrl+K) finds any section, card or setting by name and opens it.
+
 ## Supported pixels
 
 - **ChatGPT Ads** — `oaiq` measurement pixel + Conversions API server-side
