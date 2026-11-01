@@ -45,6 +45,8 @@ export const api = {
 
 	// ChatGPT Ads connection test (validate-only request).
 	testChatgpt: () => post( '/test/chatgpt', {} ),
+	// Pinterest Conversions API connection test (test=true request).
+	testPinterest: () => post( '/test/pinterest', {} ),
 };
 
 /**

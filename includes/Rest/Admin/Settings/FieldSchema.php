@@ -44,6 +44,7 @@ final class FieldSchema {
 			'gtm_container_id'            => self::id( '/^GTM-[A-Z0-9]{4,12}$/', true ),
 			'tiktok_pixel_id'             => self::id( self::SAFE_ID ),
 			'pinterest_tag_id'            => self::id( self::SAFE_ID ),
+			'pinterest_ad_account_id'     => self::id( '/^\d{1,20}$/' ),
 			'bing_tag_id'                 => self::id( self::SAFE_ID ),
 			'reddit_pixel_id'             => self::id( self::SAFE_ID ),
 			'snapchat_pixel_id'           => self::id( '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', false, true ),

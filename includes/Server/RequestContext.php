@@ -12,7 +12,8 @@ namespace LightweightPlugins\Pixel\Server;
 /**
  * One array shape for every provider:
  * time (unix seconds), url, ip, ua, fbp, fbc, ga (GA4 client id), obref,
- * oppref (ChatGPT Ads cookies) and customer (raw fields, see CustomerData).
+ * oppref (ChatGPT Ads cookies), epik (Pinterest click id) and customer (raw
+ * fields, see CustomerData).
  */
 final class RequestContext {
 
@@ -32,6 +33,7 @@ final class RequestContext {
 			'ga'       => self::ga_client_id( ClientRequest::cookie( '_ga' ) ),
 			'obref'    => ClientRequest::cookie( '__obref' ),
 			'oppref'   => ClientRequest::cookie( '__oppref' ),
+			'epik'     => ClientRequest::cookie( '_epik' ),
 			'customer' => CustomerData::current_user(),
 		];
 	}
@@ -50,7 +52,7 @@ final class RequestContext {
 			'customer' => $customer,
 		];
 
-		foreach ( [ 'url', 'ip', 'ua', 'fbp', 'fbc', 'ga', 'obref', 'oppref' ] as $key ) {
+		foreach ( [ 'url', 'ip', 'ua', 'fbp', 'fbc', 'ga', 'obref', 'oppref', 'epik' ] as $key ) {
 			$context[ $key ] = (string) ( $checkout[ $key ] ?? '' );
 		}
 

@@ -84,6 +84,7 @@ export default function OverviewTab( { store, events } ) {
 		saved.fb_capi_enabled && __( 'Meta', 'lw-pixel' ),
 		saved.ga4_mp_enabled && __( 'GA4', 'lw-pixel' ),
 		saved.chatgpt_capi_enabled && __( 'ChatGPT Ads', 'lw-pixel' ),
+		saved.pinterest_capi_enabled && __( 'Pinterest', 'lw-pixel' ),
 	].filter( Boolean );
 	const customOn = events.list
 		? events.list.events.filter( ( event ) => event.enabled ).length

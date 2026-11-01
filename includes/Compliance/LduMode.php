@@ -13,7 +13,8 @@ use LightweightPlugins\Pixel\Options;
 
 /**
  * Adds the Meta data_processing_options block ("LDU") to CAPI events when LDU
- * mode is enabled. Lets the user opt all traffic in, or only California traffic
+ * mode is enabled, and marks Pinterest Conversions API events with
+ * `opt_out_type: LDP` (limited data processing). Lets the user opt all traffic in, or only California traffic
  * (Meta resolves geo automatically when {0,0} is sent).
  *
  * Reference: https://developers.facebook.com/docs/marketing-apis/data-processing-options
@@ -31,6 +32,22 @@ final class LduMode {
 		}
 
 		add_filter( 'lw_pixel_capi_event_body', [ self::class, 'attach_ldu' ] );
+		add_filter( 'lw_pixel_pinterest_capi_event', [ self::class, 'attach_pinterest_ldp' ] );
+	}
+
+	/**
+	 * Mark a Pinterest Conversions API event as limited data processing.
+	 *
+	 * @param array<string, mixed> $event Event body.
+	 * @return array<string, mixed>
+	 */
+	public static function attach_pinterest_ldp( array $event ): array {
+		$custom = isset( $event['custom_data'] ) && is_array( $event['custom_data'] ) ? $event['custom_data'] : [];
+
+		$custom['opt_out_type'] = 'LDP';
+		$event['custom_data']   = $custom;
+
+		return $event;
 	}
 
 	/**

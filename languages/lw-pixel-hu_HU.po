@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LW Pixel\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
-"POT-Creation-Date: 2026-11-01T08:39:23+00:00\n"
+"POT-Creation-Date: 2026-11-01T21:42:55+00:00\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -527,6 +527,31 @@ msgstr ""
 msgid "Tracking context (LW Pixel)"
 msgstr "Követési adatok (LW Pixel)"
 
+#: includes/Server/PinterestCAPI.php:133
+msgid "Save a Pinterest ad account ID and conversion access token first."
+msgstr "Előbb ments el egy Pinterest-hirdetésifiók-azonosítót és egy konverziós hozzáférési tokent."
+
+#: includes/Server/PinterestCAPI.php:166
+msgid ""
+"Connected. Pinterest accepted a test event (test mode, nothing was recorded)."
+msgstr "Kapcsolódva. A Pinterest elfogadott egy teszteseményt (tesztmód, semmi sem lett rögzítve)."
+
+#: includes/Server/PinterestCAPI.php:170
+msgid ""
+"Pinterest rejected the access token. Check the token and that it belongs to "
+"this ad account."
+msgstr "A Pinterest elutasította a hozzáférési tokent. Ellenőrizd a tokent, és hogy ehhez a hirdetési fiókhoz tartozik-e."
+
+#: includes/Server/PinterestCAPI.php:174
+msgid "Could not reach the Pinterest API from this server."
+msgstr "Erről a szerverről nem érhető el a Pinterest API."
+
+#. translators: %d: HTTP status code.
+#: includes/Server/PinterestCAPI.php:179
+#, php-format
+msgid "Pinterest returned HTTP %d. Check the ad account ID and access token."
+msgstr "A Pinterest HTTP %d választ adott. Ellenőrizd a hirdetésifiók-azonosítót és a hozzáférési tokent."
+
 #: includes/SiteManager/Integration.php:40
 msgid "Tracking Pixels"
 msgstr "Követőpixelek"
@@ -737,11 +762,7 @@ msgstr "%s bekapcsolva."
 msgid "Reload page"
 msgstr "Oldal újratöltése"
 
-#: build/index.js:1
-msgid "Settings saved."
-msgstr "Beállítások elmentve."
-
-#: build/index.js:1
+#: build/index.js:1 build/index.js:17
 msgid "Nothing was saved. Fix the highlighted fields and save again."
 msgstr "Semmi sem lett elmentve. Javítsd a kiemelt mezőket, és mentsd újra."
 
@@ -969,25 +990,6 @@ msgid "Keep it"
 msgstr "Maradjon"
 
 #: build/index.js:3
-msgid ""
-"Sends one sample event with a validate-only flag: OpenAI checks the pixel ID "
-"and the key, and records nothing."
-msgstr ""
-"Egy mintaeseményt küld csak-ellenőrzés jelzéssel: az OpenAI ellenőrzi a "
-"pixelazonosítót és a kulcsot, de semmit sem rögzít."
-
-#: build/index.js:3
-msgid "Save your changes first: the test uses the saved pixel ID and key."
-msgstr ""
-"Előbb mentsd a módosításaidat: a teszt a mentett pixelazonosítót és kulcsot "
-"használja."
-
-#: build/index.js:3
-msgid "Save a pixel ID and a Conversions API key to run the test."
-msgstr ""
-"A teszthez ments el egy pixelazonosítót és egy Conversions API-kulcsot."
-
-#: build/index.js:3
 msgid "Test the connection"
 msgstr "Kapcsolat tesztelése"
 
@@ -1120,6 +1122,80 @@ msgstr "%s törlése"
 #: build/index.js:12
 msgid "Delete the custom event \"%s\"?"
 msgstr "Törlöd a(z) „%s” egyéni eseményt?"
+
+#: build/index.js:12
+msgid "Pinterest Conversions API (server-side)"
+msgstr "Pinterest Conversions API (szerveroldali)"
+
+#: build/index.js:12
+msgid "Token or ad account ID missing"
+msgstr "Hiányzik a token vagy a hirdetésifiók-azonosító"
+
+#: build/index.js:12
+msgid ""
+"Also sends purchases, add-to-carts, page visits, leads, searches and sign-"
+"ups from your server, deduplicated with the Pinterest Tag."
+msgstr "A vásárlásokat, kosárba helyezéseket, oldallátogatásokat, érdeklődéseket, kereséseket és regisztrációkat a szerveredről is elküldi, a Pinterest Taggel duplikáció nélkül."
+
+#: build/index.js:12
+msgid "Ad account ID"
+msgstr "Hirdetésifiók-azonosító"
+
+#: build/index.js:12
+msgid "The numeric ID of your Pinterest ad account (Ads Manager)."
+msgstr "A Pinterest-hirdetési fiókod számazonosítója (Ads Manager)."
+
+#: build/index.js:12
+msgid "Conversion access token"
+msgstr "Konverziós hozzáférési token"
+
+#: build/index.js:12
+msgid ""
+"Generate it in Ads Manager under Conversions. Stored in the database; you "
+"can instead define LW_PIXEL_PINTEREST_TOKEN in wp-config.php (takes "
+"precedence)."
+msgstr "Az Ads Manager Konverziók részében hozhatod létre. Az adatbázisban tárolódik; helyette megadhatod az LW_PIXEL_PINTEREST_TOKEN konstanst is a wp-config.php-ban (az élvez elsőbbséget)."
+
+#: build/index.js:12 build/index.js:15
+msgid "Advanced matching"
+msgstr "Speciális egyeztetés"
+
+#: build/index.js:12
+msgid ""
+"Sends SHA-256 hashed email, phone, name, address and user ID (the logged-in "
+"user, or the customer’s billing data with purchases) to improve matching."
+msgstr "SHA-256-tal hashelt e-mail-címet, telefonszámot, nevet, címet és felhasználói azonosítót küld (a bejelentkezett felhasználóét, vásárlásnál a vásárló számlázási adatait) a jobb egyeztetésért."
+
+#: build/index.js:12
+msgid "Test mode"
+msgstr "Tesztmód"
+
+#: build/index.js:12
+msgid ""
+"Pinterest checks the events but does not record them. Turn off on a live "
+"site."
+msgstr "A Pinterest ellenőrzi az eseményeket, de nem rögzíti őket. Éles oldalon kapcsold ki."
+
+#: build/index.js:12
+msgid ""
+"Medical mode is on: Pinterest needs the visitor’s IP address and user agent "
+"or a hashed email, so no server-side events are sent."
+msgstr "Az egészségügyi mód be van kapcsolva: a Pinterestnek a látogató IP-címe és böngészőazonosítója vagy hashelt e-mail-címe kell, ezért szerveroldali esemény nem megy ki."
+
+#: build/index.js:12
+msgid ""
+"Sends one sample event in test mode: Pinterest checks the ad account ID and "
+"the token, and records nothing."
+msgstr "Egy mintaeseményt küld tesztmódban: a Pinterest ellenőrzi a hirdetésifiók-azonosítót és a tokent, de semmit sem rögzít."
+
+#: build/index.js:12
+msgid ""
+"Save your changes first: the test uses the saved ad account ID and token."
+msgstr "Előbb mentsd a módosításaidat: a teszt az elmentett hirdetésifiók-azonosítót és tokent használja."
+
+#: build/index.js:12
+msgid "Save an ad account ID and a conversion access token to run the test."
+msgstr "A teszthez ments el egy hirdetésifiók-azonosítót és egy konverziós hozzáférési tokent."
 
 #: build/index.js:12
 msgid "Yes"
@@ -1267,6 +1343,10 @@ msgstr "Rendszerjelentés (JSON)"
 #: build/index.js:14
 msgid "GA4"
 msgstr "GA4"
+
+#: build/index.js:14
+msgid "Pinterest"
+msgstr "Pinterest"
 
 #: build/index.js:14
 msgid ""
@@ -1572,10 +1652,6 @@ msgid "Your ChatGPT Ads pixel ID from the Ads Manager."
 msgstr "A ChatGPT Ads pixelazonosítód az Ads Managerből."
 
 #: build/index.js:15
-msgid "Advanced matching"
-msgstr "Speciális egyeztetés"
-
-#: build/index.js:15
 msgid ""
 "Sends SHA-256 hashed email, phone, name and user ID (logged-in users in the "
 "browser, the customer’s billing data with server-side purchases) to improve "
@@ -1634,6 +1710,25 @@ msgstr ""
 "A böngészős és a szerveroldali események is figyelembe veszik az LW Cookie "
 "marketing hozzájárulási kategóriáját. Hozzájáruláskezelő bővítmény nélkül "
 "minden látogatónál elküldődnek."
+
+#: build/index.js:15
+msgid ""
+"Sends one sample event with a validate-only flag: OpenAI checks the pixel ID "
+"and the key, and records nothing."
+msgstr ""
+"Egy mintaeseményt küld csak-ellenőrzés jelzéssel: az OpenAI ellenőrzi a "
+"pixelazonosítót és a kulcsot, de semmit sem rögzít."
+
+#: build/index.js:15
+msgid "Save your changes first: the test uses the saved pixel ID and key."
+msgstr ""
+"Előbb mentsd a módosításaidat: a teszt a mentett pixelazonosítót és kulcsot "
+"használja."
+
+#: build/index.js:15
+msgid "Save a pixel ID and a Conversions API key to run the test."
+msgstr ""
+"A teszthez ments el egy pixelazonosítót és egy Conversions API-kulcsot."
 
 #: build/index.js:15
 msgid "Your TikTok Pixel ID (from Events Manager)."
@@ -2075,10 +2170,9 @@ msgstr "Korlátozott adathasználat (LDU)"
 #: build/index.js:17
 msgid ""
 "Adds the Meta data_processing_options block to CAPI events for California "
-"(CCPA) compliance."
-msgstr ""
-"Hozzáadja a Meta data_processing_options blokkját a CAPI eseményekhez a "
-"kaliforniai (CCPA) megfelelőségért."
+"(CCPA) compliance, and marks Pinterest Conversions API events as limited "
+"data processing (LDP)."
+msgstr "Hozzáadja a Meta data_processing_options blokkját a CAPI eseményekhez a kaliforniai (CCPA) megfelelőségért, a Pinterest Conversions API eseményeit pedig korlátozott adatfeldolgozásúnak (LDP) jelöli."
 
 #: build/index.js:17
 msgid "Mark events with LDU"
@@ -2098,11 +2192,9 @@ msgstr ""
 
 #: build/index.js:17
 msgid ""
-"LDU applies to Meta Conversion API events, which are switched off on the "
-"Meta screen."
-msgstr ""
-"Az LDU a Meta Conversion API eseményeire vonatkozik, ezek viszont ki vannak "
-"kapcsolva a Meta képernyőn."
+"LDU applies to the Meta and Pinterest Conversions API events, which are both "
+"switched off."
+msgstr "Az LDU a Meta és a Pinterest Conversions API eseményeire vonatkozik, ezek viszont mind ki vannak kapcsolva."
 
 #: build/index.js:17
 msgid "General"
@@ -2150,6 +2242,24 @@ msgstr "A <body> után"
 #: build/index.js:17
 msgid "Before </body>"
 msgstr "A </body> előtt"
+
+#: build/index.js:17
+msgid "Settings saved."
+msgstr "Beállítások elmentve."
+
+#~ msgid ""
+#~ "Adds the Meta data_processing_options block to CAPI events for California "
+#~ "(CCPA) compliance."
+#~ msgstr ""
+#~ "Hozzáadja a Meta data_processing_options blokkját a CAPI eseményekhez a "
+#~ "kaliforniai (CCPA) megfelelőségért."
+
+#~ msgid ""
+#~ "LDU applies to Meta Conversion API events, which are switched off on the "
+#~ "Meta screen."
+#~ msgstr ""
+#~ "Az LDU a Meta Conversion API eseményeire vonatkozik, ezek viszont ki "
+#~ "vannak kapcsolva a Meta képernyőn."
 
 #~ msgid ""
 #~ "Lightweight tracking pixel manager — ChatGPT Ads, Meta, Google Analytics "

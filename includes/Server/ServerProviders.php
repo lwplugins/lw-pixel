@@ -12,11 +12,12 @@ namespace LightweightPlugins\Pixel\Server;
 use LightweightPlugins\Pixel\Server\Providers\ChatGptProvider;
 use LightweightPlugins\Pixel\Server\Providers\Ga4Provider;
 use LightweightPlugins\Pixel\Server\Providers\MetaProvider;
+use LightweightPlugins\Pixel\Server\Providers\PinterestProvider;
 use LightweightPlugins\Pixel\Server\Providers\ServerProviderInterface;
 
 /**
- * Meta Conversions API, GA4 Measurement Protocol and ChatGPT Ads
- * Conversions API, plus any provider added with the
+ * Meta Conversions API, GA4 Measurement Protocol, ChatGPT Ads
+ * Conversions API and Pinterest Conversions API, plus any provider added with the
  * `lw_pixel_server_providers` filter.
  */
 final class ServerProviders {
@@ -34,7 +35,7 @@ final class ServerProviders {
 		 *
 		 * @param array<int, mixed> $list Providers (ServerProviderInterface instances).
 		 */
-		$list = (array) apply_filters( 'lw_pixel_server_providers', [ new MetaProvider(), new Ga4Provider(), new ChatGptProvider() ] );
+		$list = (array) apply_filters( 'lw_pixel_server_providers', [ new MetaProvider(), new Ga4Provider(), new ChatGptProvider(), new PinterestProvider() ] );
 
 		foreach ( $list as $provider ) {
 			if ( $provider instanceof ServerProviderInterface ) {

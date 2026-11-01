@@ -312,11 +312,16 @@
 				window.pintrk( 'load', config.tagId );
 				window.pintrk( 'page' );
 			},
-			fire: function (mapped, params) {
+			fire: function (mapped, params, eventId) {
 				if ( ! window.pintrk || ! mapped) {
 					return;
 				}
-				window.pintrk( 'track', mapped.name, mergeParams( mapped, params ) );
+				var pinParams = mergeParams( mapped, params );
+				// Shared with the Conversions API copy, so Pinterest keeps one.
+				if (eventId) {
+					pinParams.event_id = eventId;
+				}
+				window.pintrk( 'track', mapped.name, pinParams );
 			}
 		},
 

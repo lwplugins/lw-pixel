@@ -178,6 +178,35 @@ final class ServerPurchaseTest extends CapiTestCase {
 		$this->assertArrayHasKey( 'data', $this->sent[0] );
 	}
 
+	public function test_pinterest_purchase_is_sent_once_with_the_order_event_id_and_click_id(): void {
+		$this->use_options(
+			[
+				'fb_capi_enabled'         => false,
+				'pinterest_capi_enabled'  => true,
+				'pinterest_ad_account_id' => '549755885175',
+				'pinterest_capi_token'    => 'pina',
+			]
+		);
+		$context             = self::CONTEXT;
+		$context['consents'] = [ 'pinterest' => CheckoutContext::GRANTED ];
+		$context['epik']     = 'dj0yJnU9abc';
+		$order               = $this->order( [ CheckoutContext::META_KEY => $context ] );
+		$order->shouldReceive( 'update_meta_data' )->once()->with( '_lw_pixel_server_purchase_pinterest', '1' );
+		Functions\when( 'wc_get_order' )->justReturn( $order );
+
+		ServerPurchase::send( 42 );
+
+		$this->assertCount( 1, $this->sent );
+		$event = $this->sent[0]['data'][0];
+		$this->assertSame( 'checkout', $event['event_name'] );
+		$this->assertStringStartsWith( 'order-', $event['event_id'] );
+		$this->assertSame( 'dj0yJnU9abc', $event['user_data']['click_id'] );
+		$this->assertSame( '42', $event['custom_data']['order_id'] );
+		$this->assertIsString( $event['custom_data']['value'] );
+		$this->assertStringContainsString( 'api.pinterest.com', $this->urls[0] );
+		$this->assertSame( [ 'pinterest' ], OrderEnrich::providers_for( OrderEnrich::TRIGGER_STATUS ) );
+	}
+
 	public function test_meta_without_order_enrich_sends_on_the_thankyou_page(): void {
 		$this->use_options(
 			[

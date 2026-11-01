@@ -19,7 +19,7 @@ final class Options {
 	/**
 	 * Keys holding API secrets: never returned in plaintext by read APIs.
 	 */
-	public const SECRET_KEYS = [ 'fb_capi_token', 'ga4_mp_api_secret', 'chatgpt_api_key' ];
+	public const SECRET_KEYS = [ 'fb_capi_token', 'ga4_mp_api_secret', 'chatgpt_api_key', 'pinterest_capi_token' ];
 
 	/**
 	 * Placeholder returned instead of a stored secret. Writing it back

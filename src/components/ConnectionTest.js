@@ -9,47 +9,45 @@ import { Icon, connection } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import StatusIcon from '../../components/StatusIcon';
-import { api, errorMessage } from '../../data/api';
-
-const KEYS = [ 'chatgpt_pixel_id', 'chatgpt_api_key' ];
+import StatusIcon from './StatusIcon';
+import { errorMessage } from '../data/api';
 
 /**
  * Connection test state bar: what the test does, the button (a card-level
  * control, so it lives in this bar) and the last result. It checks the
- * SAVED pixel ID and key, so it waits for unsaved edits to be saved.
+ * SAVED ID and key, so it waits for unsaved edits to be saved.
  *
- * @param {Object} props
- * @param {Object} props.store Settings store.
+ * @param {Object}                 props
+ * @param {Object}                 props.store     Settings store.
+ * @param {string}                 props.idKey     Saved ID option key.
+ * @param {string}                 props.secretKey Secret option key.
+ * @param {() => Promise<Object>}  props.test      Runs the test, resolves to { ok, status, message }.
+ * @param {Object<string, string>} props.hints     Hint texts: idle (what the test does), dirty (unsaved edits), empty (ID or key not saved).
  */
-export default function ConnectionTest( { store } ) {
+export default function ConnectionTest( {
+	store,
+	idKey,
+	secretKey,
+	test,
+	hints,
+} ) {
 	const [ result, setResult ] = useState( null );
 	const [ running, setRunning ] = useState( false );
 	const { saved, data } = store;
-	const dirty = KEYS.some( ( key ) => store.isDirty( key ) );
-	const ready =
-		!! saved.chatgpt_pixel_id && !! data.meta.secrets.chatgpt_api_key?.set;
+	const dirty = [ idKey, secretKey ].some( ( key ) => store.isDirty( key ) );
+	const ready = !! saved[ idKey ] && !! data.meta.secrets[ secretKey ]?.set;
 
-	let hint = __(
-		'Sends one sample event with a validate-only flag: OpenAI checks the pixel ID and the key, and records nothing.',
-		'lw-pixel'
-	);
+	let hint = hints.idle;
 	if ( dirty ) {
-		hint = __(
-			'Save your changes first: the test uses the saved pixel ID and key.',
-			'lw-pixel'
-		);
+		hint = hints.dirty;
 	} else if ( ! ready ) {
-		hint = __(
-			'Save a pixel ID and a Conversions API key to run the test.',
-			'lw-pixel'
-		);
+		hint = hints.empty;
 	}
 
 	const run = async () => {
 		setRunning( true );
 		try {
-			setResult( await api.testChatgpt() );
+			setResult( await test() );
 		} catch ( e ) {
 			setResult( { ok: false, status: 0, message: errorMessage( e ) } );
 		}

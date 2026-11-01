@@ -29,9 +29,10 @@ final class SettingsSanitizer {
 	/**
 	 * Identifier keys limited to a safe character set. The ChatGPT Ads pixel
 	 * ID format is not documented, so only characters that are safe in a URL
-	 * query value are kept — no pattern is assumed.
+	 * query value are kept — no pattern is assumed. The Pinterest ad account
+	 * ID goes into a URL path.
 	 */
-	private const IDENTIFIER_KEYS = [ 'chatgpt_pixel_id' ];
+	private const IDENTIFIER_KEYS = [ 'chatgpt_pixel_id', 'pinterest_ad_account_id' ];
 
 	/**
 	 * Sanitise the submitted values.

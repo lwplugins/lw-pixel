@@ -13,7 +13,8 @@ import ProviderCard, { stateBadge } from '../components/ProviderCard';
 import SecretRow from '../components/SecretRow';
 import StatusBadge from '../components/StatusBadge';
 import { OptionSwitch, SwitchList } from '../components/Switches';
-import ConnectionTest from './chatgpt/ConnectionTest';
+import ConnectionTest from '../components/ConnectionTest';
+import { api } from '../data/api';
 import { hasSecret } from './providerState';
 
 /**
@@ -112,7 +113,26 @@ export default function ChatGptTab( { store } ) {
 					</Callout>
 				) }
 			</ProviderCard>
-			<ConnectionTest store={ store } />
+			<ConnectionTest
+				store={ store }
+				idKey="chatgpt_pixel_id"
+				secretKey="chatgpt_api_key"
+				test={ api.testChatgpt }
+				hints={ {
+					idle: __(
+						'Sends one sample event with a validate-only flag: OpenAI checks the pixel ID and the key, and records nothing.',
+						'lw-pixel'
+					),
+					dirty: __(
+						'Save your changes first: the test uses the saved pixel ID and key.',
+						'lw-pixel'
+					),
+					empty: __(
+						'Save a pixel ID and a Conversions API key to run the test.',
+						'lw-pixel'
+					),
+				} }
+			/>
 		</>
 	);
 }

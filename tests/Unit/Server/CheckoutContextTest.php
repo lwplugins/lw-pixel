@@ -97,6 +97,13 @@ final class CheckoutContextTest extends CapiTestCase {
 		unset( $_SERVER['HTTP_X_FORWARDED_FOR'] );
 	}
 
+	public function test_pinterest_click_id_is_kept_only_with_pinterest_consent(): void {
+		$_COOKIE['_epik'] = 'dj0yJnU9abc';
+
+		$this->assertSame( 'dj0yJnU9abc', CheckoutContext::from_request( [ 'pinterest' ] )['epik'] );
+		$this->assertArrayNotHasKey( 'epik', CheckoutContext::from_request( [ 'fb' ] ) );
+	}
+
 	public function test_get_returns_nothing_without_a_user_agent(): void {
 		$order = $this->order( [ CheckoutContext::META_KEY => [ 'consent' => CheckoutContext::GRANTED, 'ip' => '1.1.1.1' ] ] );
 

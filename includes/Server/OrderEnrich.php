@@ -14,7 +14,7 @@ use LightweightPlugins\Pixel\WooCommerce\Events\Purchase;
 
 /**
  * When the Purchase is sent from the server:
- * - GA4 Measurement Protocol and ChatGPT Ads Conversions API: when the
+ * - GA4 Measurement Protocol, ChatGPT Ads and Pinterest Conversions API: when the
  *   order reaches processing or completed (payment confirmed, final value).
  * - Meta Conversions API: the same with "Re-send Purchase when the order
  *   completes/processes" (`fb_order_enrich`) on; otherwise on the thank-you

@@ -47,7 +47,7 @@ export default function ComplianceTab( { store } ) {
 			<Section
 				title={ __( 'Limited Data Use (LDU)', 'lw-pixel' ) }
 				description={ __(
-					'Adds the Meta data_processing_options block to CAPI events for California (CCPA) compliance.',
+					'Adds the Meta data_processing_options block to CAPI events for California (CCPA) compliance, and marks Pinterest Conversions API events as limited data processing (LDP).',
 					'lw-pixel'
 				) }
 			>
@@ -72,14 +72,16 @@ export default function ComplianceTab( { store } ) {
 						label: labels[ value ] || value,
 					} ) ) }
 				/>
-				{ options.compliance_ldu && ! options.fb_capi_enabled && (
-					<Callout>
-						{ __(
-							'LDU applies to Meta Conversion API events, which are switched off on the Meta screen.',
-							'lw-pixel'
-						) }
-					</Callout>
-				) }
+				{ options.compliance_ldu &&
+					! options.fb_capi_enabled &&
+					! options.pinterest_capi_enabled && (
+						<Callout>
+							{ __(
+								'LDU applies to the Meta and Pinterest Conversions API events, which are both switched off.',
+								'lw-pixel'
+							) }
+						</Callout>
+					) }
 			</Section>
 		</>
 	);

@@ -43,12 +43,13 @@ Errors are `WP_Error` JSON: `{ code, message, data: { status, fields? } }`.
 
 - `options`: every `DefaultOptions` key, cast to its default's type. Keys in
   `Options::SECRET_KEYS` (`fb_capi_token`, `ga4_mp_api_secret`,
-  `chatgpt_api_key`) are always `null`. Their state is in `meta.secrets`:
+  `chatgpt_api_key`, `pinterest_capi_token`) are always `null`. Their state is in `meta.secrets`:
   `source` is `option`, `constant` or `none`, and `hint` is `…` plus the last
   4 characters, or only `…` for secrets under 16 characters.
 - `meta.locked`: secrets pinned by a wp-config constant. Only
-  `chatgpt_api_key` / `LW_PIXEL_CHATGPT_API_KEY` exists today, the same test as
-  `Server\ChatGptCAPI::api_key()`.
+  `chatgpt_api_key` / `LW_PIXEL_CHATGPT_API_KEY` and `pinterest_capi_token` /
+  `LW_PIXEL_PINTEREST_TOKEN` exist today, the same test as
+  `Server\ChatGptCAPI::api_key()` / `Server\PinterestCAPI::token()`.
 - `meta.pixels`: every registered pixel, third-party ones included, with its
   **saved** status. `default_category` is `''` for a pixel with no default
   consent list, which means it is not gated unless a list names it.
@@ -69,6 +70,7 @@ Validation per key (`Settings/FieldSchema` + `Settings/ValueParser`):
 | `ga4_measurement_id` / `gads_conversion_id` / `gtm_container_id` | upper-cased, then `^G-[A-Z0-9]{4,20}$` / `^AW-\d{5,15}$` / `^GTM-[A-Z0-9]{4,12}$` |
 | `snapchat_pixel_id` | lower-cased UUID |
 | `barion_pixel_id` | `^BP-[A-Za-z0-9]{4,32}-[A-Za-z0-9]{1,8}$` |
+| `pinterest_ad_account_id` | `^\d{1,20}$` |
 | other IDs (`tiktok_`, `pinterest_`, `bing_`, `reddit_`, `x_`, `chatgpt_pixel_id`, `fb_test_event_code`, `gads_conversion_label`) | `^[A-Za-z0-9_-]{1,64}$` |
 | Any ID | `""` clears it. |
 | `event_scroll_thresholds` | comma list of integers from 1 to 100 (max. 20), stored sorted and unique: `"25,50,75,100"` |
@@ -127,6 +129,7 @@ A click trigger needs a selector whenever you send `trigger_type` or
 | POST | `/admin/migrators/{id}/run` | `{ id, updated: [keys], skipped: [source keys] }`. Replaces the old GET + nonce link. |
 | GET | `/admin/system-report` | `{ report: { environment, pixels, integrations, options } }`. Secrets and custom code appear only as `***REDACTED*** (N chars)`. |
 | POST | `/admin/test/chatgpt` | Always 200: `{ ok, status, message }` from `Server\ChatGptCAPI::test_connection()`, a validate-only request built from the **saved** pixel ID and key. The message never contains the key. |
+| POST | `/admin/test/pinterest` | Always 200: `{ ok, status, message }` from `Server\PinterestCAPI::test_connection()`, one `page_visit` sent with `?test=true` (not recorded) using the **saved** ad account ID and token. The message never contains the token. |
 
 ## Screen
 

@@ -14,7 +14,7 @@ use LightweightPlugins\Pixel\Consent\Manager as ConsentManager;
 /**
  * Stores IP, user agent, the source URL and the consented providers' browser
  * identifiers (`_fbp`/`_fbc`, the GA4 client id, ChatGPT Ads `__obref`/
- * `__oppref`) on the order while
+ * `__oppref`, the Pinterest `_epik` click id) on the order while
  * the customer's own checkout request is running, so the Conversion API
  * Purchase later sends the customer's data — never that of the admin or
  * payment webhook that moves the order to processing/completed.
@@ -127,7 +127,7 @@ final class CheckoutContext {
 			 *
 			 * @param bool      $allowed  Consent state resolved like the browser pixel.
 			 * @param \WC_Order $order    Order being placed.
-			 * @param string    $provider Provider id ('fb', 'ga4', 'chatgpt').
+			 * @param string    $provider Provider id ('fb', 'ga4', 'chatgpt', 'pinterest').
 			 */
 			$consents[ $id ] = (bool) apply_filters( 'lw_pixel_server_purchase_consent', $allowed, $order, $id );
 		}
@@ -160,6 +160,10 @@ final class CheckoutContext {
 		if ( in_array( 'chatgpt', $granted, true ) ) {
 			$context['obref']  = ClientRequest::cookie( '__obref' );
 			$context['oppref'] = ClientRequest::cookie( '__oppref' );
+		}
+
+		if ( in_array( 'pinterest', $granted, true ) ) {
+			$context['epik'] = ClientRequest::cookie( '_epik' );
 		}
 
 		$context['url'] = function_exists( 'wc_get_checkout_url' ) ? (string) wc_get_checkout_url() : home_url( '/' );

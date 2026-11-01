@@ -27,7 +27,8 @@ final class SecretState {
 	 * list a key here when the runtime really reads the constant.
 	 */
 	private const CONSTANTS = [
-		'chatgpt_api_key' => 'LW_PIXEL_CHATGPT_API_KEY',
+		'chatgpt_api_key'      => 'LW_PIXEL_CHATGPT_API_KEY',
+		'pinterest_capi_token' => 'LW_PIXEL_PINTEREST_TOKEN',
 	];
 
 	/**
@@ -115,7 +116,8 @@ final class SecretState {
 			return null;
 		}
 
-		// Same test as the runtime reader (Server\ChatGptCAPI::api_key()).
+		// Same test as the runtime readers (Server\ChatGptCAPI::api_key(),
+		// Server\PinterestCAPI::token()).
 		$value = (string) constant( $constant );
 
 		return '' !== $value ? $value : null;

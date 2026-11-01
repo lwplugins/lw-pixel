@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-01T08:39:32+00:00\n"
+"POT-Creation-Date: 2026-11-01T21:43:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: lw-pixel\n"
@@ -506,6 +506,28 @@ msgstr ""
 msgid "Tracking context (LW Pixel)"
 msgstr ""
 
+#: includes/Server/PinterestCAPI.php:133
+msgid "Save a Pinterest ad account ID and conversion access token first."
+msgstr ""
+
+#: includes/Server/PinterestCAPI.php:166
+msgid "Connected. Pinterest accepted a test event (test mode, nothing was recorded)."
+msgstr ""
+
+#: includes/Server/PinterestCAPI.php:170
+msgid "Pinterest rejected the access token. Check the token and that it belongs to this ad account."
+msgstr ""
+
+#: includes/Server/PinterestCAPI.php:174
+msgid "Could not reach the Pinterest API from this server."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/Server/PinterestCAPI.php:179
+#, php-format
+msgid "Pinterest returned HTTP %d. Check the ad account ID and access token."
+msgstr ""
+
 #: includes/SiteManager/Integration.php:40
 msgid "Tracking Pixels"
 msgstr ""
@@ -726,10 +748,7 @@ msgid "Reload page"
 msgstr ""
 
 #: build/index.js:1
-msgid "Settings saved."
-msgstr ""
-
-#: build/index.js:1
+#: build/index.js:17
 msgid "Nothing was saved. Fix the highlighted fields and save again."
 msgstr ""
 
@@ -972,18 +991,6 @@ msgid "Keep it"
 msgstr ""
 
 #: build/index.js:3
-msgid "Sends one sample event with a validate-only flag: OpenAI checks the pixel ID and the key, and records nothing."
-msgstr ""
-
-#: build/index.js:3
-msgid "Save your changes first: the test uses the saved pixel ID and key."
-msgstr ""
-
-#: build/index.js:3
-msgid "Save a pixel ID and a Conversions API key to run the test."
-msgstr ""
-
-#: build/index.js:3
 msgid "Test the connection"
 msgstr ""
 
@@ -1114,6 +1121,67 @@ msgstr ""
 #: build/index.js:12
 #, js-format
 msgid "Delete the custom event \"%s\"?"
+msgstr ""
+
+#: build/index.js:12
+msgid "Pinterest Conversions API (server-side)"
+msgstr ""
+
+#: build/index.js:12
+msgid "Token or ad account ID missing"
+msgstr ""
+
+#: build/index.js:12
+msgid "Also sends purchases, add-to-carts, page visits, leads, searches and sign-ups from your server, deduplicated with the Pinterest Tag."
+msgstr ""
+
+#: build/index.js:12
+msgid "Ad account ID"
+msgstr ""
+
+#: build/index.js:12
+msgid "The numeric ID of your Pinterest ad account (Ads Manager)."
+msgstr ""
+
+#: build/index.js:12
+msgid "Conversion access token"
+msgstr ""
+
+#: build/index.js:12
+msgid "Generate it in Ads Manager under Conversions. Stored in the database; you can instead define LW_PIXEL_PINTEREST_TOKEN in wp-config.php (takes precedence)."
+msgstr ""
+
+#: build/index.js:12
+#: build/index.js:15
+msgid "Advanced matching"
+msgstr ""
+
+#: build/index.js:12
+msgid "Sends SHA-256 hashed email, phone, name, address and user ID (the logged-in user, or the customer’s billing data with purchases) to improve matching."
+msgstr ""
+
+#: build/index.js:12
+msgid "Test mode"
+msgstr ""
+
+#: build/index.js:12
+msgid "Pinterest checks the events but does not record them. Turn off on a live site."
+msgstr ""
+
+#: build/index.js:12
+msgid "Medical mode is on: Pinterest needs the visitor’s IP address and user agent or a hashed email, so no server-side events are sent."
+msgstr ""
+
+#: build/index.js:12
+msgid "Sends one sample event in test mode: Pinterest checks the ad account ID and the token, and records nothing."
+msgstr ""
+
+#: build/index.js:12
+msgid "Save your changes first: the test uses the saved ad account ID and token."
+msgstr ""
+
+#: build/index.js:12
+msgid "Save an ad account ID and a conversion access token to run the test."
 msgstr ""
 
 #: build/index.js:12
@@ -1251,6 +1319,10 @@ msgstr ""
 
 #: build/index.js:14
 msgid "GA4"
+msgstr ""
+
+#: build/index.js:14
+msgid "Pinterest"
 msgstr ""
 
 #: build/index.js:14
@@ -1510,10 +1582,6 @@ msgid "Your ChatGPT Ads pixel ID from the Ads Manager."
 msgstr ""
 
 #: build/index.js:15
-msgid "Advanced matching"
-msgstr ""
-
-#: build/index.js:15
 msgid "Sends SHA-256 hashed email, phone, name and user ID (logged-in users in the browser, the customer’s billing data with server-side purchases) to improve attribution."
 msgstr ""
 
@@ -1547,6 +1615,18 @@ msgstr ""
 
 #: build/index.js:15
 msgid "Browser and server-side events respect the marketing consent category of LW Cookie. Without a consent plugin they are sent to every visitor."
+msgstr ""
+
+#: build/index.js:15
+msgid "Sends one sample event with a validate-only flag: OpenAI checks the pixel ID and the key, and records nothing."
+msgstr ""
+
+#: build/index.js:15
+msgid "Save your changes first: the test uses the saved pixel ID and key."
+msgstr ""
+
+#: build/index.js:15
+msgid "Save a pixel ID and a Conversions API key to run the test."
 msgstr ""
 
 #: build/index.js:15
@@ -1926,7 +2006,7 @@ msgid "Limited Data Use (LDU)"
 msgstr ""
 
 #: build/index.js:17
-msgid "Adds the Meta data_processing_options block to CAPI events for California (CCPA) compliance."
+msgid "Adds the Meta data_processing_options block to CAPI events for California (CCPA) compliance, and marks Pinterest Conversions API events as limited data processing (LDP)."
 msgstr ""
 
 #: build/index.js:17
@@ -1942,7 +2022,7 @@ msgid "\"Auto\" lets Meta resolve geo. \"Force California\" sets country=1, stat
 msgstr ""
 
 #: build/index.js:17
-msgid "LDU applies to Meta Conversion API events, which are switched off on the Meta screen."
+msgid "LDU applies to the Meta and Pinterest Conversions API events, which are both switched off."
 msgstr ""
 
 #: build/index.js:17
@@ -1979,4 +2059,8 @@ msgstr ""
 
 #: build/index.js:17
 msgid "Before </body>"
+msgstr ""
+
+#: build/index.js:17
+msgid "Settings saved."
 msgstr ""

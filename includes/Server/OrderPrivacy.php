@@ -11,7 +11,7 @@ namespace LightweightPlugins\Pixel\Server;
 
 /**
  * The checkout context (IP, user agent, `_fbp`/`_fbc`, GA client id,
- * `__obref`/`__oppref`) is personal data kept on the order until every
+ * `__obref`/`__oppref`, `_epik`) is personal data kept on the order until every
  * provider has sent the Purchase. WooCommerce's personal data exporter
  * lists it, and its eraser deletes it (instead of leaving a `[deleted]`
  * placeholder).

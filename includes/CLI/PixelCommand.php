@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace LightweightPlugins\Pixel\CLI;
 
 use LightweightPlugins\Pixel\Options;
+use LightweightPlugins\Pixel\Server\PinterestCAPI;
 use WP_CLI;
 use WP_CLI\Utils;
 
@@ -70,6 +71,12 @@ final class PixelCommand {
 			[
 				'setting' => 'Meta CAPI',
 				'value'   => ! empty( $options['fb_capi_enabled'] ) && ! empty( $options['fb_capi_token'] ) ? 'On' : 'Off',
+			],
+			[
+				'setting' => 'Pinterest CAPI',
+				'value'   => ! empty( $options['pinterest_capi_enabled'] ) && PinterestCAPI::is_configured()
+					? 'On' . ( ! empty( $options['pinterest_capi_test'] ) ? ' (test mode)' : '' )
+					: 'Off',
 			],
 			[
 				'setting' => 'GA4 Measurement Protocol',

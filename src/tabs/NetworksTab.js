@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	atSymbol,
@@ -18,6 +19,7 @@ import {
 import { TextRow } from '../components/Fields';
 import ProviderCard, { stateBadge } from '../components/ProviderCard';
 import { OptionSwitch, SwitchList } from '../components/Switches';
+import PinterestCapi from './networks/PinterestCapi';
 
 /**
  * The single-ID networks, in the classic order.
@@ -42,6 +44,7 @@ const networks = () => [
 		idTitle: __( 'Tag ID', 'lw-pixel' ),
 		help: __( 'Your Pinterest Tag ID.', 'lw-pixel' ),
 		placeholder: '2612345678901',
+		after: PinterestCapi,
 	},
 	{
 		prefix: 'bing',
@@ -122,42 +125,45 @@ export default function NetworksTab( { store } ) {
 
 	return networks().map( ( net ) => {
 		const enabledKey = `${ net.prefix }_enabled`;
+		const After = net.after;
 
 		return (
-			<ProviderCard
-				key={ net.prefix }
-				store={ store }
-				name={ enabledKey }
-				title={ net.title }
-				icon={ net.icon }
-				badge={ stateBadge(
-					options[ enabledKey ],
-					!! options[ net.idKey ],
-					__( 'ID missing', 'lw-pixel' )
-				) }
-			>
-				<TextRow
+			<Fragment key={ net.prefix }>
+				<ProviderCard
 					store={ store }
-					name={ net.idKey }
-					title={ net.idTitle }
-					help={ net.help }
-					placeholder={ net.placeholder }
-					mono
-				/>
-				{ net.switches && (
-					<SwitchList>
-						{ net.switches.map( ( sw ) => (
-							<OptionSwitch
-								key={ sw.name }
-								store={ store }
-								name={ sw.name }
-								title={ sw.title }
-								help={ sw.help }
-							/>
-						) ) }
-					</SwitchList>
-				) }
-			</ProviderCard>
+					name={ enabledKey }
+					title={ net.title }
+					icon={ net.icon }
+					badge={ stateBadge(
+						options[ enabledKey ],
+						!! options[ net.idKey ],
+						__( 'ID missing', 'lw-pixel' )
+					) }
+				>
+					<TextRow
+						store={ store }
+						name={ net.idKey }
+						title={ net.idTitle }
+						help={ net.help }
+						placeholder={ net.placeholder }
+						mono
+					/>
+					{ net.switches && (
+						<SwitchList>
+							{ net.switches.map( ( sw ) => (
+								<OptionSwitch
+									key={ sw.name }
+									store={ store }
+									name={ sw.name }
+									title={ sw.title }
+									help={ sw.help }
+								/>
+							) ) }
+						</SwitchList>
+					) }
+				</ProviderCard>
+				{ After && <After store={ store } /> }
+			</Fragment>
 		);
 	} );
 }
