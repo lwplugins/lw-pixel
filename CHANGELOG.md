@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.1] - 2026-11-02
+
+### Fixed
+- GA4 sends hits again when another script defined `gtag()` before LW Pixel, most commonly LW Cookie with Google Consent Mode. LW Pixel only queued gtag.js's required `js` command when it created `gtag()` itself, so the tag loaded but sent no page views or events and set no `_ga` cookie. The command is now queued once, whoever defined `gtag()` (#14). Google Ads tags loaded through the same `gtag()` get the same fix.
+
 ## [1.5.0] - 2026-11-01
 
 ### Added

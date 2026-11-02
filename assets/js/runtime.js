@@ -143,6 +143,13 @@
 		if (typeof window.gtag !== 'function') {
 			window.gtag = function () {
 				window.dataLayer.push( arguments ); };
+		}
+		// Another script (e.g. a consent banner's Consent Mode defaults) may
+		// have defined gtag first: gtag.js sends nothing without the js command.
+		var hasJs = window.dataLayer.some( function (entry) {
+			return entry && entry[0] === 'js';
+		} );
+		if ( ! hasJs) {
 			window.gtag( 'js', new Date() );
 		}
 	}

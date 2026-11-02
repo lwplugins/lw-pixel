@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,9 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.5.1 =
+* Fix: GA4 sends hits again when another script defined `gtag()` before LW Pixel, most commonly LW Cookie with Google Consent Mode. LW Pixel only queued gtag.js's required `js` command when it created `gtag()` itself, so the tag loaded but sent no page views or events and set no `_ga` cookie. The command is now queued once, whoever defined `gtag()` (#14). Google Ads tags loaded through the same `gtag()` get the same fix.
 
 = 1.5.0 =
 * New: Pinterest Conversions API: purchases, add-to-carts, page visits, leads, searches and sign-ups are also sent server-side, deduplicated with the Pinterest Tag through a shared event ID, with consent, medical-traffic and limited-data-processing handling like the other server-side providers.
