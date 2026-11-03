@@ -9,3 +9,6 @@ composer.phar
 
 # Internal planning docs (brainstorm specs / implementation plans)
 /docs/superpowers/
+
+# Playwright output
+/tests/e2e/.results/

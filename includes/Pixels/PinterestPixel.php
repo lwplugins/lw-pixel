@@ -15,20 +15,20 @@ namespace LightweightPlugins\Pixel\Pixels;
 final class PinterestPixel extends AbstractPixel {
 
 	/**
-	 * Generic → Pinterest event.
+	 * Generic → Pinterest event. No InitiateCheckout: Pinterest's
+	 * `checkout` is the completed purchase.
 	 *
 	 * @var array<string, string>
 	 */
 	private const EVENT_MAP = [
-		'PageView'         => 'pagevisit',
-		'ViewContent'      => 'pagevisit',
-		'ViewCategory'     => 'viewcategory',
-		'Search'           => 'search',
-		'Lead'             => 'lead',
-		'Contact'          => 'lead',
-		'AddToCart'        => 'addtocart',
-		'InitiateCheckout' => 'checkout',
-		'Purchase'         => 'checkout',
+		'PageView'     => 'pagevisit',
+		'ViewContent'  => 'pagevisit',
+		'ViewCategory' => 'viewcategory',
+		'Search'       => 'search',
+		'Lead'         => 'lead',
+		'Contact'      => 'lead',
+		'AddToCart'    => 'addtocart',
+		'Purchase'     => 'checkout',
 	];
 
 	public function get_id(): string {

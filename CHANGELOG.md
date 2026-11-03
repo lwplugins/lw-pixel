@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.5.2] - 2026-11-03
+
+### Fixed
+- GA4 counted every page view twice: the GA4 configuration sent its own automatic `page_view` next to LW Pixel's. The automatic one is now off, so each page load is one page view, with the visitor's own URL and the event ID (#20).
+- Snapchat Pixel: the pixel never started since 1.0.0, because its loader failed in the browser before it loaded the Snapchat library. It now loads and sends its events.
+- TikTok Pixel: each page load sent three page views, and the loader requested the TikTok library a second time with an invalid ID. It now loads once and sends one page view.
+- Reddit Pixel: each page load sent the page visit twice; now once.
+- Snapchat, TikTok and Reddit page views now follow the PageView event setting, like the other pixels.
+- Pinterest Tag: a started checkout was reported as Pinterest's `checkout` event, which Pinterest counts as a completed purchase. Started checkouts are no longer sent to Pinterest; the `checkout` event is the purchase only, as in the Conversions API.
+- When a pixel fails in the browser, the console now shows which one, instead of failing silently.
+
 ## [1.5.1] - 2026-11-02
 
 ### Fixed

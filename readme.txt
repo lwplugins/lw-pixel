@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,15 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.5.2 =
+* Fix: GA4 counted every page view twice: the GA4 configuration sent its own automatic `page_view` next to LW Pixel's. The automatic one is now off, so each page load is one page view, with the visitor's own URL and the event ID (#20).
+* Fix: Snapchat Pixel: the pixel never started since 1.0.0, because its loader failed in the browser before it loaded the Snapchat library. It now loads and sends its events.
+* Fix: TikTok Pixel: each page load sent three page views, and the loader requested the TikTok library a second time with an invalid ID. It now loads once and sends one page view.
+* Fix: Reddit Pixel: each page load sent the page visit twice; now once.
+* Fix: Snapchat, TikTok and Reddit page views now follow the PageView event setting, like the other pixels.
+* Fix: Pinterest Tag: a started checkout was reported as Pinterest's `checkout` event, which Pinterest counts as a completed purchase. Started checkouts are no longer sent to Pinterest; the `checkout` event is the purchase only, as in the Conversions API.
+* Fix: When a pixel fails in the browser, the console now shows which one, instead of failing silently.
 
 = 1.5.1 =
 * Fix: GA4 sends hits again when another script defined `gtag()` before LW Pixel, most commonly LW Cookie with Google Consent Mode. LW Pixel only queued gtag.js's required `js` command when it created `gtag()` itself, so the tag loaded but sent no page views or events and set no `_ga` cookie. The command is now queued once, whoever defined `gtag()` (#14). Google Ads tags loaded through the same `gtag()` get the same fix.

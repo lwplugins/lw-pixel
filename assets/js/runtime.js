@@ -155,6 +155,19 @@
 	}
 
 	/**
+	 * A provider call failed: say so in the console instead of failing
+	 * silently (a broken snippet must not stop the other providers).
+	 *
+	 * @param {string} id    Provider id.
+	 * @param {Error}  error Error.
+	 */
+	function warn(id, error) {
+		if (window.console && window.console.warn) {
+			window.console.warn( 'LW Pixel: ' + id + ' failed.', error );
+		}
+	}
+
+	/**
 	 * Merge server-mapped params with the runtime params captured at fire time.
 	 */
 	function mergeParams(mapped, params) {
@@ -205,7 +218,10 @@
 					config.measurementId,
 					{
 						anonymize_ip: ! ! config.anonymizeIp,
-						debug_mode: ! ! config.debug
+						debug_mode: ! ! config.debug,
+						// The PageView event sends page_view (cache-safe
+						// page_location, event id): no automatic second one.
+						send_page_view: false
 					}
 				);
 			},
@@ -292,13 +308,17 @@
 								for (var e = ttq._i[t] || [],n = 0;n < ttq.methods.length;n++) {
 									ttq.setAndDefer( e,ttq.methods[n] );
 								}return e};ttq.load = function (e,n) {
-									var r = "https://analytics.tiktok.com/i18n/pixel/events.js",o = n && n.partner;ttq._i = ttq._i || {};ttq._i[e] = [];ttq._i[e]._u = r;ttq._t = ttq._t || {};ttq._t[e] = +new Date;ttq._o = ttq._o || {};ttq._o[e] = n || {};var i = document.createElement( "script" );i.type = "text/javascript";i.async = ! 0;i.src = r + "?sdkid=" + e + "&lib=" + t;var a = document.getElementsByTagName( "script" )[0];a.parentNode.insertBefore( i,a )};ttq.load( arguments[0] );ttq.page()}(window,document,'ttq');
+									var r = "https://analytics.tiktok.com/i18n/pixel/events.js",o = n && n.partner;ttq._i = ttq._i || {};ttq._i[e] = [];ttq._i[e]._u = r;ttq._t = ttq._t || {};ttq._t[e] = +new Date;ttq._o = ttq._o || {};ttq._o[e] = n || {};var i = document.createElement( "script" );i.type = "text/javascript";i.async = ! 0;i.src = r + "?sdkid=" + e + "&lib=" + t;var a = document.getElementsByTagName( "script" )[0];a.parentNode.insertBefore( i,a )}}(window,document,'ttq');
 				/* eslint-enable */
 				window.ttq.load( config.pixelId );
-				window.ttq.page();
 			},
 			fire: function (mapped, params) {
 				if ( ! window.ttq || ! mapped) {
+					return;
+				}
+				// TikTok's page view is ttq.page(), not a tracked event.
+				if (mapped.name === 'Pageview') {
+					window.ttq.page();
 					return;
 				}
 				window.ttq.track( mapped.name, mergeParams( mapped, params ) );
@@ -361,7 +381,6 @@
 				!function (w,d) {if ( ! w.rdt) {var p = w.rdt = function () {p.sendEvent ? p.sendEvent.apply( p,arguments ) : p.callQueue.push( arguments )};p.callQueue = [];var t = d.createElement( "script" );t.src = "https://www.redditstatic.com/ads/pixel.js",t.async = ! 0;var s = d.getElementsByTagName( "script" )[0];s.parentNode.insertBefore( t,s )}}(window,document);
 				/* eslint-enable */
 				window.rdt( 'init', config.pixelId );
-				window.rdt( 'track', 'PageVisit' );
 			},
 			fire: function (mapped, params) {
 				if ( ! window.rdt || ! mapped) {
@@ -377,10 +396,9 @@
 					return;
 				}
 				/* eslint-disable */
-				(function (e,t,n) {if (e.snaptr) return;var a = e.snaptr = function () {a.handleRequest ? a.handleRequest.apply( a,arguments ) : a.queue.push( arguments )};a.queue = [];var s = 'script';r = t.createElement( s );r.async = ! 0;r.src = n;var u = t.getElementsByTagName( s )[0];u.parentNode.insertBefore( r,u )})( window,document,'https://sc-static.net/scevent.min.js' );
+				(function (e,t,n) {if (e.snaptr) return;var a = e.snaptr = function () {a.handleRequest ? a.handleRequest.apply( a,arguments ) : a.queue.push( arguments )};a.queue = [];var s = 'script';var r = t.createElement( s );r.async = ! 0;r.src = n;var u = t.getElementsByTagName( s )[0];u.parentNode.insertBefore( r,u )})( window,document,'https://sc-static.net/scevent.min.js' );
 				/* eslint-enable */
 				window.snaptr( 'init', config.pixelId, { user_email: config.email || '' } );
-				window.snaptr( 'track', 'PAGE_VIEW' );
 			},
 			fire: function (mapped, params) {
 				if ( ! window.snaptr || ! mapped) {
@@ -523,7 +541,9 @@
 					try {
 						provider.init( payload.pixels[id] );
 						initialized[id] = true;
-					} catch (e) { /* noop */ }
+					} catch (e) {
+						warn( id, e );
+					}
 				}
 				if (initialized[id] && ! active[id] && pixelAllowed( id )) {
 					active[id] = true;
@@ -555,7 +575,7 @@
 					return;
 				}
 				lastAllowed[id] = allowed;
-				try { provider.consent( allowed ); } catch (e) { /* noop */ }
+				try { provider.consent( allowed ); } catch (e) { warn( id, e ); }
 			}
 		);
 	}
@@ -585,7 +605,7 @@
 								if ( ! allow[pixelId]) { return; }
 								var provider = providers[pixelId];
 								if ( ! provider || typeof provider.fire !== 'function') { return; }
-								try { provider.fire( entry.mapped[pixelId], entry.params || {}, entry.event_id ); } catch (e) { /* noop */ }
+								try { provider.fire( entry.mapped[pixelId], entry.params || {}, entry.event_id ); } catch (e) { warn( pixelId, e ); }
 							}
 						);
 					}
@@ -645,7 +665,7 @@
 				if ( ! active[pixelId]) { return; }
 				var provider = providers[pixelId];
 				if ( ! provider || typeof provider.fire !== 'function') { return; }
-				try { provider.fire( mapped[pixelId], params || {}, eventId ); } catch (e) { /* noop */ }
+				try { provider.fire( mapped[pixelId], params || {}, eventId ); } catch (e) { warn( pixelId, e ); }
 			}
 		);
 	}
@@ -731,7 +751,7 @@
 				if ( ! provider || typeof provider.fire !== 'function') {
 					return;
 				}
-				try { provider.fire( cev.mapped[pixelId], cev.params || {}, eventId ); } catch (e) { /* noop */ }
+				try { provider.fire( cev.mapped[pixelId], cev.params || {}, eventId ); } catch (e) { warn( pixelId, e ); }
 			}
 		);
 
