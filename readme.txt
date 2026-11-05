@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,9 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.5.3 =
+* Fix: Admin quick search: moving the mouse over a result no longer breaks the dialog (a console error, and Enter or the arrow keys stopped working); the result under the pointer becomes the selected one.
 
 = 1.5.2 =
 * Fix: GA4 counted every page view twice: the GA4 configuration sent its own automatic `page_view` next to LW Pixel's. The automatic one is now off, so each page load is one page view, with the visitor's own URL and the event ID (#20).

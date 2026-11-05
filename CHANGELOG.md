@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.3] - 2026-11-05
+
+### Fixed
+- Admin quick search: moving the mouse over a result no longer breaks the dialog (a console error, and Enter or the arrow keys stopped working); the result under the pointer becomes the selected one.
+
 ## [1.5.2] - 2026-11-03
 
 ### Fixed
