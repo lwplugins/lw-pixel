@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.4] - 2026-11-25
+
+### Fixed
+- Page and post titles reach GA4, Meta and the other providers as plain text. The page title (PageView) and the post title (ViewContent) were sent HTML-encoded, so reports showed `&#8211;`, `&#8217;` or `&amp;` instead of the dash, apostrophe or ampersand (#32).
+
 ## [1.5.3] - 2026-11-05
 
 ### Fixed

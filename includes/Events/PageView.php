@@ -16,7 +16,7 @@ final class PageView extends AbstractEvent {
 
 	public function __construct() {
 		$this->params = [
-			'page_title'    => wp_get_document_title(),
+			'page_title'    => self::plain_text( wp_get_document_title() ),
 			'page_location' => self::current_url(),
 		];
 	}

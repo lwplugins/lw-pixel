@@ -45,6 +45,21 @@ abstract class AbstractEvent implements EventInterface {
 	}
 
 	/**
+	 * Plain-text form of a title WordPress prepared for HTML output.
+	 *
+	 * The core title functions (wp_get_document_title(), get_the_title())
+	 * return texturized, entity-encoded text (&#8211;, &#8217;, &amp;); the
+	 * providers would store the entities literally, so decode them and drop
+	 * any markup.
+	 *
+	 * @param string $title Title as WordPress returns it for display.
+	 * @return string
+	 */
+	protected static function plain_text( string $title ): string {
+		return wp_strip_all_tags( html_entity_decode( $title, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
+	}
+
+	/**
 	 * Plugin option key controlling this event.
 	 *
 	 * @return string Empty when always-on.

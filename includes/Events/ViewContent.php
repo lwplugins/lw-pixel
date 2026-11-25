@@ -27,7 +27,7 @@ final class ViewContent extends AbstractEvent {
 
 		$this->params = [
 			'content_id'   => (string) $post->ID,
-			'content_name' => get_the_title( $post ),
+			'content_name' => self::plain_text( get_the_title( $post ) ),
 			'content_type' => $post->post_type,
 		];
 	}

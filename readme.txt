@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,9 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.5.4 =
+* Fix: Page and post titles reach GA4, Meta and the other providers as plain text. The page title (PageView) and the post title (ViewContent) were sent HTML-encoded, so reports showed `&#8211;`, `&#8217;` or `&amp;` instead of the dash, apostrophe or ampersand (#32).
 
 = 1.5.3 =
 * Fix: Admin quick search: moving the mouse over a result no longer breaks the dialog (a console error, and Enter or the arrow keys stopped working); the result under the pointer becomes the selected one.
