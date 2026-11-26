@@ -175,3 +175,63 @@ test( 'a marketing pixel waits for consent, then sends its page view once', asyn
 
 	expect( [ views.reddit, views.ga4 ] ).toEqual( [ 1, 1 ] );
 } );
+
+/** Google tag scripts the runtime inserted. */
+function gtagScripts( page ) {
+	return page.evaluate( () => Array.from( document.querySelectorAll( 'script[src*="googletagmanager.com/gtag/js"]' ) ).map( ( s ) => s.src ) );
+}
+
+function giveConsent( page ) {
+	return page.evaluate( () => {
+		const consent = { categories: { necessary: true, analytics: true, marketing: true } };
+		document.cookie = 'lw_cookie_consent=' + encodeURIComponent( btoa( JSON.stringify( consent ) ) ) + '; path=/';
+		window.dispatchEvent( new Event( 'lwCookieConsent' ) );
+	} );
+}
+
+const LEAD = {
+	name: 'Lead',
+	params: {},
+	mapped: { gads: { send_to: 'AW-123456/lead1' } },
+};
+
+const GOOGLE_GATED = {
+	consentClient: true,
+	categories: { ga4: 'analytics', gads: 'marketing' },
+	events: [ PAGE_VIEW, LEAD ],
+};
+
+test( 'Consent Mode: the Google tag loads before consent, its events wait for it (#28)', async ( { page } ) => {
+	const data = payload( Object.assign( {}, GOOGLE_GATED, {
+		pixels: {
+			ga4: Object.assign( {}, PIXELS.ga4, { baseWithoutConsent: true } ),
+			gads: { conversionId: 'AW-123456', baseWithoutConsent: true },
+		},
+	} ) );
+	const warnings = await load( page, data );
+
+	expect( warnings ).toEqual( [] );
+	expect( await gtagScripts( page ) ).toHaveLength( 2 );
+	let calls = ( await queuedCalls( page ) ).ga4;
+	expect( calls.filter( ( c ) => c[ 0 ] === 'config' ).map( ( c ) => c[ 1 ] ) ).toEqual( [ 'G-TEST123456', 'AW-123456' ] );
+	expect( calls.filter( ( c ) => c[ 0 ] === 'event' ) ).toEqual( [] );
+
+	await giveConsent( page );
+	calls = ( await queuedCalls( page ) ).ga4;
+
+	// GA4: one page_view event, and its config sends none of its own.
+	expect( calls.filter( ( c ) => c[ 0 ] === 'event' && c[ 1 ] === 'page_view' ) ).toHaveLength( 1 );
+	expect( calls.find( ( c ) => c[ 0 ] === 'config' && c[ 1 ] === 'G-TEST123456' )[ 2 ].send_page_view ).toBe( false );
+	expect( calls.filter( ( c ) => c[ 0 ] === 'event' && c[ 1 ] === 'conversion' ).map( ( c ) => c[ 2 ].send_to ) ).toEqual( [ 'AW-123456/lead1' ] );
+	expect( calls.filter( ( c ) => c[ 0 ] === 'config' ) ).toHaveLength( 2 );
+} );
+
+test( 'without the Consent Mode option the Google tag waits for consent', async ( { page } ) => {
+	const data = payload( Object.assign( {}, GOOGLE_GATED, {
+		pixels: { ga4: PIXELS.ga4, gads: { conversionId: 'AW-123456', baseWithoutConsent: false } },
+	} ) );
+	await load( page, data );
+
+	expect( await gtagScripts( page ) ).toEqual( [] );
+	expect( ( await queuedCalls( page ) ).ga4 ).toEqual( [] );
+} );

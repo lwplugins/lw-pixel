@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.5] - 2026-11-26
+
+### Added
+- Google Ads: **Other conversions** sends a Google Ads conversion for events other than the purchase, one `EventName=label` per line: form submissions and thank-you pages (`Lead`), phone and email clicks (`Contact`) or a custom event, which also sends its value (#28).
+- Google tab → Consent Mode v2: **Load the Google tag before consent**. With LW Cookie's Google Consent Mode on, the GA4 and Google Ads tag (gtag.js) loads for every visitor, so Google Ads and Google's tag checks find it; Consent Mode keeps it cookieless and LW Pixel sends no events until the visitor consents. Off by default; needs LW Cookie 1.9.18 (#28).
+
 ## [1.5.4] - 2026-11-25
 
 ### Fixed

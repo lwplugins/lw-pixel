@@ -54,16 +54,32 @@ final class SettingsSanitizerTest extends MonkeyTestCase {
 		$this->assertFalse( SettingsSanitizer::raw_code_refused( 'footer_code' ) );
 	}
 
-	public function test_preserves_line_breaks_in_thankyou_urls(): void {
+	/**
+	 * @dataProvider provide_line_lists
+	 *
+	 * @param string $key   One-entry-per-line option.
+	 * @param string $value Submitted value.
+	 */
+	public function test_preserves_line_breaks_in_line_lists( string $key, string $value ): void {
 		// Real sanitize_textarea_field() keeps internal newlines, only
 		// trimming the ends - unlike sanitize_text_field().
 		Functions\when( 'sanitize_textarea_field' )->alias(
 			static fn ( $value ): string => trim( (string) $value )
 		);
 
-		$result = SettingsSanitizer::sanitize( [ 'event_thankyou_urls' => "koszonjuk\nthank-you" ] );
+		$result = SettingsSanitizer::sanitize( [ $key => $value ] );
 
-		$this->assertSame( "koszonjuk\nthank-you", $result['event_thankyou_urls'] );
+		$this->assertSame( $value, $result[ $key ] );
+	}
+
+	/**
+	 * @return array<string, array{0: string, 1: string}>
+	 */
+	public static function provide_line_lists(): array {
+		return [
+			'thank-you URLs'          => [ 'event_thankyou_urls', "koszonjuk\nthank-you" ],
+			'Google Ads conversions'  => [ 'gads_conversion_events', "Lead=lead1\nContact=call1" ],
+		];
 	}
 
 	public function test_sanitizes_ordinary_text_option_without_textarea_routing(): void {

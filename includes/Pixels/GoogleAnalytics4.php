@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Pixels;
 
+use LightweightPlugins\Pixel\Consent\GoogleTagBeforeConsent;
 use LightweightPlugins\Pixel\WooCommerce\Ga4Purchase;
 
 /**
  * Maps generic events to GA4 standard events.
  */
-final class GoogleAnalytics4 extends AbstractPixel {
+final class GoogleAnalytics4 extends AbstractPixel implements BaseWithoutConsentInterface {
 
 	/**
 	 * Generic event → GA4 event name.
@@ -50,11 +51,16 @@ final class GoogleAnalytics4 extends AbstractPixel {
 		return (string) $this->get_option( 'measurement_id', '' );
 	}
 
+	public function loads_base_without_consent(): bool {
+		return GoogleTagBeforeConsent::is_active();
+	}
+
 	public function get_frontend_config(): array {
 		return [
-			'measurementId' => $this->primary_id(),
-			'debug'         => (bool) $this->get_option( 'debug' ),
-			'anonymizeIp'   => (bool) $this->get_option( 'anonymize_ip', true ),
+			'measurementId'      => $this->primary_id(),
+			'debug'              => (bool) $this->get_option( 'debug' ),
+			'anonymizeIp'        => (bool) $this->get_option( 'anonymize_ip', true ),
+			'baseWithoutConsent' => $this->loads_base_without_consent(),
 		];
 	}
 

@@ -29,6 +29,7 @@ import SettingRow from './SettingRow';
  * @param {string}                    props.placeholder Placeholder.
  * @param {boolean}                   props.disabled    Disabled.
  * @param {boolean}                   props.mono        Monospace (IDs).
+ * @param {boolean}                   props.multiline   Textarea instead of an input (one entry per line).
  * @param {(value: string) => string} props.normalize   Optional value transform on change.
  */
 export function TextRow( {
@@ -39,11 +40,15 @@ export function TextRow( {
 	placeholder,
 	disabled = false,
 	mono = false,
+	multiline = false,
 	normalize,
 } ) {
 	if ( ! store.has( name ) ) {
 		return null;
 	}
+
+	const Control = multiline ? TextareaControl : TextControl;
+	const extra = multiline ? { rows: 4 } : { __next40pxDefaultSize: true };
 
 	return (
 		<SettingRow
@@ -51,9 +56,9 @@ export function TextRow( {
 			help={ help }
 			errors={ store.errors[ name ] }
 		>
-			<TextControl
-				__next40pxDefaultSize
+			<Control
 				__nextHasNoMarginBottom
+				{ ...extra }
 				className={ mono ? 'lw-px-mono' : '' }
 				label={ title }
 				hideLabelFromVision

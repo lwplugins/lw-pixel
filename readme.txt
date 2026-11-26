@@ -4,7 +4,7 @@ Tags: pixel, conversion tracking, chatgpt ads, facebook, google analytics
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.5.4
+Stable tag: 1.5.5
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,8 @@ Measure the results of your ChatGPT Ads campaigns with the official measurement 
 
 * Admin quick search (Cmd/Ctrl+K) across all sections and settings
 * Google Tag Manager: optional GA4 ecommerce dataLayer (view_item, add_to_cart, begin_checkout, purchase) for GA4 and Google Ads tags in GTM
+* Google Ads conversions for any event (form submissions, thank-you pages, phone and email clicks, custom events), each with its own conversion label
+* Google Consent Mode v2: the GA4 / Google Ads tag can load before consent (cookieless until consent, with LW Cookie), so Google's tag checks find it
 * 12 pixel providers — ChatGPT Ads, Meta (Facebook), Google Analytics 4, Google Ads, Google Tag Manager, TikTok, Pinterest, Microsoft Bing UET, Reddit, Snapchat, X (Twitter), Barion
 * Server-side events — ChatGPT Ads Conversions API, Meta Conversion API for every standard event, Pinterest Conversions API, GA4 Measurement Protocol; browser and server copies share one event ID so they are counted once
 * WooCommerce integration — ViewProduct, ViewCategory, ViewCart, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase (sent once per order, from the browser and the server)
@@ -91,6 +93,10 @@ The browser and the server copy of an event share one event ID, so each platform
 3. Event configuration
 
 == Changelog ==
+
+= 1.5.5 =
+* New: Google Ads: **Other conversions** sends a Google Ads conversion for events other than the purchase, one `EventName=label` per line: form submissions and thank-you pages (`Lead`), phone and email clicks (`Contact`) or a custom event, which also sends its value (#28).
+* New: Google tab → Consent Mode v2: **Load the Google tag before consent**. With LW Cookie's Google Consent Mode on, the GA4 and Google Ads tag (gtag.js) loads for every visitor, so Google Ads and Google's tag checks find it; Consent Mode keeps it cookieless and LW Pixel sends no events until the visitor consents. Off by default; needs LW Cookie 1.9.18 (#28).
 
 = 1.5.4 =
 * Fix: Page and post titles reach GA4, Meta and the other providers as plain text. The page title (PageView) and the post title (ViewContent) were sent HTML-encoded, so reports showed `&#8211;`, `&#8217;` or `&amp;` instead of the dash, apostrophe or ampersand (#32).

@@ -83,6 +83,17 @@ final class ValueParserTest extends RestTestCase {
 		$this->assertSame( [ "koszonjuk\nthank-you", null ], $this->parse( 'event_thankyou_urls', "koszonjuk\r\n\r\n thank-you " ) );
 	}
 
+	public function test_ads_conversion_list_is_normalised(): void {
+		$this->assertSame( [ "Lead=lead1\nContact=call-2", null ], $this->parse( 'gads_conversion_events', "Lead = lead1\r\n\r\nContact=call-2 " ) );
+	}
+
+	public function test_ads_conversion_list_names_the_bad_line(): void {
+		[ $value, $error ] = $this->parse( 'gads_conversion_events', "Lead=lead1\nform submit" );
+
+		$this->assertNull( $value );
+		$this->assertStringContainsString( 'form submit', (string) $error );
+	}
+
 	public function test_ldu_mode_is_a_whitelist(): void {
 		$this->assertSame( [ 'force_california', null ], $this->parse( 'compliance_ldu_mode', 'force_california' ) );
 		$this->assertNotNull( $this->parse( 'compliance_ldu_mode', 'texas' )[1] );

@@ -24,7 +24,7 @@ final class SettingsSanitizer {
 	/**
 	 * Keys that should be sanitized as textarea (preserve line breaks).
 	 */
-	private const TEXTAREA_KEYS = [ 'event_thankyou_urls' ];
+	private const TEXTAREA_KEYS = [ 'event_thankyou_urls', 'gads_conversion_events' ];
 
 	/**
 	 * Identifier keys limited to a safe character set. The ChatGPT Ads pixel

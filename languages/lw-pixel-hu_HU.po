@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LW Pixel\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/lw-pixel\n"
-"POT-Creation-Date: 2026-11-01T21:42:55+00:00\n"
+"POT-Creation-Date: 2026-11-26T10:33:25+00:00\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -277,11 +277,11 @@ msgstr "ChatGPT Ads"
 msgid "Meta (Facebook) Pixel"
 msgstr "Meta (Facebook) Pixel"
 
-#: includes/Pixels/GoogleAds.php:22 build/index.js:15
+#: includes/Pixels/GoogleAds.php:25 build/index.js:15
 msgid "Google Ads"
 msgstr "Google Ads"
 
-#: includes/Pixels/GoogleAnalytics4.php:42 build/index.js:15
+#: includes/Pixels/GoogleAnalytics4.php:43 build/index.js:15
 msgid "Google Analytics 4"
 msgstr "Google Analytics 4"
 
@@ -326,7 +326,7 @@ msgstr ""
 "pl. MyCustomEvent."
 
 #: includes/Rest/Admin/CustomEvents/CustomEventInput.php:117
-#: includes/Rest/Admin/Settings/ValueParser.php:48
+#: includes/Rest/Admin/Settings/ValueParser.php:52
 msgid "Choose one of the listed options."
 msgstr "Válassz a felsorolt lehetőségek közül."
 
@@ -355,16 +355,16 @@ msgstr "Ismeretlen mező."
 
 #: includes/Rest/Admin/CustomEvents/CustomEventInput.php:147
 #: includes/Rest/Admin/Settings/SettingsInput.php:120
-#: includes/Rest/Admin/Settings/ValueParser.php:89
-#: includes/Rest/Admin/Settings/ValueParser.php:212
-#: includes/Rest/Admin/Settings/ValueParser.php:267
-#: includes/Rest/Admin/Settings/ValueParser.php:287
+#: includes/Rest/Admin/Settings/ValueParser.php:93
+#: includes/Rest/Admin/Settings/ValueParser.php:216
+#: includes/Rest/Admin/Settings/ValueParser.php:300
+#: includes/Rest/Admin/Settings/ValueParser.php:320
 msgid "Must be text."
 msgstr "Szövegnek kell lennie."
 
 #. translators: %d: maximum number of characters.
 #: includes/Rest/Admin/CustomEvents/CustomEventInput.php:154
-#: includes/Rest/Admin/Settings/ValueParser.php:294
+#: includes/Rest/Admin/Settings/ValueParser.php:327
 #, php-format
 msgid "Use at most %d characters."
 msgstr "Legfeljebb %d karakter lehet."
@@ -426,11 +426,11 @@ msgstr "Pontosan úgy illeszd be a kulcsot, ahogy látod, szóközök nélkül."
 msgid "Pixel \"%s\" is in more than one consent category."
 msgstr "A(z) „%s” pixel több hozzájárulási kategóriában is szerepel."
 
-#: includes/Rest/Admin/Settings/ValueParser.php:77
+#: includes/Rest/Admin/Settings/ValueParser.php:81
 msgid "Must be true or false."
 msgstr "Igaz vagy hamis értéknek kell lennie."
 
-#: includes/Rest/Admin/Settings/ValueParser.php:104
+#: includes/Rest/Admin/Settings/ValueParser.php:108
 msgid ""
 "This ID does not have the expected format. Copy it again from the ad "
 "platform."
@@ -438,18 +438,18 @@ msgstr ""
 "Ennek az azonosítónak nem megfelelő a formátuma. Másold ki újra a hirdetési "
 "felületről."
 
-#: includes/Rest/Admin/Settings/ValueParser.php:119
-#: includes/Rest/Admin/Settings/ValueParser.php:152
+#: includes/Rest/Admin/Settings/ValueParser.php:123
+#: includes/Rest/Admin/Settings/ValueParser.php:156
 msgid "Must be a comma-separated list."
 msgstr "Vesszővel elválasztott listának kell lennie."
 
 #. translators: 1: smallest allowed number, 2: largest allowed number.
-#: includes/Rest/Admin/Settings/ValueParser.php:129
+#: includes/Rest/Admin/Settings/ValueParser.php:133
 #, php-format
 msgid "Use whole numbers from %1$d to %2$d, separated by commas."
 msgstr "%1$d és %2$d közötti egész számokat adj meg, vesszővel elválasztva."
 
-#: includes/Rest/Admin/Settings/ValueParser.php:161
+#: includes/Rest/Admin/Settings/ValueParser.php:165
 msgid ""
 "Use file extensions such as pdf or zip (letters and digits only), separated "
 "by commas."
@@ -458,29 +458,36 @@ msgstr ""
 "vesszővel elválasztva."
 
 #. translators: %d: maximum number of lines.
-#: includes/Rest/Admin/Settings/ValueParser.php:220
+#: includes/Rest/Admin/Settings/ValueParser.php:224
 #, php-format
 msgid "Use at most %d lines."
 msgstr "Legfeljebb %d sor lehet."
 
 #. translators: %d: maximum number of characters.
-#: includes/Rest/Admin/Settings/ValueParser.php:226
+#: includes/Rest/Admin/Settings/ValueParser.php:230
 #, php-format
 msgid "Each line can be at most %d characters long."
 msgstr "Egy sor legfeljebb %d karakter hosszú lehet."
 
-#: includes/Rest/Admin/Settings/ValueParser.php:242
+#. translators: %s: the line that is not in EventName=label form.
+#: includes/Rest/Admin/Settings/ValueParser.php:255
+#, php-format
+msgid ""
+"Write each line as EventName=label, e.g. Lead=AbC123. This line is not: %s"
+msgstr "Minden sort EseményNév=címke alakban írj, pl. Lead=AbC123. Ez a sor nem ilyen: %s"
+
+#: includes/Rest/Admin/Settings/ValueParser.php:275
 msgid "Must be a list of pixel IDs."
 msgstr "Pixelazonosítók listájának kell lennie."
 
 #. translators: %s: pixel ID.
-#: includes/Rest/Admin/Settings/ValueParser.php:250
+#: includes/Rest/Admin/Settings/ValueParser.php:283
 #, php-format
 msgid "Unknown pixel: \"%s\"."
 msgstr "Ismeretlen pixel: „%s”."
 
 #. translators: %d: maximum size in kilobytes.
-#: includes/Rest/Admin/Settings/ValueParser.php:272
+#: includes/Rest/Admin/Settings/ValueParser.php:305
 #, php-format
 msgid "The code can be at most %d KB."
 msgstr "A kód legfeljebb %d KB lehet."
@@ -529,18 +536,24 @@ msgstr "Követési adatok (LW Pixel)"
 
 #: includes/Server/PinterestCAPI.php:133
 msgid "Save a Pinterest ad account ID and conversion access token first."
-msgstr "Előbb ments el egy Pinterest-hirdetésifiók-azonosítót és egy konverziós hozzáférési tokent."
+msgstr ""
+"Előbb ments el egy Pinterest-hirdetésifiók-azonosítót és egy konverziós "
+"hozzáférési tokent."
 
 #: includes/Server/PinterestCAPI.php:166
 msgid ""
 "Connected. Pinterest accepted a test event (test mode, nothing was recorded)."
-msgstr "Kapcsolódva. A Pinterest elfogadott egy teszteseményt (tesztmód, semmi sem lett rögzítve)."
+msgstr ""
+"Kapcsolódva. A Pinterest elfogadott egy teszteseményt (tesztmód, semmi sem "
+"lett rögzítve)."
 
 #: includes/Server/PinterestCAPI.php:170
 msgid ""
 "Pinterest rejected the access token. Check the token and that it belongs to "
 "this ad account."
-msgstr "A Pinterest elutasította a hozzáférési tokent. Ellenőrizd a tokent, és hogy ehhez a hirdetési fiókhoz tartozik-e."
+msgstr ""
+"A Pinterest elutasította a hozzáférési tokent. Ellenőrizd a tokent, és hogy "
+"ehhez a hirdetési fiókhoz tartozik-e."
 
 #: includes/Server/PinterestCAPI.php:174
 msgid "Could not reach the Pinterest API from this server."
@@ -550,7 +563,9 @@ msgstr "Erről a szerverről nem érhető el a Pinterest API."
 #: includes/Server/PinterestCAPI.php:179
 #, php-format
 msgid "Pinterest returned HTTP %d. Check the ad account ID and access token."
-msgstr "A Pinterest HTTP %d választ adott. Ellenőrizd a hirdetésifiók-azonosítót és a hozzáférési tokent."
+msgstr ""
+"A Pinterest HTTP %d választ adott. Ellenőrizd a hirdetésifiók-azonosítót és "
+"a hozzáférési tokent."
 
 #: includes/SiteManager/Integration.php:40
 msgid "Tracking Pixels"
@@ -1135,7 +1150,10 @@ msgstr "Hiányzik a token vagy a hirdetésifiók-azonosító"
 msgid ""
 "Also sends purchases, add-to-carts, page visits, leads, searches and sign-"
 "ups from your server, deduplicated with the Pinterest Tag."
-msgstr "A vásárlásokat, kosárba helyezéseket, oldallátogatásokat, érdeklődéseket, kereséseket és regisztrációkat a szerveredről is elküldi, a Pinterest Taggel duplikáció nélkül."
+msgstr ""
+"A vásárlásokat, kosárba helyezéseket, oldallátogatásokat, érdeklődéseket, "
+"kereséseket és regisztrációkat a szerveredről is elküldi, a Pinterest Taggel "
+"duplikáció nélkül."
 
 #: build/index.js:12
 msgid "Ad account ID"
@@ -1154,7 +1172,10 @@ msgid ""
 "Generate it in Ads Manager under Conversions. Stored in the database; you "
 "can instead define LW_PIXEL_PINTEREST_TOKEN in wp-config.php (takes "
 "precedence)."
-msgstr "Az Ads Manager Konverziók részében hozhatod létre. Az adatbázisban tárolódik; helyette megadhatod az LW_PIXEL_PINTEREST_TOKEN konstanst is a wp-config.php-ban (az élvez elsőbbséget)."
+msgstr ""
+"Az Ads Manager Konverziók részében hozhatod létre. Az adatbázisban "
+"tárolódik; helyette megadhatod az LW_PIXEL_PINTEREST_TOKEN konstanst is a wp-"
+"config.php-ban (az élvez elsőbbséget)."
 
 #: build/index.js:12 build/index.js:15
 msgid "Advanced matching"
@@ -1164,7 +1185,10 @@ msgstr "Speciális egyeztetés"
 msgid ""
 "Sends SHA-256 hashed email, phone, name, address and user ID (the logged-in "
 "user, or the customer’s billing data with purchases) to improve matching."
-msgstr "SHA-256-tal hashelt e-mail-címet, telefonszámot, nevet, címet és felhasználói azonosítót küld (a bejelentkezett felhasználóét, vásárlásnál a vásárló számlázási adatait) a jobb egyeztetésért."
+msgstr ""
+"SHA-256-tal hashelt e-mail-címet, telefonszámot, nevet, címet és "
+"felhasználói azonosítót küld (a bejelentkezett felhasználóét, vásárlásnál a "
+"vásárló számlázási adatait) a jobb egyeztetésért."
 
 #: build/index.js:12
 msgid "Test mode"
@@ -1174,28 +1198,39 @@ msgstr "Tesztmód"
 msgid ""
 "Pinterest checks the events but does not record them. Turn off on a live "
 "site."
-msgstr "A Pinterest ellenőrzi az eseményeket, de nem rögzíti őket. Éles oldalon kapcsold ki."
+msgstr ""
+"A Pinterest ellenőrzi az eseményeket, de nem rögzíti őket. Éles oldalon "
+"kapcsold ki."
 
 #: build/index.js:12
 msgid ""
 "Medical mode is on: Pinterest needs the visitor’s IP address and user agent "
 "or a hashed email, so no server-side events are sent."
-msgstr "Az egészségügyi mód be van kapcsolva: a Pinterestnek a látogató IP-címe és böngészőazonosítója vagy hashelt e-mail-címe kell, ezért szerveroldali esemény nem megy ki."
+msgstr ""
+"Az egészségügyi mód be van kapcsolva: a Pinterestnek a látogató IP-címe és "
+"böngészőazonosítója vagy hashelt e-mail-címe kell, ezért szerveroldali "
+"esemény nem megy ki."
 
 #: build/index.js:12
 msgid ""
 "Sends one sample event in test mode: Pinterest checks the ad account ID and "
 "the token, and records nothing."
-msgstr "Egy mintaeseményt küld tesztmódban: a Pinterest ellenőrzi a hirdetésifiók-azonosítót és a tokent, de semmit sem rögzít."
+msgstr ""
+"Egy mintaeseményt küld tesztmódban: a Pinterest ellenőrzi a hirdetésifiók-"
+"azonosítót és a tokent, de semmit sem rögzít."
 
 #: build/index.js:12
 msgid ""
 "Save your changes first: the test uses the saved ad account ID and token."
-msgstr "Előbb mentsd a módosításaidat: a teszt az elmentett hirdetésifiók-azonosítót és tokent használja."
+msgstr ""
+"Előbb mentsd a módosításaidat: a teszt az elmentett hirdetésifiók-azonosítót "
+"és tokent használja."
 
 #: build/index.js:12
 msgid "Save an ad account ID and a conversion access token to run the test."
-msgstr "A teszthez ments el egy hirdetésifiók-azonosítót és egy konverziós hozzáférési tokent."
+msgstr ""
+"A teszthez ments el egy hirdetésifiók-azonosítót és egy konverziós "
+"hozzáférési tokent."
 
 #: build/index.js:12
 msgid "Yes"
@@ -1581,6 +1616,38 @@ msgstr "Konverziós címke"
 #: build/index.js:15
 msgid "Used for the Purchase event conversion."
 msgstr "A Vásárlás esemény konverziójához használatos."
+
+#: build/index.js:15
+msgid "Other conversions"
+msgstr "További konverziók"
+
+#: build/index.js:15
+msgid ""
+"One event per line as EventName=label, with the label of a Google Ads "
+"conversion action. E.g. Lead=AbC123 (form submissions and thank-you pages), "
+"Contact=XyZ789 (phone and email clicks), or the name of a custom event. A "
+"custom event with a value sends its value too."
+msgstr "Soronként egy esemény EseményNév=címke alakban, a Google Ads konverziós művelet címkéjével. Pl. Lead=AbC123 (űrlapküldés és köszönőoldal), Contact=XyZ789 (telefon- és e-mail-kattintás), vagy egy egyéni esemény neve. Az értékkel rendelkező egyéni esemény az értékét is elküldi."
+
+#: build/index.js:15
+msgid "Consent Mode v2"
+msgstr "Consent Mode v2"
+
+#: build/index.js:15
+msgid "For GA4 and Google Ads, when LW Cookie's Google Consent Mode is on."
+msgstr "GA4-hez és Google Adshez, ha az LW Cookie-ban be van kapcsolva a Google Consent Mode."
+
+#: build/index.js:15
+msgid "Load the Google tag before consent"
+msgstr "A Google-címke betöltése hozzájárulás előtt"
+
+#: build/index.js:15
+msgid ""
+"The Google tag (gtag.js) loads for every visitor, so Google Ads and the tag "
+"checks find it. Until the visitor consents, Consent Mode keeps it cookieless "
+"and LW Pixel sends no events. Only takes effect when Google Consent Mode is "
+"on in LW Cookie."
+msgstr "A Google-címke (gtag.js) minden látogatónál betöltődik, így a Google Ads és a címkeellenőrzők megtalálják. Amíg a látogató nem járul hozzá, a Consent Mode miatt nem ír sütit, és az LW Pixel nem küld eseményt. Csak akkor hat, ha az LW Cookie-ban be van kapcsolva a Google Consent Mode."
 
 #: build/index.js:15
 msgid "Container ID missing"
@@ -2172,7 +2239,10 @@ msgid ""
 "Adds the Meta data_processing_options block to CAPI events for California "
 "(CCPA) compliance, and marks Pinterest Conversions API events as limited "
 "data processing (LDP)."
-msgstr "Hozzáadja a Meta data_processing_options blokkját a CAPI eseményekhez a kaliforniai (CCPA) megfelelőségért, a Pinterest Conversions API eseményeit pedig korlátozott adatfeldolgozásúnak (LDP) jelöli."
+msgstr ""
+"Hozzáadja a Meta data_processing_options blokkját a CAPI eseményekhez a "
+"kaliforniai (CCPA) megfelelőségért, a Pinterest Conversions API eseményeit "
+"pedig korlátozott adatfeldolgozásúnak (LDP) jelöli."
 
 #: build/index.js:17
 msgid "Mark events with LDU"
@@ -2194,7 +2264,9 @@ msgstr ""
 msgid ""
 "LDU applies to the Meta and Pinterest Conversions API events, which are both "
 "switched off."
-msgstr "Az LDU a Meta és a Pinterest Conversions API eseményeire vonatkozik, ezek viszont mind ki vannak kapcsolva."
+msgstr ""
+"Az LDU a Meta és a Pinterest Conversions API eseményeire vonatkozik, ezek "
+"viszont mind ki vannak kapcsolva."
 
 #: build/index.js:17
 msgid "General"

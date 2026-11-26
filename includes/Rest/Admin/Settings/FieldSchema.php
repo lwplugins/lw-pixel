@@ -41,6 +41,7 @@ final class FieldSchema {
 			'ga4_measurement_id'          => self::id( '/^G-[A-Z0-9]{4,20}$/', true ),
 			'gads_conversion_id'          => self::id( '/^AW-\d{5,15}$/', true ),
 			'gads_conversion_label'       => self::id( self::SAFE_ID ),
+			'gads_conversion_events'      => [ 'type' => 'conversion_map' ],
 			'gtm_container_id'            => self::id( '/^GTM-[A-Z0-9]{4,12}$/', true ),
 			'tiktok_pixel_id'             => self::id( self::SAFE_ID ),
 			'pinterest_tag_id'            => self::id( self::SAFE_ID ),

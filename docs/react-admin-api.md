@@ -77,6 +77,7 @@ Validation per key (`Settings/FieldSchema` + `Settings/ValueParser`):
 | `event_time_thresholds` | comma list of integers from 1 to 86400 |
 | `event_download_extensions` | comma list of `[a-z0-9]{1,10}`, lower-cased, leading dot dropped |
 | `event_thankyou_urls` | one fragment per line, max. 50 lines of 200 characters, blank lines dropped |
+| `gads_conversion_events` | one `EventName=label` per line (event `^[A-Za-z][A-Za-z0-9_]{0,63}$`, label `^[A-Za-z0-9_-]{1,64}$`), max. 50 lines, stored without spaces around `=`; a line in another form is a field error naming it |
 | `woo_content_id_prefix` | text, max. 64 characters |
 | `compliance_ldu_mode` | `auto` or `force_california` |
 | `consent_marketing_pixels`, `consent_analytics_pixels`, `consent_unclassified_pixels` | arrays of registered pixel IDs. After the save, a pixel may appear in only one list. Send all three when you move a pixel. |

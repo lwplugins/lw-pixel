@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace LightweightPlugins\Pixel\Rest\Admin\Settings;
 
+use LightweightPlugins\Pixel\Pixels\GoogleAdsConversions;
+
 /**
  * Strict per-type parsing. Each method returns [ value, error ]: the
  * normalised value to store, or a translated message (value null).
@@ -42,6 +44,8 @@ final class ValueParser {
 				return self::word_list( (string) $rule['pattern'], $value );
 			case 'lines':
 				return self::lines( (int) $rule['max_lines'], (int) $rule['max_line'], $value );
+			case 'conversion_map':
+				return self::conversion_map( $value );
 			case 'enum':
 				return in_array( $value, (array) $rule['values'], true )
 					? [ $value, null ]
@@ -228,6 +232,35 @@ final class ValueParser {
 		}
 
 		return [ sanitize_textarea_field( implode( "\n", $lines ) ), null ];
+	}
+
+	/**
+	 * Google Ads conversion list: "EventName=label" per line, stored
+	 * normalised (no spaces around "=").
+	 *
+	 * @param mixed $value Submitted value.
+	 * @return array{0: string|null, 1: string|null}
+	 */
+	private static function conversion_map( mixed $value ): array {
+		[ $text, $error ] = self::lines( 50, 140, $value );
+
+		if ( null === $text ) {
+			return [ null, $error ];
+		}
+
+		$invalid = GoogleAdsConversions::invalid_lines( $text );
+
+		if ( [] !== $invalid ) {
+			/* translators: %s: the line that is not in EventName=label form. */
+			return [ null, sprintf( __( 'Write each line as EventName=label, e.g. Lead=AbC123. This line is not: %s', 'lw-pixel' ), $invalid[0] ) ];
+		}
+
+		$lines = [];
+		foreach ( GoogleAdsConversions::parse( $text ) as $event => $label ) {
+			$lines[] = $event . '=' . $label;
+		}
+
+		return [ implode( "\n", $lines ), null ];
 	}
 
 	/**

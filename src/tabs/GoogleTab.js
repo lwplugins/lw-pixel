@@ -9,6 +9,7 @@ import { chartBar, payment, tag } from '@wordpress/icons';
  */
 import { TextRow } from '../components/Fields';
 import ProviderCard, { stateBadge } from '../components/ProviderCard';
+import Section from '../components/Section';
 import SecretRow from '../components/SecretRow';
 import { OptionSwitch, SwitchList } from '../components/Switches';
 import { upper } from './providerState';
@@ -120,7 +121,41 @@ export default function GoogleTab( { store } ) {
 					) }
 					mono
 				/>
+				<TextRow
+					store={ store }
+					name="gads_conversion_events"
+					title={ __( 'Other conversions', 'lw-pixel' ) }
+					help={ __(
+						'One event per line as EventName=label, with the label of a Google Ads conversion action. E.g. Lead=AbC123 (form submissions and thank-you pages), Contact=XyZ789 (phone and email clicks), or the name of a custom event. A custom event with a value sends its value too.',
+						'lw-pixel'
+					) }
+					placeholder={ 'Lead=AbC123\nContact=XyZ789' }
+					multiline
+					mono
+				/>
 			</ProviderCard>
+			<Section
+				title={ __( 'Consent Mode v2', 'lw-pixel' ) }
+				description={ __(
+					"For GA4 and Google Ads, when LW Cookie's Google Consent Mode is on.",
+					'lw-pixel'
+				) }
+			>
+				<SwitchList>
+					<OptionSwitch
+						store={ store }
+						name="google_tag_before_consent"
+						title={ __(
+							'Load the Google tag before consent',
+							'lw-pixel'
+						) }
+						help={ __(
+							'The Google tag (gtag.js) loads for every visitor, so Google Ads and the tag checks find it. Until the visitor consents, Consent Mode keeps it cookieless and LW Pixel sends no events. Only takes effect when Google Consent Mode is on in LW Cookie.',
+							'lw-pixel'
+						) }
+					/>
+				</SwitchList>
+			</Section>
 			<ProviderCard
 				store={ store }
 				name="gtm_enabled"

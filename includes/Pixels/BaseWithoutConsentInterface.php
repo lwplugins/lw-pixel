@@ -10,9 +10,10 @@ declare(strict_types=1);
 namespace LightweightPlugins\Pixel\Pixels;
 
 /**
- * For providers whose base script serves a purpose that needs no consent
- * (Barion: payment fraud prevention). The script loads for every visitor;
- * events still wait for the pixel's consent category.
+ * For providers whose base script may load without consent: Barion's
+ * fraud-prevention pixel, and the Google tag under Consent Mode v2 (opt-in,
+ * cookieless until consent). The script loads for every visitor; events
+ * still wait for the pixel's consent category.
  */
 interface BaseWithoutConsentInterface {
 

@@ -32,7 +32,7 @@ A React settings screen with a side navigation; the **Quick search** field at th
 - **ChatGPT Ads** — `oaiq` measurement pixel + Conversions API server-side
 - **Meta (Facebook) Pixel** — `fbq` browser pixel + Conversion API server-side (Advanced Matching, External ID, Order Enrich)
 - **Google Analytics 4** — `gtag.js` + Measurement Protocol server-side
-- **Google Ads** — conversion tracking
+- **Google Ads** — conversion tracking: the purchase plus any other event (`Lead=label`, `Contact=label`, custom events) with its own conversion label; with LW Cookie's Google Consent Mode v2 the tag can load before consent, cookieless until the visitor accepts
 - **Google Tag Manager** — container + `dataLayer`, optionally in the GA4 ecommerce format (view_item, add_to_cart, begin_checkout, purchase)
 - **TikTok Pixel** — `ttq`
 - **Pinterest Tag** — `pintrk` + Conversions API server-side

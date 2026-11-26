@@ -254,8 +254,9 @@
 			 * {name, params} pair. mergeParams() reads mapped.params, which does not
 			 * exist for this provider, so merging would silently drop send_to and
 			 * transaction_id. There are also no runtime-captured params to merge for
-			 * this provider: map_event() only returns non-null for Purchase, and its
-			 * params are already baked in server-side. Pass mapped straight through.
+			 * this provider: map_event() only maps the purchase and the events of the
+			 * conversion list, with their value baked in server-side. Pass mapped
+			 * straight through.
 			 */
 			fire: function (mapped) {
 				if ( ! window.gtag || ! mapped) {

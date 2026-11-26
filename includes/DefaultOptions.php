@@ -57,6 +57,8 @@ final class DefaultOptions {
 			'gads_enabled'                => false,
 			'gads_conversion_id'          => '',
 			'gads_conversion_label'       => '',
+			'gads_conversion_events'      => '',
+			'google_tag_before_consent'   => false,
 			'gtm_enabled'                 => false,
 			'gtm_container_id'            => '',
 			'gtm_data_layer_only'         => false,
